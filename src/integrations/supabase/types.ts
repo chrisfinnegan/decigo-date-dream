@@ -14,7 +14,256 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      flags: {
+        Row: {
+          key: string
+          value: Json
+        }
+        Insert: {
+          key: string
+          value: Json
+        }
+        Update: {
+          key?: string
+          value?: Json
+        }
+        Relationships: []
+      }
+      invites: {
+        Row: {
+          channel: string
+          consent_at: string
+          id: string
+          name: string | null
+          plan_id: string | null
+          sent_count: number | null
+          stopped: boolean | null
+          value: string
+        }
+        Insert: {
+          channel: string
+          consent_at: string
+          id?: string
+          name?: string | null
+          plan_id?: string | null
+          sent_count?: number | null
+          stopped?: boolean | null
+          value: string
+        }
+        Update: {
+          channel?: string
+          consent_at?: string
+          id?: string
+          name?: string | null
+          plan_id?: string | null
+          sent_count?: number | null
+          stopped?: boolean | null
+          value?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invites_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      options: {
+        Row: {
+          address: string
+          id: string
+          lat: number
+          lng: number
+          name: string
+          plan_id: string | null
+          price_band: string | null
+          rank: number
+          source_id: string | null
+          tip: string | null
+          why_it_fits: string | null
+        }
+        Insert: {
+          address: string
+          id?: string
+          lat: number
+          lng: number
+          name: string
+          plan_id?: string | null
+          price_band?: string | null
+          rank: number
+          source_id?: string | null
+          tip?: string | null
+          why_it_fits?: string | null
+        }
+        Update: {
+          address?: string
+          id?: string
+          lat?: number
+          lng?: number
+          name?: string
+          plan_id?: string | null
+          price_band?: string | null
+          rank?: number
+          source_id?: string | null
+          tip?: string | null
+          why_it_fits?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "options_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      plans: {
+        Row: {
+          budget_band: string
+          canceled: boolean | null
+          created_at: string | null
+          date_end: string
+          date_start: string
+          daypart: string
+          decision_deadline: string
+          headcount: number
+          id: string
+          locked: boolean | null
+          locked_at: string | null
+          magic_token: string
+          mode: string
+          neighborhood: string
+          notes_chips: string[] | null
+          notes_raw: string | null
+          threshold: number
+          two_stop: boolean | null
+        }
+        Insert: {
+          budget_band: string
+          canceled?: boolean | null
+          created_at?: string | null
+          date_end: string
+          date_start: string
+          daypart: string
+          decision_deadline: string
+          headcount: number
+          id?: string
+          locked?: boolean | null
+          locked_at?: string | null
+          magic_token: string
+          mode: string
+          neighborhood: string
+          notes_chips?: string[] | null
+          notes_raw?: string | null
+          threshold: number
+          two_stop?: boolean | null
+        }
+        Update: {
+          budget_band?: string
+          canceled?: boolean | null
+          created_at?: string | null
+          date_end?: string
+          date_start?: string
+          daypart?: string
+          decision_deadline?: string
+          headcount?: number
+          id?: string
+          locked?: boolean | null
+          locked_at?: string | null
+          magic_token?: string
+          mode?: string
+          neighborhood?: string
+          notes_chips?: string[] | null
+          notes_raw?: string | null
+          threshold?: number
+          two_stop?: boolean | null
+        }
+        Relationships: []
+      }
+      reminders: {
+        Row: {
+          id: string
+          invite_id: string | null
+          kind: string
+          plan_id: string | null
+          status: string | null
+          when_at: string
+        }
+        Insert: {
+          id?: string
+          invite_id?: string | null
+          kind: string
+          plan_id?: string | null
+          status?: string | null
+          when_at: string
+        }
+        Update: {
+          id?: string
+          invite_id?: string | null
+          kind?: string
+          plan_id?: string | null
+          status?: string | null
+          when_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reminders_invite_id_fkey"
+            columns: ["invite_id"]
+            isOneToOne: false
+            referencedRelation: "invites"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reminders_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      votes: {
+        Row: {
+          created_at: string | null
+          id: string
+          option_id: string | null
+          plan_id: string | null
+          voter_hash: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          option_id?: string | null
+          plan_id?: string | null
+          voter_hash: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          option_id?: string | null
+          plan_id?: string | null
+          voter_hash?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "votes_option_id_fkey"
+            columns: ["option_id"]
+            isOneToOne: false
+            referencedRelation: "options"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "votes_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
