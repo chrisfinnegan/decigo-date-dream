@@ -1,1 +1,13 @@
 project_id = "gomkcwfxbwtnxlgmvjjp"
+
+[functions.plans-create]
+verify_jwt = false
+
+[functions.plans-get]
+verify_jwt = false
+
+[functions.votes-cast]
+verify_jwt = false
+
+[functions.options-list]
+verify_jwt = false
