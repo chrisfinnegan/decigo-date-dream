@@ -11,13 +11,30 @@ serve(async (req) => {
   }
 
   try {
-    const url = new URL(req.url);
-    const q = url.searchParams.get('q');
-    const sessionToken = url.searchParams.get('sessionToken') || crypto.randomUUID();
-    const lat = url.searchParams.get('lat');
-    const lng = url.searchParams.get('lng');
+    // Support both POST (from supabase.functions.invoke) and GET
+    let q: string | null = null;
+    let sessionToken: string | null = null;
+    let lat: string | null = null;
+    let lng: string | null = null;
+
+    if (req.method === 'POST') {
+      const body = await req.json();
+      q = body.q;
+      sessionToken = body.sessionToken || crypto.randomUUID();
+      lat = body.lat;
+      lng = body.lng;
+    } else {
+      const url = new URL(req.url);
+      q = url.searchParams.get('q');
+      sessionToken = url.searchParams.get('sessionToken') || crypto.randomUUID();
+      lat = url.searchParams.get('lat');
+      lng = url.searchParams.get('lng');
+    }
+
+    console.log('Places autocomplete request:', { q, sessionToken, lat, lng });
 
     if (!q || q.length < 2) {
+      console.log('Query too short, returning empty');
       return new Response(
         JSON.stringify({ sessionToken, predictions: [] }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -32,6 +49,8 @@ serve(async (req) => {
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
+
+    console.log('API Key present:', apiKey.substring(0, 10) + '...');
 
     // Build request body for Places Autocomplete (New)
     const requestBody: any = {
@@ -51,7 +70,7 @@ serve(async (req) => {
       };
     }
 
-    console.log('Calling Google Places Autocomplete:', { input: q, sessionToken });
+    console.log('Calling Google Places Autocomplete');
 
     const response = await fetch(
       'https://places.googleapis.com/v1/places:autocomplete',
@@ -65,6 +84,8 @@ serve(async (req) => {
       }
     );
 
+    console.log('Google API response status:', response.status);
+
     if (!response.ok) {
       const errorText = await response.text();
       console.error('Google Places API error:', response.status, errorText);
@@ -72,18 +93,23 @@ serve(async (req) => {
     }
 
     const data = await response.json();
+    console.log('Google API returned suggestions:', data.suggestions?.length || 0);
     
     // For each prediction, fetch basic geometry to get lat/lng
     const predictions = [];
-    for (const suggestion of (data.suggestions || [])) {
+    const suggestions = data.suggestions || [];
+
+    for (const suggestion of suggestions) {
       const placeId = suggestion.placePrediction?.placeId;
       const name = suggestion.placePrediction?.text?.text || '';
       const types = suggestion.placePrediction?.types || [];
 
       if (!placeId) continue;
 
+      console.log(`Fetching details for ${name}`);
+
       // Fetch Place Details to get coordinates
-      let lat, lng;
+      let detailLat, detailLng;
       try {
         const detailsResponse = await fetch(
           `https://places.googleapis.com/v1/places/${placeId}`,
@@ -98,8 +124,11 @@ serve(async (req) => {
 
         if (detailsResponse.ok) {
           const details = await detailsResponse.json();
-          lat = details.location?.latitude;
-          lng = details.location?.longitude;
+          detailLat = details.location?.latitude;
+          detailLng = details.location?.longitude;
+          console.log(`Got coordinates: ${detailLat}, ${detailLng}`);
+        } else {
+          console.error('Details fetch failed:', detailsResponse.status);
         }
       } catch (err) {
         console.error('Error fetching place details:', err);
@@ -109,12 +138,12 @@ serve(async (req) => {
         id: placeId,
         name,
         types,
-        lat,
-        lng,
+        lat: detailLat,
+        lng: detailLng,
       });
     }
 
-    console.log('Autocomplete results:', predictions.length);
+    console.log('Returning predictions:', predictions.length);
 
     return new Response(
       JSON.stringify({ sessionToken, predictions }),
