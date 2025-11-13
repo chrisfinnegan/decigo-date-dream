@@ -13,7 +13,7 @@ export const Header = () => {
     <header className="bg-white border-b border-decigo-slate-300 px-4 py-3">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <Link to="/" className="flex items-center">
-          <img src="/brand/logo-mark.svg" alt="Decigo" className="h-[45px] w-[45px]" />
+          <img src="/brand/logo-mark.svg" alt="Decigo" className="h-[135px] w-[135px]" />
         </Link>
         <div className="flex items-center gap-4">
           <button 
