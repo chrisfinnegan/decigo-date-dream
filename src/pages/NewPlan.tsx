@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { PlacesAutocomplete } from "@/components/PlacesAutocomplete";
+import { DateRangePicker } from "@/components/DateRangePicker";
 import { analytics } from "@/lib/analytics";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -183,31 +184,12 @@ const NewPlan = () => {
           <h2 className="text-2xl font-bold text-decigo-deep-teal mb-6 text-center">Create Your Plan</h2>
           
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="dateStart" className="text-decigo-deep-teal font-medium">Start Date & Time</Label>
-                <Input
-                  id="dateStart"
-                  type="datetime-local"
-                  value={formData.dateStart}
-                  onChange={(e) => setFormData({ ...formData, dateStart: e.target.value })}
-                  className="rounded-xl border-decigo-slate-300 focus:ring-decigo-green"
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="dateEnd" className="text-decigo-deep-teal font-medium">End Date & Time</Label>
-                <Input
-                  id="dateEnd"
-                  type="datetime-local"
-                  value={formData.dateEnd}
-                  onChange={(e) => setFormData({ ...formData, dateEnd: e.target.value })}
-                  className="rounded-xl border-decigo-slate-300 focus:ring-decigo-green"
-                  required
-                />
-              </div>
-            </div>
+            <DateRangePicker
+              startDate={formData.dateStart}
+              endDate={formData.dateEnd}
+              onStartDateChange={(value) => setFormData({ ...formData, dateStart: value })}
+              onEndDateChange={(value) => setFormData({ ...formData, dateEnd: value })}
+            />
 
             <div className="space-y-2">
               <Label htmlFor="neighborhood" className="text-decigo-deep-teal font-medium">Neighborhood</Label>
