@@ -61,7 +61,7 @@ export function DateTimePicker({ value, onChange }: DateTimePickerProps) {
             )}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start">
+        <PopoverContent className="w-[min(calc(100vw-2rem),320px)] p-0" align="start">
           <div className="p-3 space-y-4">
             <Calendar
               mode="single"
@@ -77,7 +77,7 @@ export function DateTimePicker({ value, onChange }: DateTimePickerProps) {
                 type="time"
                 value={time}
                 onChange={(e) => handleTimeChange(e.target.value)}
-                className="rounded-lg mt-2"
+                className="rounded-lg mt-2 w-full"
               />
             </div>
           </div>
