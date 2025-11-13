@@ -11,7 +11,7 @@ const Index = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-decigo-cream">
       <div className="text-center space-y-8 p-8 max-w-2xl">
-        <img src="/brand/logo-mark.svg" alt="Decigo" className="h-20 w-20 mx-auto mb-6" />
+        <img src="/brand/logo-full.svg" alt="Decigo" className="h-16 mx-auto mb-6" />
         <h1 className="text-5xl font-bold text-decigo-deep-teal mb-4">
           Plan Together, Decide Together
         </h1>

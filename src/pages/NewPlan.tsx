@@ -14,7 +14,7 @@ import { PlacesAutocomplete } from "@/components/PlacesAutocomplete";
 import { analytics } from "@/lib/analytics";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { X, CheckCircle, Zap, Users } from "lucide-react";
+import { X } from "lucide-react";
 
 const NewPlan = () => {
   const navigate = useNavigate();
@@ -108,82 +108,12 @@ const NewPlan = () => {
     }
   };
 
-  const scrollToIntake = () => {
-    const intakeSection = document.getElementById('intake-section');
-    if (intakeSection) {
-      intakeSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  const handleStartPlanning = () => {
-    analytics.track('hero_start_planning');
-    scrollToIntake();
-  };
-
-  const handleWatchDemo = () => {
-    analytics.track('hero_watch_demo');
-    // Placeholder for demo video
-    toast({
-      title: "Coming soon",
-      description: "Demo video will be available shortly",
-    });
-  };
-
   return (
     <div className="min-h-screen bg-decigo-cream">
       <Header />
       
-      {/* Hero Section */}
-      <section className="bg-decigo-cream py-16 px-4 relative overflow-hidden">
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 opacity-10">
-          <div className="brand-gradient w-full h-full rounded-full blur-3xl" />
-        </div>
-        
-        <div className="max-w-4xl mx-auto text-center relative z-10">
-          <div className="mb-8 flex justify-center">
-            <img src="/brand/logo-mark.svg" alt="Decigo" className="h-16 w-16" />
-          </div>
-          
-          <h1 className="text-4xl md:text-5xl font-bold text-decigo-deep-teal mb-6 leading-tight">
-            Plans in minutes, not message storms.
-          </h1>
-          
-          <p className="text-xl text-decigo-slate-700 mb-8 max-w-2xl mx-auto">
-            AI-powered shortlists tailored to your time, place, budget, and vibe.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <button onClick={handleStartPlanning} className="btn-primary">
-              Start planning
-            </button>
-            <button onClick={handleWatchDemo} className="btn-secondary">
-              See a 30-sec demo
-            </button>
-          </div>
-          
-          {/* Benefits Row */}
-          <div className="grid md:grid-cols-3 gap-6 mt-12">
-            <div className="flex flex-col items-center text-center">
-              <CheckCircle className="w-10 h-10 text-decigo-teal mb-3" />
-              <h3 className="font-bold text-decigo-deep-teal mb-2">Three great options</h3>
-              <p className="text-sm text-decigo-slate-700">Curated picks that match your vibe</p>
-            </div>
-            <div className="flex flex-col items-center text-center">
-              <Zap className="w-10 h-10 text-decigo-green mb-3" />
-              <h3 className="font-bold text-decigo-deep-teal mb-2">Tap to vote & lock</h3>
-              <p className="text-sm text-decigo-slate-700">Quick consensus without the back-and-forth</p>
-            </div>
-            <div className="flex flex-col items-center text-center">
-              <Users className="w-10 h-10 text-decigo-lime mb-3" />
-              <h3 className="font-bold text-decigo-deep-teal mb-2">Out of the thread, still connected</h3>
-              <p className="text-sm text-decigo-slate-700">Everyone votes on their own time</p>
-            </div>
-          </div>
-        </div>
-      </section>
-      
       {/* Intake Section */}
-      <section id="intake-section" className="py-12 px-4">
+      <section className="py-12 px-4">
         <div className="max-w-md mx-auto card">
           <h2 className="text-2xl font-bold text-decigo-deep-teal mb-6 text-center">Create Your Plan</h2>
           
