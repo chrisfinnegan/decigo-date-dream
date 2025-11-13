@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { MapPin, ExternalLink, Share2, Copy } from "lucide-react";
+import { MapPin, ExternalLink, Share2, Copy, Image } from "lucide-react";
 import { CountdownTimer } from "@/components/CountdownTimer";
 import { analytics } from "@/lib/analytics";
-import { staticMapUrl } from "@/lib/map";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 
@@ -158,13 +156,11 @@ const PlanView = () => {
   };
 
   const getMapThumbnail = (option: Option) => {
-    // Use Google Places photo if available, otherwise fallback to Mapbox
     if (option.photo_ref) {
       const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-      const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
       return `${supabaseUrl}/functions/v1/places-photo?photoRef=${encodeURIComponent(option.photo_ref)}`;
     }
-    return staticMapUrl(option.lat, option.lng);
+    return null;
   };
 
   const openInMaps = (option: Option, provider: 'apple' | 'google') => {
@@ -191,10 +187,10 @@ const PlanView = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-decigo-cream">
+      <div className="min-h-screen bg-background">
         <Header />
         <div className="p-4 flex items-center justify-center min-h-[60vh]">
-          <p className="text-decigo-slate-700">Loading plan...</p>
+          <p className="text-muted-foreground">Loading plan...</p>
         </div>
         <Footer />
       </div>
@@ -203,10 +199,10 @@ const PlanView = () => {
 
   if (!plan) {
     return (
-      <div className="min-h-screen bg-decigo-cream">
+      <div className="min-h-screen bg-background">
         <Header />
         <div className="p-4 flex items-center justify-center min-h-[60vh]">
-          <p className="text-decigo-slate-700">Plan not found</p>
+          <p className="text-muted-foreground">Plan not found</p>
         </div>
         <Footer />
       </div>
@@ -216,12 +212,12 @@ const PlanView = () => {
   const totalVotes = Object.values(votesByOption).reduce((a, b) => a + b, 0);
 
   return (
-    <div className="min-h-screen bg-decigo-cream">
+    <div className="min-h-screen bg-background">
       <Header />
       <div className="p-4 max-w-4xl mx-auto space-y-6 py-8">
         <div>
-          <h1 className="text-3xl font-bold text-decigo-deep-teal mb-2">
-            {plan.daypart.charAt(0).toUpperCase() + plan.daypart.slice(1)} in {plan.neighborhood}
+          <h1 className="text-3xl font-bold text-primary mb-2">
+            {plan.daypart.charAt(0).toUpperCase() + plan.daypart.slice(1)} {plan.neighborhood && `in ${plan.neighborhood}`}
           </h1>
           <div className="flex gap-2 flex-wrap">
             <span className="chip">{plan.budget_band}</span>
@@ -230,19 +226,19 @@ const PlanView = () => {
           </div>
         </div>
 
-        <div className="card bg-decigo-green/10 border-decigo-green/20">
+        <div className="card bg-accent/10 border-accent/20">
           <div className="space-y-4">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <p className="text-sm font-medium text-decigo-deep-teal">
+                <p className="text-sm font-medium text-primary">
                   Progress: {totalVotes}/{plan.threshold} votes to lock
                 </p>
                 {totalVotes >= plan.threshold - 1 && totalVotes < plan.threshold && (
-                  <Badge className="bg-decigo-error text-white">Almost there!</Badge>
+                  <Badge className="bg-error text-white">Almost there!</Badge>
                 )}
               </div>
               <div className="flex items-center justify-between">
-                <p className="text-sm text-decigo-slate-700">
+                <p className="text-sm text-muted-foreground">
                   Deadline: {new Date(plan.decision_deadline).toLocaleDateString('en-US', { 
                     month: 'short', 
                     day: 'numeric',
@@ -254,8 +250,8 @@ const PlanView = () => {
               </div>
             </div>
 
-            <div className="pt-2 border-t border-decigo-slate-300">
-              <p className="text-sm font-medium mb-2 flex items-center gap-2 text-decigo-deep-teal">
+            <div className="pt-2 border-t border-border">
+              <p className="text-sm font-medium mb-2 flex items-center gap-2 text-primary">
                 <Share2 className="w-4 h-4" />
                 Share with your group
               </p>
@@ -271,67 +267,79 @@ const PlanView = () => {
         </div>
 
         <div className="space-y-4">
-          {options.map((option) => (
-            <div key={option.id} className="card">
-              <div className="flex flex-col md:flex-row gap-4">
-                <img
-                  src={getMapThumbnail(option)}
-                  alt={`${option.name}`}
-                  className="w-full md:w-48 h-36 object-cover rounded-lg flex-shrink-0"
-                  loading="lazy"
-                />
-                
-                <div className="flex-1 space-y-3">
-                  <div>
-                    <div className="flex items-start justify-between mb-1">
-                      <h3 className="font-bold text-decigo-deep-teal text-lg">
-                        {option.rank}. {option.name}
-                      </h3>
-                      <span className="chip text-xs">{option.price_band}</span>
-                    </div>
-                    <p className="text-sm text-decigo-slate-700">{option.address}</p>
+          {options.map((option) => {
+            const thumbnail = getMapThumbnail(option);
+            return (
+              <div key={option.id} className="card">
+                <div className="flex flex-col md:flex-row gap-4">
+                  {thumbnail ? (
+                    <img
+                      src={thumbnail}
+                      alt={option.name}
+                      className="w-full md:w-48 h-36 object-cover rounded-lg flex-shrink-0"
+                      loading="lazy"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                        e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                      }}
+                    />
+                  ) : null}
+                  <div className={`w-full md:w-48 h-36 bg-muted rounded-lg flex-shrink-0 flex items-center justify-center ${thumbnail ? 'hidden' : ''}`}>
+                    <Image className="w-8 h-8 text-muted-foreground" />
                   </div>
                   
-                  <div>
-                    <p className="text-xs font-medium text-decigo-deep-teal mb-1">Why it fits:</p>
-                    <p className="text-sm text-decigo-slate-700">{option.why_it_fits}</p>
-                  </div>
-
-                  {option.tip && (
-                    <div className="chip inline-block text-xs">
-                      💡 {option.tip}
+                  <div className="flex-1 space-y-3">
+                    <div>
+                      <div className="flex items-start justify-between mb-1">
+                        <h3 className="font-bold text-primary text-lg">
+                          {option.rank}. {option.name}
+                        </h3>
+                        <span className="chip text-xs">{option.price_band}</span>
+                      </div>
+                      <p className="text-sm text-muted-foreground">{option.address}</p>
                     </div>
-                  )}
+                    
+                    <div>
+                      <p className="text-xs font-medium text-primary mb-1">Why it fits:</p>
+                      <p className="text-sm text-muted-foreground">{option.why_it_fits}</p>
+                    </div>
 
-                  <div className="flex gap-2 flex-wrap pt-2">
-                    <button
-                      onClick={() => openInMaps(option, 'apple')}
-                      className="btn-primary text-xs h-9 px-4"
+                    {option.tip && (
+                      <div className="chip inline-block text-xs">
+                        💡 {option.tip}
+                      </div>
+                    )}
+
+                    <div className="flex gap-2 flex-wrap pt-2">
+                      <button
+                        onClick={() => openInMaps(option, 'apple')}
+                        className="btn-primary text-xs h-9 px-4 flex items-center"
+                      >
+                        <MapPin className="w-3 h-3 mr-1" />
+                        Open in Maps
+                      </button>
+                      <button
+                        onClick={() => openInMaps(option, 'google')}
+                        className="btn-secondary text-xs h-9 px-4 flex items-center"
+                      >
+                        <ExternalLink className="w-3 h-3 mr-1" />
+                        Google Maps
+                      </button>
+                    </div>
+
+                    <Button
+                      className="w-full btn-primary"
+                      onClick={() => handleVote(option.id)}
+                      disabled={voting}
                     >
-                      <MapPin className="w-3 h-3 mr-1" />
-                      Open in Maps
-                    </button>
-                    <button
-                      onClick={() => openInMaps(option, 'google')}
-                      className="btn-secondary text-xs h-9 px-4"
-                    >
-                      <ExternalLink className="w-3 h-3 mr-1" />
-                      Google Maps
-                    </button>
+                      Vote for {option.name}
+                      {votesByOption[option.id] && ` (${votesByOption[option.id]} votes)`}
+                    </Button>
                   </div>
-
-                  <Button
-                    className="w-full btn-primary"
-                    onClick={() => handleVote(option.id)}
-                    disabled={voting}
-                  >
-                    Vote for {option.name}
-                    {votesByOption[option.id] && ` (${votesByOption[option.id]} votes)`}
-                  </Button>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {!showAll && options.length === 3 && (
