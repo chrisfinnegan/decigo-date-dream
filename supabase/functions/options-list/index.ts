@@ -12,9 +12,19 @@ serve(async (req) => {
   }
 
   try {
-    const url = new URL(req.url);
-    const planId = url.searchParams.get('planId');
-    const mode = url.searchParams.get('mode') || 'top3';
+    // Support both query params and body for flexibility
+    let planId: string | null = null;
+    let mode: string = 'top3';
+    
+    if (req.method === 'POST') {
+      const body = await req.json();
+      planId = body.planId;
+      mode = body.mode || 'top3';
+    } else {
+      const url = new URL(req.url);
+      planId = url.searchParams.get('planId');
+      mode = url.searchParams.get('mode') || 'top3';
+    }
 
     if (!planId) {
       return new Response(
@@ -25,7 +35,7 @@ serve(async (req) => {
 
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_PUBLISHABLE_KEY') ?? ''
+      Deno.env.get('SUPABASE_ANON_KEY') ?? ''
     );
 
     // Get options based on mode
