@@ -13,7 +13,7 @@ export const Header = () => {
     <header className="bg-white border-b border-decigo-slate-300 px-4 py-3">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <Link to="/" className="flex items-center">
-          <img src="/brand/logo-mark.svg" alt="Decigo" className="h-10 w-10" />
+          <img src="/brand/logo-mark.svg" alt="Decigo" className="h-20 w-20" />
         </Link>
         <div className="flex items-center gap-4">
           <button 
@@ -22,9 +22,9 @@ export const Header = () => {
           >
             How it works
           </button>
-          <button onClick={scrollToIntake} className="btn-primary text-sm h-9 px-4">
+          <Button onClick={scrollToIntake} className="btn-primary text-sm h-9 px-4">
             Start planning
-          </button>
+          </Button>
         </div>
       </div>
     </header>
