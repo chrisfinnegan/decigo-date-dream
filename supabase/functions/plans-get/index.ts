@@ -12,8 +12,16 @@ serve(async (req) => {
   }
 
   try {
-    const url = new URL(req.url);
-    const planId = url.searchParams.get('id');
+    // Support both query params and body for flexibility
+    let planId: string | null = null;
+    
+    if (req.method === 'POST') {
+      const body = await req.json();
+      planId = body.id;
+    } else {
+      const url = new URL(req.url);
+      planId = url.searchParams.get('id');
+    }
 
     if (!planId) {
       return new Response(
