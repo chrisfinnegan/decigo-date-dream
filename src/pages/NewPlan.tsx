@@ -183,28 +183,30 @@ const NewPlan = () => {
           <h2 className="text-2xl font-bold text-decigo-deep-teal mb-6 text-center">Create Your Plan</h2>
           
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="dateStart" className="text-decigo-deep-teal font-medium">Start Date & Time</Label>
-              <Input
-                id="dateStart"
-                type="datetime-local"
-                value={formData.dateStart}
-                onChange={(e) => setFormData({ ...formData, dateStart: e.target.value })}
-                className="rounded-xl border-decigo-slate-300 focus:ring-decigo-green"
-                required
-              />
-            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="dateStart" className="text-decigo-deep-teal font-medium">Start Date & Time</Label>
+                <Input
+                  id="dateStart"
+                  type="datetime-local"
+                  value={formData.dateStart}
+                  onChange={(e) => setFormData({ ...formData, dateStart: e.target.value })}
+                  className="rounded-xl border-decigo-slate-300 focus:ring-decigo-green"
+                  required
+                />
+              </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="dateEnd" className="text-decigo-deep-teal font-medium">End Date & Time</Label>
-              <Input
-                id="dateEnd"
-                type="datetime-local"
-                value={formData.dateEnd}
-                onChange={(e) => setFormData({ ...formData, dateEnd: e.target.value })}
-                className="rounded-xl border-decigo-slate-300 focus:ring-decigo-green"
-                required
-              />
+              <div className="space-y-2">
+                <Label htmlFor="dateEnd" className="text-decigo-deep-teal font-medium">End Date & Time</Label>
+                <Input
+                  id="dateEnd"
+                  type="datetime-local"
+                  value={formData.dateEnd}
+                  onChange={(e) => setFormData({ ...formData, dateEnd: e.target.value })}
+                  className="rounded-xl border-decigo-slate-300 focus:ring-decigo-green"
+                  required
+                />
+              </div>
             </div>
 
             <div className="space-y-2">
