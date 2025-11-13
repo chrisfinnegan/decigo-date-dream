@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { MapPin, ExternalLink } from "lucide-react";
+import { MapPin, ExternalLink, Share2, Copy } from "lucide-react";
 import { CountdownTimer } from "@/components/CountdownTimer";
 import { analytics } from "@/lib/analytics";
 import { staticMapUrl } from "@/lib/map";
@@ -163,6 +163,15 @@ const PlanView = () => {
     window.open(url, '_blank');
   };
 
+  const copyShareLink = () => {
+    const shareUrl = window.location.href;
+    navigator.clipboard.writeText(shareUrl);
+    toast({
+      title: "Link copied!",
+      description: "Share this link with your group to vote",
+    });
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background p-4 flex items-center justify-center">
@@ -195,27 +204,46 @@ const PlanView = () => {
           </div>
         </div>
 
-        <div className="bg-muted p-4 rounded-lg space-y-2">
-          <div className="flex items-center justify-between">
-            <p className="text-sm font-medium">
-              Progress: {totalVotes}/{plan.threshold} votes to lock
-            </p>
-            {totalVotes >= plan.threshold - 1 && totalVotes < plan.threshold && (
-              <Badge variant="destructive">Almost there!</Badge>
-            )}
-          </div>
-          <div className="flex items-center justify-between">
-            <p className="text-sm text-muted-foreground">
-              Deadline: {new Date(plan.decision_deadline).toLocaleDateString('en-US', { 
-                month: 'short', 
-                day: 'numeric',
-                hour: 'numeric',
-                minute: '2-digit'
-              })}
-            </p>
-            <CountdownTimer deadline={plan.decision_deadline} />
-          </div>
-        </div>
+        <Card className="bg-primary/5 border-primary/20">
+          <CardContent className="pt-6 space-y-4">
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-medium">
+                  Progress: {totalVotes}/{plan.threshold} votes to lock
+                </p>
+                {totalVotes >= plan.threshold - 1 && totalVotes < plan.threshold && (
+                  <Badge variant="destructive">Almost there!</Badge>
+                )}
+              </div>
+              <div className="flex items-center justify-between">
+                <p className="text-sm text-muted-foreground">
+                  Deadline: {new Date(plan.decision_deadline).toLocaleDateString('en-US', { 
+                    month: 'short', 
+                    day: 'numeric',
+                    hour: 'numeric',
+                    minute: '2-digit'
+                  })}
+                </p>
+                <CountdownTimer deadline={plan.decision_deadline} />
+              </div>
+            </div>
+
+            <div className="pt-2 border-t border-border">
+              <p className="text-sm font-medium mb-2 flex items-center gap-2">
+                <Share2 className="w-4 h-4" />
+                Share with your group
+              </p>
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={copyShareLink}
+              >
+                <Copy className="w-4 h-4 mr-2" />
+                Copy voting link
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
 
         <div className="space-y-4">
           {options.map((option) => (

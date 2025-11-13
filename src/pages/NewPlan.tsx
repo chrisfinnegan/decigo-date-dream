@@ -78,9 +78,14 @@ const NewPlan = () => {
         result_mode: resultMode,
       });
 
+      // Store magic token for management access
+      if (data.magicToken) {
+        localStorage.setItem(`plan_${data.planId}_token`, data.magicToken);
+      }
+
       toast({
         title: "Plan created!",
-        description: "Redirecting to your plan...",
+        description: "You can now share the voting link with your group",
       });
 
       // Store result mode preference
