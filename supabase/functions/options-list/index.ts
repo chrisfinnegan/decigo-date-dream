@@ -41,7 +41,8 @@ serve(async (req) => {
     // Get options based on mode
     const limit = mode === 'top3' ? 3 : 20;
     
-    const { data: options, error } = await supabaseClient
+    // Try to get options from database first
+    const { data: existingOptions, error } = await supabaseClient
       .from('options')
       .select('*')
       .eq('plan_id', planId)
@@ -55,6 +56,10 @@ serve(async (req) => {
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
+
+    // If options exist in database, return them
+    // Google Places integration will be added in plans-create function
+    const options = existingOptions || [];
 
     console.log('Options retrieved:', options.length);
 

@@ -20,6 +20,7 @@ interface Option {
   lat: number;
   lng: number;
   rank: number;
+  photo_ref?: string;
 }
 
 interface Plan {
@@ -147,6 +148,12 @@ const PlanView = () => {
   };
 
   const getMapThumbnail = (option: Option) => {
+    // Use Google Places photo if available, otherwise fallback to Mapbox
+    if (option.photo_ref) {
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
+      return `${supabaseUrl}/functions/v1/places-photo?photoRef=${encodeURIComponent(option.photo_ref)}`;
+    }
     return staticMapUrl(option.lat, option.lng);
   };
 

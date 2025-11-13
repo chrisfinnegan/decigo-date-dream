@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
 import { MapPin } from "lucide-react";
-import { geocodeUrl } from "@/lib/map";
+import { supabase } from "@/integrations/supabase/client";
 
 interface PlacesAutocompleteProps {
   value: string;
@@ -12,14 +12,15 @@ interface PlacesAutocompleteProps {
 
 interface Suggestion {
   id: string;
-  place_name: string;
-  center: [number, number];
+  name: string;
+  types: string[];
 }
 
 export const PlacesAutocomplete = ({ value, onChange, placeholder }: PlacesAutocompleteProps) => {
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [sessionToken] = useState(crypto.randomUUID());
   const timeoutRef = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
@@ -36,17 +37,21 @@ export const PlacesAutocomplete = ({ value, onChange, placeholder }: PlacesAutoc
     timeoutRef.current = setTimeout(async () => {
       setLoading(true);
       try {
-        const response = await fetch(geocodeUrl(value));
-        const data = await response.json();
-        const features = data.features || [];
-        setSuggestions(features.map((f: any) => ({
-          id: f.id,
-          place_name: f.place_name,
-          center: f.center
-        })));
+        // Call our proxy endpoint instead of Google directly
+        const { data, error } = await supabase.functions.invoke('places-autocomplete', {
+          body: { 
+            q: value,
+            sessionToken,
+          },
+        });
+
+        if (error) throw error;
+
+        setSuggestions(data.predictions || []);
         setShowSuggestions(true);
       } catch (error) {
         console.error('Error fetching places:', error);
+        setSuggestions([]);
       } finally {
         setLoading(false);
       }
@@ -81,13 +86,13 @@ export const PlacesAutocomplete = ({ value, onChange, placeholder }: PlacesAutoc
                     <CommandItem
                       key={index}
                       onSelect={() => {
-                        onChange(suggestion.place_name);
+                        onChange(suggestion.name);
                         setShowSuggestions(false);
                       }}
                       className="cursor-pointer"
                     >
                       <MapPin className="mr-2 h-4 w-4" />
-                      <span>{suggestion.place_name}</span>
+                      <span>{suggestion.name}</span>
                     </CommandItem>
                   ))}
                 </CommandGroup>
