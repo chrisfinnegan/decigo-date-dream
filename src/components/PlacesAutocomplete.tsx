@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
 import { MapPin } from "lucide-react";
+import { geocodeUrl } from "@/lib/map";
 
 interface PlacesAutocompleteProps {
   value: string;
@@ -10,6 +11,7 @@ interface PlacesAutocompleteProps {
 }
 
 interface Suggestion {
+  id: string;
   place_name: string;
   center: [number, number];
 }
@@ -34,12 +36,14 @@ export const PlacesAutocomplete = ({ value, onChange, placeholder }: PlacesAutoc
     timeoutRef.current = setTimeout(async () => {
       setLoading(true);
       try {
-        const token = import.meta.env.VITE_MAPBOX_TOKEN;
-        const response = await fetch(
-          `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(value)}.json?access_token=${token}&types=neighborhood,locality,place&limit=5`
-        );
+        const response = await fetch(geocodeUrl(value));
         const data = await response.json();
-        setSuggestions(data.features || []);
+        const features = data.features || [];
+        setSuggestions(features.map((f: any) => ({
+          id: f.id,
+          place_name: f.place_name,
+          center: f.center
+        })));
         setShowSuggestions(true);
       } catch (error) {
         console.error('Error fetching places:', error);

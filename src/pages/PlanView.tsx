@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { MapPin, ExternalLink } from "lucide-react";
 import { CountdownTimer } from "@/components/CountdownTimer";
 import { analytics } from "@/lib/analytics";
+import { staticMapUrl } from "@/lib/map";
 
 interface Option {
   id: string;
@@ -146,8 +147,7 @@ const PlanView = () => {
   };
 
   const getMapThumbnail = (option: Option) => {
-    const mapboxToken = import.meta.env.VITE_MAPBOX_TOKEN || '';
-    return `https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/pin-l+000(${option.lng},${option.lat})/${option.lng},${option.lat},14/320x180@2x?access_token=${mapboxToken}`;
+    return staticMapUrl(option.lat, option.lng);
   };
 
   const openInMaps = (option: Option, provider: 'apple' | 'google') => {
