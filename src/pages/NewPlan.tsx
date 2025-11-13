@@ -183,8 +183,8 @@ const NewPlan = () => {
           <h2 className="text-2xl font-bold text-decigo-deep-teal mb-6 text-center">Create Your Plan</h2>
           
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="flex flex-col sm:flex-row gap-4">
-              <div className="space-y-2 flex-1">
+            <div className="space-y-4">
+              <div className="space-y-2">
                 <Label htmlFor="dateStart" className="text-decigo-deep-teal font-medium">Start Date & Time</Label>
                 <Input
                   id="dateStart"
@@ -196,7 +196,7 @@ const NewPlan = () => {
                 />
               </div>
 
-              <div className="space-y-2 flex-1">
+              <div className="space-y-2">
                 <Label htmlFor="dateEnd" className="text-decigo-deep-teal font-medium">End Date & Time</Label>
                 <Input
                   id="dateEnd"
