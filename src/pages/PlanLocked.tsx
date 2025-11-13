@@ -6,6 +6,9 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Calendar, MapPin, ExternalLink } from "lucide-react";
+import { InstallPrompt } from "@/components/InstallPrompt";
+import { usePWA } from "@/hooks/usePWA";
+import { analytics } from "@/lib/analytics";
 
 interface Option {
   id: string;
@@ -32,6 +35,7 @@ const PlanLocked = () => {
   const [plan, setPlan] = useState<Plan | null>(null);
   const [option, setOption] = useState<Option | null>(null);
   const [loading, setLoading] = useState(true);
+  const { showInstallPrompt, installApp, dismissPrompt, markPlanLocked } = usePWA();
 
   useEffect(() => {
     if (planId) {
@@ -59,6 +63,9 @@ const PlanLocked = () => {
       if (optionsData.options && optionsData.options.length > 0) {
         setOption(optionsData.options[0]);
       }
+      
+      // Mark plan as locked for PWA prompt
+      markPlanLocked();
     } catch (error) {
       console.error('Error loading locked plan:', error);
       toast({
@@ -72,6 +79,10 @@ const PlanLocked = () => {
   };
 
   const downloadICS = () => {
+    analytics.trackCalendarAdded({
+      planId,
+      optionId: option?.id,
+    });
     const baseUrl = import.meta.env.VITE_SUPABASE_URL || '';
     window.open(`${baseUrl}/functions/v1/ics?planId=${planId}`, '_blank');
   };
@@ -195,6 +206,10 @@ const PlanLocked = () => {
             </Button>
           </CardContent>
         </Card>
+
+        {showInstallPrompt && (
+          <InstallPrompt onInstall={installApp} onDismiss={dismissPrompt} />
+        )}
       </div>
     </div>
   );

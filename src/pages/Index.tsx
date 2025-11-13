@@ -1,7 +1,13 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { useEffect } from "react";
+import { analytics } from "@/lib/analytics";
 
 const Index = () => {
+  useEffect(() => {
+    analytics.trackLPView();
+  }, []);
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-primary/10 to-primary/5">
       <div className="text-center space-y-8 p-8 max-w-2xl">

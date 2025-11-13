@@ -6,6 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { MapPin, ExternalLink } from "lucide-react";
+import { CountdownTimer } from "@/components/CountdownTimer";
+import { analytics } from "@/lib/analytics";
 
 interface Option {
   id: string;
@@ -45,6 +47,10 @@ const PlanView = () => {
 
   useEffect(() => {
     if (planId) {
+      const preferredMode = localStorage.getItem(`plan_${planId}_mode`) as 'top3' | 'full20' | null;
+      if (preferredMode) {
+        setShowAll(preferredMode === 'full20');
+      }
       loadPlan();
     }
   }, [planId]);
@@ -69,6 +75,13 @@ const PlanView = () => {
       if (optionsError) throw optionsError;
 
       setOptions(optionsData.options);
+      
+      // Track analytics
+      analytics.trackOptionsShown(showAll ? 'full20' : 'top3', {
+        planId,
+        daypart: planData.plan?.daypart,
+        neighborhood: planData.plan?.neighborhood,
+      });
     } catch (error) {
       console.error('Error loading plan:', error);
       toast({
@@ -93,6 +106,13 @@ const PlanView = () => {
 
       if (error) throw error;
 
+      analytics.trackVoteCast({
+        planId,
+        optionId,
+        daypart: plan?.daypart,
+        neighborhood: plan?.neighborhood,
+      });
+
       toast({
         title: "Vote cast!",
         description: "Checking if plan is locked...",
@@ -104,6 +124,11 @@ const PlanView = () => {
       });
 
       if (lockData?.locked) {
+        analytics.trackLockReached({
+          planId,
+          optionId: lockData.optionId,
+          daypart: plan?.daypart,
+        });
         navigate(`/p/${planId}/locked`);
       } else {
         loadPlan();
@@ -126,6 +151,12 @@ const PlanView = () => {
   };
 
   const openInMaps = (option: Option, provider: 'apple' | 'google') => {
+    analytics.trackMapOpen({
+      planId,
+      optionId: option.id,
+      provider,
+    });
+    
     const url = provider === 'apple'
       ? `maps://maps.apple.com/?q=${encodeURIComponent(option.address)}`
       : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(option.address)}`;
@@ -164,13 +195,26 @@ const PlanView = () => {
           </div>
         </div>
 
-        <div className="bg-muted p-4 rounded-lg">
-          <p className="text-sm text-muted-foreground">
-            Progress: {totalVotes}/{plan.threshold} votes to lock
-          </p>
-          <p className="text-sm text-muted-foreground mt-1">
-            Deadline: {new Date(plan.decision_deadline).toLocaleString()}
-          </p>
+        <div className="bg-muted p-4 rounded-lg space-y-2">
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-medium">
+              Progress: {totalVotes}/{plan.threshold} votes to lock
+            </p>
+            {totalVotes >= plan.threshold - 1 && totalVotes < plan.threshold && (
+              <Badge variant="destructive">Almost there!</Badge>
+            )}
+          </div>
+          <div className="flex items-center justify-between">
+            <p className="text-sm text-muted-foreground">
+              Deadline: {new Date(plan.decision_deadline).toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric',
+                hour: 'numeric',
+                minute: '2-digit'
+              })}
+            </p>
+            <CountdownTimer deadline={plan.decision_deadline} />
+          </div>
         </div>
 
         <div className="space-y-4">

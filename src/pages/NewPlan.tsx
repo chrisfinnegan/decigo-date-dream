@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,12 +6,19 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Badge } from "@/components/ui/badge";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { PlacesAutocomplete } from "@/components/PlacesAutocomplete";
+import { analytics } from "@/lib/analytics";
+import { X } from "lucide-react";
 
 const NewPlan = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [resultMode, setResultMode] = useState<'top3' | 'full20'>('top3');
+  const [chips, setChips] = useState<string[]>([]);
   const [formData, setFormData] = useState({
     dateStart: "",
     dateEnd: "",
@@ -22,6 +29,24 @@ const NewPlan = () => {
     twoStop: false,
     notesRaw: "",
   });
+
+  useEffect(() => {
+    analytics.trackIntakeStart();
+  }, []);
+
+  const generateChips = () => {
+    // Simple chip generation from notes
+    if (formData.notesRaw.trim()) {
+      const words = formData.notesRaw.toLowerCase().split(/\s+/);
+      const keywords = ['vegan', 'vegetarian', 'gluten-free', 'outdoor', 'indoor', 'romantic', 'casual', 'quiet', 'lively'];
+      const foundChips = words.filter(w => keywords.includes(w));
+      setChips(Array.from(new Set([...chips, ...foundChips])));
+    }
+  };
+
+  const removeChip = (chip: string) => {
+    setChips(chips.filter(c => c !== chip));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,10 +70,21 @@ const NewPlan = () => {
 
       if (error) throw error;
 
+      analytics.trackIntakeComplete({
+        daypart: formData.daypart,
+        neighborhood: formData.neighborhood,
+        headcount: parseInt(formData.headcount),
+        budget_band: formData.budgetBand,
+        result_mode: resultMode,
+      });
+
       toast({
         title: "Plan created!",
         description: "Redirecting to your plan...",
       });
+
+      // Store result mode preference
+      localStorage.setItem(`plan_${data.planId}_mode`, resultMode);
 
       // Navigate to plan view
       navigate(`/p/${data.planId}`);
@@ -94,13 +130,10 @@ const NewPlan = () => {
 
           <div className="space-y-2">
             <Label htmlFor="neighborhood">Neighborhood</Label>
-            <Input
-              id="neighborhood"
-              type="text"
-              placeholder="e.g., SoHo, Brooklyn"
+            <PlacesAutocomplete
               value={formData.neighborhood}
-              onChange={(e) => setFormData({ ...formData, neighborhood: e.target.value })}
-              required
+              onChange={(value) => setFormData({ ...formData, neighborhood: value })}
+              placeholder="e.g., SoHo, Brooklyn"
             />
           </div>
 
@@ -173,8 +206,37 @@ const NewPlan = () => {
               placeholder="Any preferences, dietary restrictions, or special requests..."
               value={formData.notesRaw}
               onChange={(e) => setFormData({ ...formData, notesRaw: e.target.value })}
+              onBlur={generateChips}
               rows={4}
             />
+            {chips.length > 0 && (
+              <div className="flex flex-wrap gap-2 mt-2">
+                {chips.map((chip, i) => (
+                  <Badge key={i} variant="secondary" className="gap-1">
+                    {chip}
+                    <X className="w-3 h-3 cursor-pointer" onClick={() => removeChip(chip)} />
+                  </Badge>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label>Result Mode</Label>
+            <RadioGroup value={resultMode} onValueChange={(v) => setResultMode(v as 'top3' | 'full20')}>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="top3" id="top3" />
+                <Label htmlFor="top3" className="font-normal cursor-pointer">
+                  Top 3 (Recommended) - Quick decision
+                </Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="full20" id="full20" />
+                <Label htmlFor="full20" className="font-normal cursor-pointer">
+                  Full List (~20) - More options
+                </Label>
+              </div>
+            </RadioGroup>
           </div>
 
           <Button type="submit" className="w-full" disabled={loading}>

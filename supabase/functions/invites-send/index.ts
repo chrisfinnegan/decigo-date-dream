@@ -120,6 +120,7 @@ serve(async (req) => {
       if (invite.channel === 'sms') {
         // Send SMS via Twilio
         try {
+          const baseUrlForCallback = Deno.env.get('BASE_URL') || baseUrl;
           const twilioResponse = await fetch(
             `https://api.twilio.com/2010-04-01/Accounts/${Deno.env.get('TWILIO_ACCOUNT_SID')}/Messages.json`,
             {
@@ -130,8 +131,9 @@ serve(async (req) => {
               },
               body: new URLSearchParams({
                 To: invite.value,
-                From: Deno.env.get('TWILIO_MESSAGING_SID') || '',
+                MessagingServiceSid: Deno.env.get('TWILIO_MESSAGING_SID') || '',
                 Body: `You're invited to vote on plans! ${shareUrl}`,
+                StatusCallback: `${baseUrlForCallback}/functions/v1/webhooks-twilio`,
               }),
             }
           );
