@@ -136,22 +136,12 @@ All colors MUST be HSL.
   /* Fix datetime-local inputs on mobile */
   input[type="datetime-local"] {
     min-width: 0;
+    pointer-events: auto !important;
   }
 
   @media (max-width: 640px) {
     input[type="datetime-local"] {
       font-size: 16px;
-      padding-left: 0.5rem;
-      padding-right: 0.5rem;
-    }
-    
-    input[type="datetime-local"]::-webkit-datetime-edit {
-      padding-right: 0;
-    }
-    
-    input[type="datetime-local"]::-webkit-calendar-picker-indicator {
-      margin-left: 0;
-      padding-left: 0;
     }
   }
 }
