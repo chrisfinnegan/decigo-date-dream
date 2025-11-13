@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { PlacesAutocomplete } from "@/components/PlacesAutocomplete";
-import { DateRangePicker } from "@/components/DateRangePicker";
+import { DateTimePicker } from "@/components/DateTimePicker";
 import { analytics } from "@/lib/analytics";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -24,7 +24,6 @@ const NewPlan = () => {
   const [chips, setChips] = useState<string[]>([]);
   const [formData, setFormData] = useState({
     dateStart: "",
-    dateEnd: "",
     neighborhood: "",
     neighborhoodPlaceId: "",
     neighborhoodLat: 0,
@@ -62,7 +61,7 @@ const NewPlan = () => {
         body: {
           daypart: formData.daypart,
           date_start: formData.dateStart,
-          date_end: formData.dateEnd,
+          date_end: formData.dateStart,
           neighborhood: formData.neighborhood,
           neighborhood_place_id: formData.neighborhoodPlaceId,
           neighborhood_lat: formData.neighborhoodLat,
@@ -184,11 +183,9 @@ const NewPlan = () => {
           <h2 className="text-2xl font-bold text-decigo-deep-teal mb-6 text-center">Create Your Plan</h2>
           
           <form onSubmit={handleSubmit} className="space-y-6">
-            <DateRangePicker
-              startDate={formData.dateStart}
-              endDate={formData.dateEnd}
-              onStartDateChange={(value) => setFormData({ ...formData, dateStart: value })}
-              onEndDateChange={(value) => setFormData({ ...formData, dateEnd: value })}
+            <DateTimePicker
+              value={formData.dateStart}
+              onChange={(value) => setFormData({ ...formData, dateStart: value })}
             />
 
             <div className="space-y-2">
@@ -241,7 +238,7 @@ const NewPlan = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="daypart" className="text-decigo-deep-teal font-medium">Daypart</Label>
+              <Label htmlFor="daypart" className="text-decigo-deep-teal font-medium">Occasion</Label>
               <Select
                 value={formData.daypart}
                 onValueChange={(value) => setFormData({ ...formData, daypart: value })}
