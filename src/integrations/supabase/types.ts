@@ -77,6 +77,7 @@ export type Database = {
           lat: number
           lng: number
           name: string
+          photo_ref: string | null
           plan_id: string | null
           price_band: string | null
           rank: number
@@ -90,6 +91,7 @@ export type Database = {
           lat: number
           lng: number
           name: string
+          photo_ref?: string | null
           plan_id?: string | null
           price_band?: string | null
           rank: number
@@ -103,6 +105,7 @@ export type Database = {
           lat?: number
           lng?: number
           name?: string
+          photo_ref?: string | null
           plan_id?: string | null
           price_band?: string | null
           rank?: number
@@ -120,6 +123,33 @@ export type Database = {
           },
         ]
       }
+      places_cache: {
+        Row: {
+          cache_key: string
+          cache_type: string
+          created_at: string | null
+          data: Json
+          expires_at: string
+          id: string
+        }
+        Insert: {
+          cache_key: string
+          cache_type: string
+          created_at?: string | null
+          data: Json
+          expires_at: string
+          id?: string
+        }
+        Update: {
+          cache_key?: string
+          cache_type?: string
+          created_at?: string | null
+          data?: Json
+          expires_at?: string
+          id?: string
+        }
+        Relationships: []
+      }
       plans: {
         Row: {
           budget_band: string
@@ -136,6 +166,9 @@ export type Database = {
           magic_token: string
           mode: string
           neighborhood: string
+          neighborhood_lat: number | null
+          neighborhood_lng: number | null
+          neighborhood_place_id: string | null
           notes_chips: string[] | null
           notes_raw: string | null
           threshold: number
@@ -156,6 +189,9 @@ export type Database = {
           magic_token: string
           mode: string
           neighborhood: string
+          neighborhood_lat?: number | null
+          neighborhood_lng?: number | null
+          neighborhood_place_id?: string | null
           notes_chips?: string[] | null
           notes_raw?: string | null
           threshold: number
@@ -176,6 +212,9 @@ export type Database = {
           magic_token?: string
           mode?: string
           neighborhood?: string
+          neighborhood_lat?: number | null
+          neighborhood_lng?: number | null
+          neighborhood_place_id?: string | null
           notes_chips?: string[] | null
           notes_raw?: string | null
           threshold?: number

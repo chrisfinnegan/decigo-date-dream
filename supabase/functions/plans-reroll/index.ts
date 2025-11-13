@@ -41,10 +41,10 @@ serve(async (req) => {
       );
     }
 
-    // Check if already rerolled
+    // Get current options
     const { data: existingOptions } = await supabaseClient
       .from('options')
-      .select('id')
+      .select('id, source_id')
       .eq('plan_id', planId);
 
     if (existingOptions && existingOptions.length > 3) {
@@ -54,18 +54,102 @@ serve(async (req) => {
       );
     }
 
-    // Get current option IDs to avoid duplicates
-    const currentOptionIds = existingOptions?.map(o => o.id) || [];
+    const usedPlaceIds = existingOptions?.map(o => o.source_id).filter(Boolean) || [];
 
-    // TODO: In production, generate new options via AI/Places API
-    // For now, return placeholder message
-    console.log('Reroll requested for plan:', planId);
-    console.log('Current options to avoid:', currentOptionIds);
+    // Get cached candidates
+    const candidateCacheKey = `plan:${planId}:candidates`;
+    const { data: cacheData } = await supabaseClient
+      .from('places_cache')
+      .select('data')
+      .eq('cache_key', candidateCacheKey)
+      .gt('expires_at', new Date().toISOString())
+      .single();
+
+    if (!cacheData?.data) {
+      return new Response(
+        JSON.stringify({ error: 'Candidate cache expired. Please create a new plan.' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const candidates = cacheData.data as any[];
+    console.log(`Reroll: ${candidates.length} candidates available, ${usedPlaceIds.length} already used`);
+
+    // Filter out used options and pick next 3
+    const availableCandidates = candidates.filter(c => !usedPlaceIds.includes(c.place_id));
+    
+    if (availableCandidates.length < 3) {
+      return new Response(
+        JSON.stringify({ error: 'Not enough new options available' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const newOptions = availableCandidates.slice(0, 3);
+
+    // Get plan details for budget
+    const { data: planData } = await supabaseClient
+      .from('plans')
+      .select('budget_band')
+      .eq('id', planId)
+      .single();
+
+    // Enrich with Place Details if available
+    const apiKey = Deno.env.get('GOOGLE_MAPS_API_KEY');
+    const optionsToInsert = [];
+    
+    for (let i = 0; i < newOptions.length; i++) {
+      const candidate = newOptions[i];
+      let optionData = { ...candidate };
+
+      if (apiKey && candidate.place_id) {
+        const detailsCacheKey = `details:${candidate.place_id}`;
+        const { data: detailsCache } = await supabaseClient
+          .from('places_cache')
+          .select('data')
+          .eq('cache_key', detailsCacheKey)
+          .gt('expires_at', new Date().toISOString())
+          .single();
+
+        if (detailsCache?.data) {
+          console.log('Cache HIT: place details for reroll');
+          optionData = { ...optionData, ...detailsCache.data };
+        }
+      }
+
+      optionsToInsert.push({
+        plan_id: planId,
+        name: optionData.name,
+        address: optionData.address,
+        lat: optionData.lat,
+        lng: optionData.lng,
+        rank: (existingOptions?.length || 0) + i + 1,
+        price_band: planData?.budget_band || '$$',
+        why_it_fits: optionData.why_it_fits || null,
+        tip: optionData.tip || null,
+        source_id: optionData.place_id || null,
+        photo_ref: optionData.photo_ref || null,
+      });
+    }
+
+    const { error: insertError } = await supabaseClient
+      .from('options')
+      .insert(optionsToInsert);
+
+    if (insertError) {
+      console.error('Error inserting reroll options:', insertError);
+      return new Response(
+        JSON.stringify({ error: insertError.message }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    console.log(`Reroll complete: added ${optionsToInsert.length} new options`);
 
     return new Response(
       JSON.stringify({ 
-        message: 'Reroll functionality requires AI/Places API integration',
-        currentOptions: existingOptions?.length || 0
+        success: true,
+        newOptionsCount: optionsToInsert.length
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );

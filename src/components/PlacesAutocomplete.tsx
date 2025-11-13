@@ -6,7 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 interface PlacesAutocompleteProps {
   value: string;
-  onChange: (value: string) => void;
+  onChange: (value: string, placeData?: { place_id: string; lat: number; lng: number }) => void;
   placeholder?: string;
 }
 
@@ -14,6 +14,8 @@ interface Suggestion {
   id: string;
   name: string;
   types: string[];
+  lat?: number;
+  lng?: number;
 }
 
 export const PlacesAutocomplete = ({ value, onChange, placeholder }: PlacesAutocompleteProps) => {
@@ -86,7 +88,11 @@ export const PlacesAutocomplete = ({ value, onChange, placeholder }: PlacesAutoc
                     <CommandItem
                       key={index}
                       onSelect={() => {
-                        onChange(suggestion.name);
+                        onChange(suggestion.name, {
+                          place_id: suggestion.id,
+                          lat: suggestion.lat || 0,
+                          lng: suggestion.lng || 0
+                        });
                         setShowSuggestions(false);
                       }}
                       className="cursor-pointer"

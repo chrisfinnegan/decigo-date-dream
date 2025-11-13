@@ -23,6 +23,9 @@ const NewPlan = () => {
     dateStart: "",
     dateEnd: "",
     neighborhood: "",
+    neighborhoodPlaceId: "",
+    neighborhoodLat: 0,
+    neighborhoodLng: 0,
     headcount: "2",
     budgetBand: "$$",
     daypart: "dinner",
@@ -60,11 +63,15 @@ const NewPlan = () => {
           date_start: formData.dateStart,
           date_end: formData.dateEnd,
           neighborhood: formData.neighborhood,
+          neighborhood_place_id: formData.neighborhoodPlaceId,
+          neighborhood_lat: formData.neighborhoodLat,
+          neighborhood_lng: formData.neighborhoodLng,
           headcount: parseInt(formData.headcount),
           budget_band: formData.budgetBand,
           two_stop: formData.twoStop,
           notes_raw: formData.notesRaw,
-          notes_chips: [],
+          notes_chips: chips,
+          mode: resultMode,
         },
       });
 
@@ -137,7 +144,13 @@ const NewPlan = () => {
             <Label htmlFor="neighborhood">Neighborhood</Label>
             <PlacesAutocomplete
               value={formData.neighborhood}
-              onChange={(value) => setFormData({ ...formData, neighborhood: value })}
+              onChange={(value, placeData) => setFormData({ 
+                ...formData, 
+                neighborhood: value,
+                neighborhoodPlaceId: placeData?.place_id || '',
+                neighborhoodLat: placeData?.lat || 0,
+                neighborhoodLng: placeData?.lng || 0,
+              })}
               placeholder="e.g., SoHo, Brooklyn"
             />
           </div>

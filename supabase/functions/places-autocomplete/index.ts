@@ -73,12 +73,46 @@ serve(async (req) => {
 
     const data = await response.json();
     
-    // Transform to simplified format
-    const predictions = (data.suggestions || []).map((suggestion: any) => ({
-      id: suggestion.placePrediction?.placeId || crypto.randomUUID(),
-      name: suggestion.placePrediction?.text?.text || '',
-      types: suggestion.placePrediction?.types || [],
-    }));
+    // For each prediction, fetch basic geometry to get lat/lng
+    const predictions = [];
+    for (const suggestion of (data.suggestions || [])) {
+      const placeId = suggestion.placePrediction?.placeId;
+      const name = suggestion.placePrediction?.text?.text || '';
+      const types = suggestion.placePrediction?.types || [];
+
+      if (!placeId) continue;
+
+      // Fetch Place Details to get coordinates
+      let lat, lng;
+      try {
+        const detailsResponse = await fetch(
+          `https://places.googleapis.com/v1/places/${placeId}`,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'X-Goog-Api-Key': apiKey,
+              'X-Goog-FieldMask': 'id,location',
+            },
+          }
+        );
+
+        if (detailsResponse.ok) {
+          const details = await detailsResponse.json();
+          lat = details.location?.latitude;
+          lng = details.location?.longitude;
+        }
+      } catch (err) {
+        console.error('Error fetching place details:', err);
+      }
+
+      predictions.push({
+        id: placeId,
+        name,
+        types,
+        lat,
+        lng,
+      });
+    }
 
     console.log('Autocomplete results:', predictions.length);
 

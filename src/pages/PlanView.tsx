@@ -78,11 +78,19 @@ const PlanView = () => {
 
       setOptions(optionsData.options);
       
-      // Track analytics
+      // Track analytics with source and metadata
+      const source = optionsData.options[0]?.source_id ? 'google_places' : 'mock';
+      const hasPhotos = optionsData.options.filter((o: Option) => o.photo_ref).length;
+      const hasRatings = optionsData.options.filter((o: any) => o.rating).length;
+      
       analytics.trackOptionsShown(showAll ? 'full20' : 'top3', {
         planId,
         daypart: planData.plan?.daypart,
         neighborhood: planData.plan?.neighborhood,
+        source,
+        price_level: planData.plan?.budget_band,
+        rating_present: hasRatings > 0,
+        photo_count: hasPhotos,
       });
     } catch (error) {
       console.error('Error loading plan:', error);
