@@ -183,60 +183,6 @@ const NewPlan = () => {
           <h2 className="text-2xl font-bold text-decigo-deep-teal mb-6 text-center">Create Your Plan</h2>
           
           <form onSubmit={handleSubmit} className="space-y-6">
-            <DateTimePicker
-              value={formData.dateStart}
-              onChange={(value) => setFormData({ ...formData, dateStart: value })}
-            />
-
-            <div className="space-y-2">
-              <Label htmlFor="neighborhood" className="text-decigo-deep-teal font-medium">Neighborhood</Label>
-              <PlacesAutocomplete
-                value={formData.neighborhood}
-                onChange={(value, placeData) => setFormData({ 
-                  ...formData, 
-                  neighborhood: value,
-                  neighborhoodPlaceId: placeData?.place_id || '',
-                  neighborhoodLat: placeData?.lat || 0,
-                  neighborhoodLng: placeData?.lng || 0,
-                })}
-                placeholder="e.g., SoHo, Brooklyn"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="headcount" className="text-decigo-deep-teal font-medium">Headcount</Label>
-              <Select
-                value={formData.headcount}
-                onValueChange={(value) => setFormData({ ...formData, headcount: value })}
-              >
-                <SelectTrigger className="rounded-xl border-decigo-slate-300">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {[2, 3, 4, 5, 6, 7, 8].map(n => (
-                    <SelectItem key={n} value={n.toString()}>{n} people</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="budgetBand" className="text-decigo-deep-teal font-medium">Budget</Label>
-              <Select
-                value={formData.budgetBand}
-                onValueChange={(value) => setFormData({ ...formData, budgetBand: value })}
-              >
-                <SelectTrigger className="rounded-xl border-decigo-slate-300">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="$">$ (Budget-friendly)</SelectItem>
-                  <SelectItem value="$$">$$ (Moderate)</SelectItem>
-                  <SelectItem value="$$$">$$$ (Upscale)</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
             <div className="space-y-2">
               <Label htmlFor="daypart" className="text-decigo-deep-teal font-medium">Occasion</Label>
               <Select
@@ -254,6 +200,62 @@ const NewPlan = () => {
                   <SelectItem value="drinks">Drinks</SelectItem>
                 </SelectContent>
               </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="neighborhood" className="text-decigo-deep-teal font-medium">Neighborhood</Label>
+              <PlacesAutocomplete
+                value={formData.neighborhood}
+                onChange={(value, placeData) => setFormData({ 
+                  ...formData, 
+                  neighborhood: value,
+                  neighborhoodPlaceId: placeData?.place_id || '',
+                  neighborhoodLat: placeData?.lat || 0,
+                  neighborhoodLng: placeData?.lng || 0,
+                })}
+                placeholder="e.g., SoHo, Brooklyn"
+              />
+            </div>
+
+            <DateTimePicker
+              value={formData.dateStart}
+              onChange={(value) => setFormData({ ...formData, dateStart: value })}
+            />
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="headcount" className="text-decigo-deep-teal font-medium">Headcount</Label>
+                <Select
+                  value={formData.headcount}
+                  onValueChange={(value) => setFormData({ ...formData, headcount: value })}
+                >
+                  <SelectTrigger className="rounded-xl border-decigo-slate-300">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {[2, 3, 4, 5, 6, 7, 8].map(n => (
+                      <SelectItem key={n} value={n.toString()}>{n} people</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="budgetBand" className="text-decigo-deep-teal font-medium">Budget</Label>
+                <Select
+                  value={formData.budgetBand}
+                  onValueChange={(value) => setFormData({ ...formData, budgetBand: value })}
+                >
+                  <SelectTrigger className="rounded-xl border-decigo-slate-300">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="$">$ (Budget-friendly)</SelectItem>
+                    <SelectItem value="$$">$$ (Moderate)</SelectItem>
+                    <SelectItem value="$$$">$$$ (Upscale)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
 
             <div className="flex items-center justify-between py-2">
