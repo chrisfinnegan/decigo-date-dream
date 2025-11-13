@@ -190,7 +190,7 @@ const NewPlan = () => {
                 type="datetime-local"
                 value={formData.dateStart}
                 onChange={(e) => setFormData({ ...formData, dateStart: e.target.value })}
-                className="rounded-xl border-decigo-slate-300 focus:ring-decigo-green"
+                className="rounded-xl border-decigo-slate-300 focus:ring-decigo-green w-full"
                 required
               />
             </div>
@@ -202,7 +202,7 @@ const NewPlan = () => {
                 type="datetime-local"
                 value={formData.dateEnd}
                 onChange={(e) => setFormData({ ...formData, dateEnd: e.target.value })}
-                className="rounded-xl border-decigo-slate-300 focus:ring-decigo-green"
+                className="rounded-xl border-decigo-slate-300 focus:ring-decigo-green w-full"
                 required
               />
             </div>
