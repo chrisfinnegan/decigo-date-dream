@@ -1,51 +1,61 @@
-// Analytics wrapper for Mixpanel
+// Analytics wrapper for Mixpanel (using HTTP API to avoid React conflicts)
 interface EventProperties {
   [key: string]: any;
 }
 
 class Analytics {
-  private initialized = false;
-  private mixpanel: any = null;
+  private token: string | null = null;
+  private distinctId: string;
 
-  async init() {
-    if (this.initialized) return;
-    
+  constructor() {
+    // Get or create distinct ID
+    this.distinctId = localStorage.getItem('analytics_id') || crypto.randomUUID();
+    localStorage.setItem('analytics_id', this.distinctId);
+  }
+
+  init() {
     const token = import.meta.env.VITE_MIXPANEL_TOKEN;
     if (!token) {
-      console.warn('Mixpanel token not found');
+      console.warn('Mixpanel token not found - analytics will log to console only');
       return;
     }
-
-    try {
-      // Dynamically import Mixpanel
-      const { default: mixpanel } = await import('mixpanel-browser');
-      mixpanel.init(token, {
-        track_pageview: true,
-        persistence: 'localStorage'
-      });
-      this.mixpanel = mixpanel;
-      this.initialized = true;
-    } catch (error) {
-      console.error('Failed to initialize Mixpanel:', error);
-    }
+    this.token = token;
   }
 
   track(eventName: string, properties?: EventProperties) {
-    if (!this.initialized || !this.mixpanel) {
-      console.log('[Analytics]', eventName, properties);
-      return;
+    const eventData = {
+      event: eventName,
+      properties: {
+        distinct_id: this.distinctId,
+        time: Date.now(),
+        ...properties,
+      },
+    };
+
+    // Log to console for debugging
+    console.log('[Analytics]', eventName, properties);
+
+    // Send to Mixpanel if token is available
+    if (this.token) {
+      try {
+        const encodedData = btoa(JSON.stringify(eventData));
+        fetch(`https://api.mixpanel.com/track?data=${encodedData}&ip=1`, {
+          method: 'GET',
+        }).catch(err => console.error('Analytics error:', err));
+      } catch (error) {
+        console.error('Failed to send analytics:', error);
+      }
     }
-    this.mixpanel.track(eventName, properties);
   }
 
   identify(userId: string) {
-    if (!this.initialized || !this.mixpanel) return;
-    this.mixpanel.identify(userId);
+    this.distinctId = userId;
+    localStorage.setItem('analytics_id', userId);
   }
 
   setUserProperties(properties: EventProperties) {
-    if (!this.initialized || !this.mixpanel) return;
-    this.mixpanel.people.set(properties);
+    // Store user properties via Mixpanel People API if needed
+    console.log('[Analytics] User properties:', properties);
   }
 
   // Specific event trackers
