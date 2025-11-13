@@ -8,35 +8,35 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 32 100% 97.3%; /* #FFF8F2 */
+    --foreground: 215 16% 41%; /* #334155 */
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 215 16% 41%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 215 16% 41%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 195 75% 20%; /* #0C4A5A */
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 0 0% 100%;
+    --secondary-foreground: 195 75% 20%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 32 100% 97.3%;
+    --muted-foreground: 215 16% 41%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 184 80% 36%; /* #119DA4 */
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 3 82% 57%; /* #E53935 */
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 214 32% 83%; /* #CBD5E1 */
+    --input: 214 32% 83%;
+    --ring: 148 74% 71%; /* #6EE28E */
 
-    --radius: 0.5rem;
+    --radius: 1rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -56,41 +56,41 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: 195 75% 20%;
+    --foreground: 0 0% 100%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 195 60% 25%;
+    --card-foreground: 0 0% 100%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 195 60% 25%;
+    --popover-foreground: 0 0% 100%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 0 0% 100%;
+    --primary-foreground: 195 75% 20%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 195 60% 30%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 195 60% 30%;
+    --muted-foreground: 214 32% 83%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 184 80% 36%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 3 82% 57%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
+    --border: 195 60% 30%;
+    --input: 195 60% 30%;
+    --ring: 148 74% 71%;
+    --sidebar-background: 195 75% 15%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 184 80% 36%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-accent: 195 60% 25%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 195 60% 25%;
+    --sidebar-ring: 148 74% 71%;
   }
 }
 
@@ -100,6 +100,36 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-inter;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-decigo-deep-teal font-poppins font-bold;
+  }
+
+  a {
+    @apply text-decigo-teal hover:text-decigo-deep-teal underline transition-colors;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-decigo-deep-teal text-white rounded-2xl px-5 py-3 font-medium hover:bg-decigo-teal focus:outline-none focus:ring-2 focus:ring-decigo-green focus:ring-offset-2 transition-all;
+  }
+
+  .btn-secondary {
+    @apply bg-white text-decigo-deep-teal border border-decigo-slate-300 rounded-2xl px-5 py-3 font-medium hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-decigo-green focus:ring-offset-2 transition-all;
+  }
+
+  .card {
+    @apply bg-white rounded-xl shadow-md p-4;
+  }
+
+  .chip {
+    @apply bg-decigo-cream border border-decigo-slate-300 text-decigo-deep-teal rounded-xl px-3 py-1 text-sm font-medium;
+  }
+
+  .brand-gradient {
+    background: linear-gradient(135deg, #119DA4 0%, #6EE28E 60%, #B7F464 100%);
   }
 }

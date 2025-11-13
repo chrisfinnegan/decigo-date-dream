@@ -9,6 +9,8 @@ import { Calendar, MapPin, ExternalLink } from "lucide-react";
 import { InstallPrompt } from "@/components/InstallPrompt";
 import { usePWA } from "@/hooks/usePWA";
 import { analytics } from "@/lib/analytics";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 
 interface Option {
   id: string;
@@ -97,29 +99,40 @@ const PlanLocked = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background p-4 flex items-center justify-center">
-        <p className="text-muted-foreground">Loading...</p>
+      <div className="min-h-screen bg-decigo-cream">
+        <Header />
+        <div className="p-4 flex items-center justify-center min-h-[60vh]">
+          <p className="text-decigo-slate-700">Loading...</p>
+        </div>
+        <Footer />
       </div>
     );
   }
 
   if (!plan || !option) {
     return (
-      <div className="min-h-screen bg-background p-4 flex items-center justify-center">
-        <p className="text-muted-foreground">Locked plan not found</p>
+      <div className="min-h-screen bg-decigo-cream">
+        <Header />
+        <div className="p-4 flex items-center justify-center min-h-[60vh]">
+          <p className="text-decigo-slate-700">Locked plan not found</p>
+        </div>
+        <Footer />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background p-4">
-      <div className="max-w-4xl mx-auto space-y-6">
+    <div className="min-h-screen bg-decigo-cream">
+      <Header />
+      <div className="p-4 max-w-4xl mx-auto space-y-6 py-8">
         <div className="text-center space-y-2">
-          <Badge className="mb-2" variant="default">🎉 Locked!</Badge>
-          <h1 className="text-4xl font-bold text-foreground">
+          <div className="inline-block bg-decigo-green text-white px-4 py-2 rounded-2xl mb-2 font-medium">
+            🎉 Locked!
+          </div>
+          <h1 className="text-4xl font-bold text-decigo-deep-teal">
             Your plans are set
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-decigo-slate-700">
             {new Date(plan.date_start).toLocaleDateString('en-US', {
               weekday: 'long',
               month: 'long',
@@ -130,87 +143,77 @@ const PlanLocked = () => {
           </p>
         </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>{option.name}</CardTitle>
-            <CardDescription>{option.address}</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex gap-2">
-              <Badge variant="secondary">{plan.budget_band}</Badge>
-              <Badge variant="secondary">{plan.daypart}</Badge>
-              <Badge variant="secondary">{plan.neighborhood}</Badge>
+        <div className="card">
+          <h2 className="text-2xl font-bold text-decigo-deep-teal mb-2">{option.name}</h2>
+          <p className="text-decigo-slate-700 mb-4">{option.address}</p>
+          
+          <div className="flex gap-2 mb-4">
+            <span className="chip">{plan.budget_band}</span>
+            <span className="chip">{plan.daypart}</span>
+            <span className="chip">{plan.neighborhood}</span>
+          </div>
+
+          <div className="mb-4">
+            <p className="text-sm font-medium text-decigo-deep-teal mb-1">Why this place:</p>
+            <p className="text-sm text-decigo-slate-700">{option.why_it_fits}</p>
+          </div>
+
+          {option.tip && (
+            <div className="mb-4">
+              <p className="text-sm font-medium text-decigo-deep-teal mb-1">Insider tip:</p>
+              <p className="text-sm text-decigo-slate-700">{option.tip}</p>
             </div>
+          )}
 
-            <div>
-              <p className="text-sm font-medium mb-1">Why this place:</p>
-              <p className="text-sm text-muted-foreground">{option.why_it_fits}</p>
-            </div>
-
-            {option.tip && (
-              <div>
-                <p className="text-sm font-medium mb-1">Insider tip:</p>
-                <p className="text-sm text-muted-foreground">{option.tip}</p>
-              </div>
-            )}
-
-            <div className="space-y-2 pt-4">
-              <Button
-                className="w-full"
-                size="lg"
-                onClick={downloadICS}
-              >
-                <Calendar className="w-5 h-5 mr-2" />
-                Add to Calendar
-              </Button>
-
-              <div className="flex gap-2">
-                <Button
-                  className="flex-1"
-                  variant="outline"
-                  onClick={() => openInMaps('apple')}
-                >
-                  <MapPin className="w-4 h-4 mr-2" />
-                  Open in Maps
-                </Button>
-                <Button
-                  className="flex-1"
-                  variant="outline"
-                  onClick={() => openInMaps('google')}
-                >
-                  <ExternalLink className="w-4 h-4 mr-2" />
-                  Google Maps
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-muted">
-          <CardHeader>
-            <CardTitle className="text-lg">Share with your group</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground mb-4">
-              Let everyone know where you're meeting
-            </p>
-            <Button
-              variant="outline"
-              className="w-full"
-              onClick={() => {
-                navigator.clipboard.writeText(window.location.href);
-                toast({ title: "Link copied!" });
-              }}
+          <div className="space-y-2 pt-4">
+            <button
+              onClick={downloadICS}
+              className="btn-primary w-full h-12 flex items-center justify-center gap-2"
             >
-              Copy link
-            </Button>
-          </CardContent>
-        </Card>
+              <Calendar className="w-5 h-5" />
+              Add to Calendar
+            </button>
+
+            <div className="flex gap-2">
+              <button
+                onClick={() => openInMaps('apple')}
+                className="btn-secondary flex-1 h-10 flex items-center justify-center gap-2"
+              >
+                <MapPin className="w-4 h-4" />
+                Open in Maps
+              </button>
+              <button
+                onClick={() => openInMaps('google')}
+                className="btn-secondary flex-1 h-10 flex items-center justify-center gap-2"
+              >
+                <ExternalLink className="w-4 h-4" />
+                Google Maps
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div className="card bg-decigo-green/10">
+          <h3 className="text-lg font-bold text-decigo-deep-teal mb-2">Share with your group</h3>
+          <p className="text-sm text-decigo-slate-700 mb-4">
+            Let everyone know where you're meeting
+          </p>
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText(window.location.href);
+              toast({ title: "Link copied!" });
+            }}
+            className="btn-secondary w-full"
+          >
+            Copy link
+          </button>
+        </div>
 
         {showInstallPrompt && (
           <InstallPrompt onInstall={installApp} onDismiss={dismissPrompt} />
         )}
       </div>
+      <Footer />
     </div>
   );
 };

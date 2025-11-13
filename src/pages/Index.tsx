@@ -9,16 +9,17 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-primary/10 to-primary/5">
+    <div className="min-h-screen flex items-center justify-center bg-decigo-cream">
       <div className="text-center space-y-8 p-8 max-w-2xl">
-        <h1 className="text-5xl font-bold text-foreground mb-4 animate-fade-in">
+        <img src="/brand/logo-mark.svg" alt="Decigo" className="h-20 w-20 mx-auto mb-6" />
+        <h1 className="text-5xl font-bold text-decigo-deep-teal mb-4">
           Plan Together, Decide Together
         </h1>
-        <p className="text-xl text-muted-foreground animate-fade-in" style={{ animationDelay: "0.2s" }}>
+        <p className="text-xl text-decigo-slate-700">
           Create group plans, share options, and let everyone vote on where to go.
         </p>
         <Link to="/new">
-          <Button size="lg" className="animate-fade-in" style={{ animationDelay: "0.4s" }}>
+          <Button className="btn-primary h-12 px-8 text-base">
             Create a Plan
           </Button>
         </Link>

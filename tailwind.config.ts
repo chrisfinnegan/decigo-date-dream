@@ -13,7 +13,19 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        poppins: ['Poppins', 'Inter', 'sans-serif'],
+        inter: ['Inter', 'sans-serif'],
+      },
       colors: {
+        'decigo-deep-teal': '#0C4A5A',
+        'decigo-teal': '#119DA4',
+        'decigo-green': '#6EE28E',
+        'decigo-lime': '#B7F464',
+        'decigo-cream': '#FFF8F2',
+        'decigo-slate-700': '#334155',
+        'decigo-slate-300': '#CBD5E1',
+        'decigo-error': '#E53935',
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

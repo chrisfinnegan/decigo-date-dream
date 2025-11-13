@@ -9,6 +9,8 @@ import { MapPin, ExternalLink, Share2, Copy } from "lucide-react";
 import { CountdownTimer } from "@/components/CountdownTimer";
 import { analytics } from "@/lib/analytics";
 import { staticMapUrl } from "@/lib/map";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 
 interface Option {
   id: string;
@@ -189,16 +191,24 @@ const PlanView = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background p-4 flex items-center justify-center">
-        <p className="text-muted-foreground">Loading plan...</p>
+      <div className="min-h-screen bg-decigo-cream">
+        <Header />
+        <div className="p-4 flex items-center justify-center min-h-[60vh]">
+          <p className="text-decigo-slate-700">Loading plan...</p>
+        </div>
+        <Footer />
       </div>
     );
   }
 
   if (!plan) {
     return (
-      <div className="min-h-screen bg-background p-4 flex items-center justify-center">
-        <p className="text-muted-foreground">Plan not found</p>
+      <div className="min-h-screen bg-decigo-cream">
+        <Header />
+        <div className="p-4 flex items-center justify-center min-h-[60vh]">
+          <p className="text-decigo-slate-700">Plan not found</p>
+        </div>
+        <Footer />
       </div>
     );
   }
@@ -206,32 +216,33 @@ const PlanView = () => {
   const totalVotes = Object.values(votesByOption).reduce((a, b) => a + b, 0);
 
   return (
-    <div className="min-h-screen bg-background p-4">
-      <div className="max-w-4xl mx-auto space-y-6">
+    <div className="min-h-screen bg-decigo-cream">
+      <Header />
+      <div className="p-4 max-w-4xl mx-auto space-y-6 py-8">
         <div>
-          <h1 className="text-3xl font-bold text-foreground mb-2">
+          <h1 className="text-3xl font-bold text-decigo-deep-teal mb-2">
             {plan.daypart.charAt(0).toUpperCase() + plan.daypart.slice(1)} in {plan.neighborhood}
           </h1>
           <div className="flex gap-2 flex-wrap">
-            <Badge variant="secondary">{plan.budget_band}</Badge>
-            <Badge variant="secondary">{plan.headcount} people</Badge>
-            {plan.two_stop && <Badge variant="secondary">Two-stop</Badge>}
+            <span className="chip">{plan.budget_band}</span>
+            <span className="chip">{plan.headcount} people</span>
+            {plan.two_stop && <span className="chip">Two-stop</span>}
           </div>
         </div>
 
-        <Card className="bg-primary/5 border-primary/20">
-          <CardContent className="pt-6 space-y-4">
+        <div className="card bg-decigo-green/10 border-decigo-green/20">
+          <div className="space-y-4">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <p className="text-sm font-medium">
+                <p className="text-sm font-medium text-decigo-deep-teal">
                   Progress: {totalVotes}/{plan.threshold} votes to lock
                 </p>
                 {totalVotes >= plan.threshold - 1 && totalVotes < plan.threshold && (
-                  <Badge variant="destructive">Almost there!</Badge>
+                  <Badge className="bg-decigo-error text-white">Almost there!</Badge>
                 )}
               </div>
               <div className="flex items-center justify-between">
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-decigo-slate-700">
                   Deadline: {new Date(plan.decision_deadline).toLocaleDateString('en-US', { 
                     month: 'short', 
                     day: 'numeric',
@@ -243,94 +254,96 @@ const PlanView = () => {
               </div>
             </div>
 
-            <div className="pt-2 border-t border-border">
-              <p className="text-sm font-medium mb-2 flex items-center gap-2">
+            <div className="pt-2 border-t border-decigo-slate-300">
+              <p className="text-sm font-medium mb-2 flex items-center gap-2 text-decigo-deep-teal">
                 <Share2 className="w-4 h-4" />
                 Share with your group
               </p>
-              <Button
-                variant="outline"
-                className="w-full"
+              <button
                 onClick={copyShareLink}
+                className="btn-secondary w-full flex items-center justify-center gap-2"
               >
-                <Copy className="w-4 h-4 mr-2" />
+                <Copy className="w-4 h-4" />
                 Copy voting link
-              </Button>
+              </button>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
         <div className="space-y-4">
           {options.map((option) => (
-            <Card key={option.id}>
-              <CardHeader>
-                <CardTitle className="flex items-start justify-between">
-                  <span>{option.rank}. {option.name}</span>
-                  <Badge>{option.price_band}</Badge>
-                </CardTitle>
-                <CardDescription>{option.address}</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
+            <div key={option.id} className="card">
+              <div className="flex flex-col md:flex-row gap-4">
                 <img
                   src={getMapThumbnail(option)}
-                  alt={`Map of ${option.name}`}
-                  className="w-full h-40 object-cover rounded-lg"
+                  alt={`${option.name}`}
+                  className="w-full md:w-48 h-36 object-cover rounded-lg flex-shrink-0"
+                  loading="lazy"
                 />
                 
-                <div>
-                  <p className="text-sm font-medium mb-1">Why it fits:</p>
-                  <p className="text-sm text-muted-foreground">{option.why_it_fits}</p>
-                </div>
-
-                {option.tip && (
+                <div className="flex-1 space-y-3">
                   <div>
-                    <p className="text-sm font-medium mb-1">Tip:</p>
-                    <p className="text-sm text-muted-foreground">{option.tip}</p>
+                    <div className="flex items-start justify-between mb-1">
+                      <h3 className="font-bold text-decigo-deep-teal text-lg">
+                        {option.rank}. {option.name}
+                      </h3>
+                      <span className="chip text-xs">{option.price_band}</span>
+                    </div>
+                    <p className="text-sm text-decigo-slate-700">{option.address}</p>
                   </div>
-                )}
+                  
+                  <div>
+                    <p className="text-xs font-medium text-decigo-deep-teal mb-1">Why it fits:</p>
+                    <p className="text-sm text-decigo-slate-700">{option.why_it_fits}</p>
+                  </div>
 
-                <div className="flex gap-2 flex-wrap">
+                  {option.tip && (
+                    <div className="chip inline-block text-xs">
+                      💡 {option.tip}
+                    </div>
+                  )}
+
+                  <div className="flex gap-2 flex-wrap pt-2">
+                    <button
+                      onClick={() => openInMaps(option, 'apple')}
+                      className="btn-primary text-xs h-9 px-4"
+                    >
+                      <MapPin className="w-3 h-3 mr-1" />
+                      Open in Maps
+                    </button>
+                    <button
+                      onClick={() => openInMaps(option, 'google')}
+                      className="btn-secondary text-xs h-9 px-4"
+                    >
+                      <ExternalLink className="w-3 h-3 mr-1" />
+                      Google Maps
+                    </button>
+                  </div>
+
                   <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => openInMaps(option, 'apple')}
+                    className="w-full btn-primary"
+                    onClick={() => handleVote(option.id)}
+                    disabled={voting}
                   >
-                    <MapPin className="w-4 h-4 mr-2" />
-                    Open in Maps
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => openInMaps(option, 'google')}
-                  >
-                    <ExternalLink className="w-4 h-4 mr-2" />
-                    Google Maps
+                    Vote for {option.name}
+                    {votesByOption[option.id] && ` (${votesByOption[option.id]} votes)`}
                   </Button>
                 </div>
-
-                <Button
-                  className="w-full"
-                  onClick={() => handleVote(option.id)}
-                  disabled={voting}
-                >
-                  Vote for {option.name}
-                  {votesByOption[option.id] && ` (${votesByOption[option.id]} votes)`}
-                </Button>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           ))}
         </div>
 
         {!showAll && options.length === 3 && (
-          <Button
-            variant="outline"
-            className="w-full"
+          <button
             onClick={() => setShowAll(true)}
+            className="btn-secondary w-full"
           >
             See full list (~20 options)
-          </Button>
+          </button>
         )}
       </div>
+      <Footer />
     </div>
   );
 };
