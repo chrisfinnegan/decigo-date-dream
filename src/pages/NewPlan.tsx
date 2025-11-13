@@ -140,7 +140,7 @@ const NewPlan = () => {
         
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <div className="mb-8 flex justify-center">
-            <img src="/brand/logo-full.svg" alt="Decigo" className="h-20" />
+            <img src="/brand/logo-full.svg" alt="Decigo" className="h-40" />
           </div>
           
           <h1 className="text-4xl md:text-5xl font-bold text-decigo-deep-teal mb-6 leading-tight">
