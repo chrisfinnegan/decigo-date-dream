@@ -11,3 +11,30 @@ verify_jwt = false
 
 [functions.options-list]
 verify_jwt = false
+
+[functions.plans-reroll]
+verify_jwt = false
+
+[functions.lock-attempt]
+verify_jwt = false
+
+[functions.invites-add]
+verify_jwt = false
+
+[functions.invites-send]
+verify_jwt = false
+
+[functions.plans-cancel]
+verify_jwt = false
+
+[functions.ics]
+verify_jwt = false
+
+[functions.og-plan]
+verify_jwt = false
+
+[functions.webhooks-twilio]
+verify_jwt = false
+
+[functions.webhooks-email]
+verify_jwt = false
