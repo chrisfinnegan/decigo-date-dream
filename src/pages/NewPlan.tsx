@@ -139,10 +139,6 @@ const NewPlan = () => {
         </div>
         
         <div className="max-w-4xl mx-auto text-center relative z-10">
-          <div className="mb-8 flex justify-center">
-            <img src="/brand/logo-full.png" alt="Decigo" className="h-60" />
-          </div>
-          
           <h1 className="text-4xl md:text-5xl font-bold text-decigo-deep-teal mb-6 leading-tight">
             Plans in minutes, not message storms.
           </h1>
