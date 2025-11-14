@@ -1,7 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import React from "https://esm.sh/react@18.2.0";
-import { ImageResponse } from "https://deno.land/x/og_edge@0.0.6/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -100,225 +98,71 @@ serve(async (req) => {
       bodyText = `${plan.daypart} • ${plan.neighborhood} • ${plan.budget_band}`;
     }
 
-    console.log('Generating PNG image for plan:', planId, 'state:', state);
+    console.log('Generating SVG image for plan:', planId, 'state:', state);
 
-    // Build options elements
-    const optionsElements = !plan.locked && options && options.length > 0
-      ? options.map((opt, i) =>
-          React.createElement('div', {
-            key: i,
-            style: {
-              display: 'flex',
-              alignItems: 'center',
-              gap: '20px',
-              padding: '20px 24px',
-              borderRadius: '16px',
-              background: 'rgba(255, 255, 255, 0.15)',
-              backdropFilter: 'blur(10px)',
-              border: '2px solid rgba(255, 255, 255, 0.2)',
-            }
-          }, [
-            React.createElement('div', {
-              style: {
-                fontSize: '40px',
-                fontWeight: 900,
-                color: '#6EE28E',
-                minWidth: '50px',
-              }
-            }, `${i + 1}`),
-            React.createElement('div', {
-              style: {
-                fontSize: '28px',
-                fontWeight: 600,
-                color: '#FFFFFF',
-                lineHeight: '1.3',
-              }
-            }, opt.name.length > 40 ? opt.name.substring(0, 40) + '...' : opt.name)
-          ])
-        )
-      : [];
+    // Generate SVG (much faster and more reliable than ImageResponse)
+    const svg = `
+      <svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#0C4A5A;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#119DA4;stop-opacity:1" />
+          </linearGradient>
+          <radialGradient id="overlay" cx="100%" cy="0%">
+            <stop offset="0%" style="stop-color:#6EE28E;stop-opacity:0.2" />
+            <stop offset="50%" style="stop-color:#6EE28E;stop-opacity:0" />
+          </radialGradient>
+        </defs>
+        
+        <!-- Background -->
+        <rect width="1200" height="630" fill="url(#bg)"/>
+        <rect width="1200" height="630" fill="url(#overlay)"/>
+        
+        <!-- Logo circle -->
+        <circle cx="84" cy="84" r="24" fill="#6EE28E"/>
+        <circle cx="84" cy="84" r="14" fill="#0C4A5A"/>
+        
+        <!-- Logo text -->
+        <text x="118" y="95" font-family="system-ui, -apple-system, sans-serif" font-size="28" font-weight="700" fill="#FFFFFF" letter-spacing="-0.5">decigo</text>
+        
+        <!-- State badge -->
+        <rect x="${1200 - 200}" y="52" width="160" height="64" rx="32" fill="${plan.locked ? '#6EE28E' : 'rgba(255, 255, 255, 0.2)'}" stroke="rgba(255, 255, 255, 0.3)" stroke-width="2"/>
+        <text x="${1200 - 120}" y="92" font-family="system-ui" font-size="24" font-weight="700" fill="${plan.locked ? '#0C4A5A' : '#FFFFFF'}" text-anchor="middle" letter-spacing="1">${state.toUpperCase()}</text>
+        
+        <!-- Title -->
+        <text x="60" y="210" font-family="system-ui" font-size="72" font-weight="900" fill="#FFFFFF" letter-spacing="-2">
+          ${titleText.length > 25 ? titleText.substring(0, 25) + '...' : titleText}
+        </text>
+        
+        <!-- Body text -->
+        <text x="60" y="260" font-family="system-ui" font-size="32" font-weight="500" fill="rgba(255, 255, 255, 0.9)">
+          ${bodyText}
+        </text>
+        
+        <!-- Options -->
+        ${!plan.locked && options && options.length > 0 ? options.map((opt, i) => `
+          <g transform="translate(60, ${340 + (i * 100)})">
+            <rect width="1080" height="80" rx="16" fill="rgba(255, 255, 255, 0.15)" stroke="rgba(255, 255, 255, 0.2)" stroke-width="2"/>
+            <text x="30" y="50" font-family="system-ui" font-size="40" font-weight="900" fill="#6EE28E">${i + 1}</text>
+            <text x="90" y="50" font-family="system-ui" font-size="28" font-weight="600" fill="#FFFFFF">
+              ${opt.name.length > 45 ? opt.name.substring(0, 45) + '...' : opt.name}
+            </text>
+          </g>
+        `).join('') : ''}
+        
+        <!-- Footer -->
+        <rect x="60" y="${plan.locked || !options || options.length === 0 ? 340 : 560}" width="1080" height="80" rx="20" fill="rgba(255, 255, 255, 0.1)" stroke="rgba(255, 255, 255, 0.2)" stroke-width="2"/>
+        <text x="600" y="${plan.locked || !options || options.length === 0 ? 390 : 610}" font-family="system-ui" font-size="28" font-weight="600" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.5">
+          ${plan.locked ? '👆 Tap to see details' : '🗳️ Vote now to lock in your plans'}
+        </text>
+      </svg>
+    `;
 
-    const content = React.createElement('div', {
-      style: {
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        background: 'linear-gradient(135deg, #0C4A5A 0%, #119DA4 100%)',
-        fontFamily: 'system-ui, -apple-system, sans-serif',
-        position: 'relative',
-        padding: '60px',
-      }
-    }, [
-      // Gradient overlay
-      React.createElement('div', {
-        style: {
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'radial-gradient(circle at top right, rgba(110, 226, 142, 0.2) 0%, transparent 50%)',
-        }
-      }),
-      // Main content container
-      React.createElement('div', {
-        style: {
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          height: '100%',
-          position: 'relative',
-          zIndex: 1,
-        }
-      }, [
-        // Header section
-        React.createElement('div', {
-          style: {
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '24px',
-          }
-        }, [
-          // Logo and badge row
-          React.createElement('div', {
-            style: {
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }
-          }, [
-            // Logo
-            React.createElement('div', {
-              style: {
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px',
-              }
-            }, [
-              React.createElement('div', {
-                style: {
-                  width: '48px',
-                  height: '48px',
-                  borderRadius: '50%',
-                  background: '#6EE28E',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }
-              }, [
-                React.createElement('div', {
-                  style: {
-                    width: '28px',
-                    height: '28px',
-                    borderRadius: '50%',
-                    background: '#0C4A5A',
-                  }
-                })
-              ]),
-              React.createElement('div', {
-                style: {
-                  fontSize: '28px',
-                  fontWeight: 700,
-                  color: '#FFFFFF',
-                  letterSpacing: '-0.5px',
-                }
-              }, 'decigo')
-            ]),
-            // State badge
-            React.createElement('div', {
-              style: {
-                padding: '16px 32px',
-                borderRadius: '30px',
-                background: plan.locked ? '#6EE28E' : 'rgba(255, 255, 255, 0.2)',
-                backdropFilter: 'blur(10px)',
-                border: '2px solid rgba(255, 255, 255, 0.3)',
-              }
-            }, [
-              React.createElement('div', {
-                style: {
-                  fontSize: '24px',
-                  fontWeight: 700,
-                  color: plan.locked ? '#0C4A5A' : '#FFFFFF',
-                  textTransform: 'uppercase',
-                  letterSpacing: '1px',
-                }
-              }, state)
-            ])
-          ]),
-          // Title section
-          React.createElement('div', {
-            style: {
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '16px',
-              marginTop: '20px',
-            }
-          }, [
-            React.createElement('h1', {
-              style: {
-                fontSize: '72px',
-                fontWeight: 900,
-                color: '#FFFFFF',
-                lineHeight: '1.1',
-                letterSpacing: '-2px',
-                margin: 0,
-                textShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
-              }
-            }, titleText),
-            React.createElement('p', {
-              style: {
-                fontSize: '32px',
-                color: 'rgba(255, 255, 255, 0.9)',
-                fontWeight: 500,
-                margin: 0,
-                lineHeight: '1.4',
-              }
-            }, bodyText)
-          ])
-        ]),
-        // Middle section - Options
-        optionsElements.length > 0 ? React.createElement('div', {
-          style: {
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '16px',
-            marginTop: '40px',
-          }
-        }, optionsElements) : null,
-        // Footer
-        React.createElement('div', {
-          style: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '24px 32px',
-            borderRadius: '20px',
-            background: 'rgba(255, 255, 255, 0.1)',
-            backdropFilter: 'blur(10px)',
-            border: '2px solid rgba(255, 255, 255, 0.2)',
-            marginTop: '20px',
-          }
-        }, [
-          React.createElement('div', {
-            style: {
-              fontSize: '28px',
-              fontWeight: 600,
-              color: '#FFFFFF',
-              letterSpacing: '0.5px',
-            }
-          }, plan.locked ? '👆 Tap to see details' : '🗳️ Vote now to lock in your plans')
-        ])
-      ])
-    ]);
-
-    return new ImageResponse(content, {
-      width: 1200,
-      height: 630,
+    return new Response(svg, {
       headers: {
         ...corsHeaders,
+        'Content-Type': 'image/svg+xml',
         'Cache-Control': 'public, max-age=300',
-        'Content-Type': 'image/png',
       },
     });
   } catch (error) {
