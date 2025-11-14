@@ -46,6 +46,7 @@ const PlanView = () => {
   const [loading, setLoading] = useState(true);
   const [voting, setVoting] = useState(false);
   const [showAll, setShowAll] = useState(false);
+  const [hasManagementAccess, setHasManagementAccess] = useState(false);
 
   useEffect(() => {
     if (!planId) return;
@@ -57,6 +58,10 @@ const PlanView = () => {
     if (preferredMode) {
       setShowAll(preferredMode === 'full20');
     }
+    
+    // Check if user has management token (creator only)
+    const token = localStorage.getItem(`plan_${planId}_token`);
+    setHasManagementAccess(!!token);
     
     // Track if this is from a sharecard
     const urlParams = new URLSearchParams(window.location.search);
@@ -322,6 +327,13 @@ const PlanView = () => {
     });
   };
 
+  const goToManagement = () => {
+    const token = localStorage.getItem(`plan_${planId}_token`);
+    if (token) {
+      navigate(`/p/${planId}/manage?token=${token}`);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background">
@@ -392,13 +404,23 @@ const PlanView = () => {
                 <Share2 className="w-4 h-4" />
                 Share with your group
               </p>
-              <button
-                onClick={copyShareLink}
-                className="btn-secondary w-full flex items-center justify-center gap-2"
-              >
-                <Copy className="w-4 h-4" />
-                Copy voting link
-              </button>
+              <div className="space-y-2">
+                <button
+                  onClick={copyShareLink}
+                  className="btn-secondary w-full flex items-center justify-center gap-2"
+                >
+                  <Copy className="w-4 h-4" />
+                  Copy voting link
+                </button>
+                {hasManagementAccess && (
+                  <button
+                    onClick={goToManagement}
+                    className="btn-primary w-full flex items-center justify-center gap-2"
+                  >
+                    Manage Plan
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>
