@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface Plan {
   id: string;
@@ -24,6 +25,16 @@ interface Plan {
   canceled: boolean;
 }
 
+interface Invite {
+  id: string;
+  name: string | null;
+  channel: string;
+  value: string;
+  sent_count: number;
+  stopped: boolean;
+  consent_at: string;
+}
+
 const PlanManage = () => {
   const { planId } = useParams();
   const [searchParams] = useSearchParams();
@@ -32,10 +43,14 @@ const PlanManage = () => {
   const [plan, setPlan] = useState<Plan | null>(null);
   const [loading, setLoading] = useState(true);
   const [inviteContacts, setInviteContacts] = useState("");
+  const [invites, setInvites] = useState<Invite[]>([]);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedPlan, setEditedPlan] = useState<Partial<Plan>>({});
 
   useEffect(() => {
     if (planId && token) {
       loadPlan();
+      loadInvites();
     }
   }, [planId, token]);
 
@@ -48,6 +63,7 @@ const PlanManage = () => {
       if (error) throw error;
 
       setPlan(data.plan);
+      setEditedPlan(data.plan);
     } catch (error) {
       console.error('Error loading plan:', error);
       toast({
@@ -57,6 +73,20 @@ const PlanManage = () => {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadInvites = async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke('invites-list', {
+        body: { planId, token },
+      });
+
+      if (error) throw error;
+
+      setInvites(data.invites || []);
+    } catch (error) {
+      console.error('Error loading invites:', error);
     }
   };
 
@@ -79,6 +109,41 @@ const PlanManage = () => {
       toast({
         title: "Error",
         description: "Failed to cancel plan",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleUpdatePlan = async () => {
+    try {
+      const { error } = await supabase.functions.invoke('plans-update', {
+        body: { 
+          planId, 
+          token, 
+          updates: {
+            headcount: editedPlan.headcount,
+            budget_band: editedPlan.budget_band,
+            date_start: editedPlan.date_start,
+            date_end: editedPlan.date_end,
+            decision_deadline: editedPlan.decision_deadline,
+          }
+        },
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Plan updated",
+        description: "Your plan has been updated successfully",
+      });
+
+      setIsEditing(false);
+      loadPlan();
+    } catch (error) {
+      console.error('Error updating plan:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update plan",
         variant: "destructive",
       });
     }
@@ -126,6 +191,7 @@ const PlanManage = () => {
       });
 
       setInviteContacts("");
+      loadInvites();
     } catch (error) {
       console.error('Error sending invites:', error);
       toast({
@@ -178,7 +244,22 @@ const PlanManage = () => {
 
         <Card>
           <CardHeader>
-            <CardTitle>Plan Details</CardTitle>
+            <div className="flex justify-between items-center">
+              <CardTitle>Plan Details</CardTitle>
+              {!plan.locked && !plan.canceled && (
+                <Button 
+                  variant={isEditing ? "outline" : "default"}
+                  onClick={() => {
+                    if (isEditing) {
+                      setEditedPlan(plan);
+                    }
+                    setIsEditing(!isEditing);
+                  }}
+                >
+                  {isEditing ? "Cancel" : "Edit"}
+                </Button>
+              )}
+            </div>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
@@ -189,32 +270,133 @@ const PlanManage = () => {
               <Label>Neighborhood</Label>
               <p className="text-sm text-muted-foreground">{plan.neighborhood}</p>
             </div>
-            <div>
-              <Label>Date Range</Label>
-              <p className="text-sm text-muted-foreground">
-                {new Date(plan.date_start).toLocaleString()} - {new Date(plan.date_end).toLocaleString()}
-              </p>
-            </div>
-            <div>
-              <Label>Headcount</Label>
-              <p className="text-sm text-muted-foreground">{plan.headcount} people</p>
-            </div>
-            <div>
-              <Label>Budget</Label>
-              <p className="text-sm text-muted-foreground">{plan.budget_band}</p>
-            </div>
-            <div>
-              <Label>Threshold</Label>
-              <p className="text-sm text-muted-foreground">{plan.threshold} votes needed to lock</p>
-            </div>
-            <div>
-              <Label>Decision Deadline</Label>
-              <p className="text-sm text-muted-foreground">
-                {new Date(plan.decision_deadline).toLocaleString()}
-              </p>
-            </div>
+            
+            {isEditing ? (
+              <>
+                <div>
+                  <Label htmlFor="date_start">Start Date & Time</Label>
+                  <Input
+                    id="date_start"
+                    type="datetime-local"
+                    value={editedPlan.date_start ? new Date(editedPlan.date_start).toISOString().slice(0, 16) : ''}
+                    onChange={(e) => setEditedPlan({ ...editedPlan, date_start: new Date(e.target.value).toISOString() })}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="date_end">End Date & Time</Label>
+                  <Input
+                    id="date_end"
+                    type="datetime-local"
+                    value={editedPlan.date_end ? new Date(editedPlan.date_end).toISOString().slice(0, 16) : ''}
+                    onChange={(e) => setEditedPlan({ ...editedPlan, date_end: new Date(e.target.value).toISOString() })}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="headcount">Headcount</Label>
+                  <Input
+                    id="headcount"
+                    type="number"
+                    min="1"
+                    value={editedPlan.headcount || ''}
+                    onChange={(e) => setEditedPlan({ ...editedPlan, headcount: parseInt(e.target.value) })}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="budget">Budget</Label>
+                  <Select 
+                    value={editedPlan.budget_band} 
+                    onValueChange={(value) => setEditedPlan({ ...editedPlan, budget_band: value })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="$">$ (Budget-friendly)</SelectItem>
+                      <SelectItem value="$$">$$ (Moderate)</SelectItem>
+                      <SelectItem value="$$$">$$$ (Upscale)</SelectItem>
+                      <SelectItem value="$$$$">$$$$ (Luxury)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="deadline">Decision Deadline</Label>
+                  <Input
+                    id="deadline"
+                    type="datetime-local"
+                    value={editedPlan.decision_deadline ? new Date(editedPlan.decision_deadline).toISOString().slice(0, 16) : ''}
+                    onChange={(e) => setEditedPlan({ ...editedPlan, decision_deadline: new Date(e.target.value).toISOString() })}
+                  />
+                </div>
+                <Button onClick={handleUpdatePlan} className="w-full">
+                  Save Changes
+                </Button>
+              </>
+            ) : (
+              <>
+                <div>
+                  <Label>Date Range</Label>
+                  <p className="text-sm text-muted-foreground">
+                    {new Date(plan.date_start).toLocaleString()} - {new Date(plan.date_end).toLocaleString()}
+                  </p>
+                </div>
+                <div>
+                  <Label>Headcount</Label>
+                  <p className="text-sm text-muted-foreground">{plan.headcount} people</p>
+                </div>
+                <div>
+                  <Label>Budget</Label>
+                  <p className="text-sm text-muted-foreground">{plan.budget_band}</p>
+                </div>
+                <div>
+                  <Label>Threshold</Label>
+                  <p className="text-sm text-muted-foreground">{plan.threshold} votes needed to lock</p>
+                </div>
+                <div>
+                  <Label>Decision Deadline</Label>
+                  <p className="text-sm text-muted-foreground">
+                    {new Date(plan.decision_deadline).toLocaleString()}
+                  </p>
+                </div>
+              </>
+            )}
           </CardContent>
         </Card>
+
+        {invites.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Invite Delivery Status</CardTitle>
+              <CardDescription>Track who has been invited and message delivery</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {invites.map((invite) => (
+                  <div key={invite.id} className="flex items-center justify-between p-3 border rounded-lg">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <Badge variant={invite.channel === 'email' ? 'default' : 'secondary'}>
+                          {invite.channel.toUpperCase()}
+                        </Badge>
+                        <span className="font-mono text-sm">{invite.value}</span>
+                      </div>
+                      {invite.name && (
+                        <p className="text-sm text-muted-foreground mt-1">{invite.name}</p>
+                      )}
+                    </div>
+                    <div className="text-right">
+                      <p className="text-sm font-medium">
+                        {invite.sent_count} message{invite.sent_count !== 1 ? 's' : ''} sent
+                      </p>
+                      {invite.stopped && (
+                        <Badge variant="destructive" className="mt-1">Stopped</Badge>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {!plan.locked && !plan.canceled && (
           <Card>
