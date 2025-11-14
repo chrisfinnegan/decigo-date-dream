@@ -114,10 +114,9 @@ serve(async (req) => {
     const userAgent = req.headers.get('user-agent') || '';
     const isCrawler = /bot|crawler|spider|whatsapp|facebook|twitter|slack|discord/i.test(userAgent);
 
-    // For WhatsApp/social previews, we need a stable image URL without cache busting
-    // Only add cache busting for non-crawler requests
-    const cacheBuster = isCrawler ? '' : `&t=${Date.now()}`;
-    const ogImageUrl = `${supabaseUrl}/functions/v1/og-plan?id=${planId}${cacheBuster}`;
+    // Use static PNG for OG image (WhatsApp doesn't support SVG)
+    // const ogImageUrl = `${supabaseUrl}/functions/v1/og-plan?id=${planId}`;
+    const ogImageUrl = `${baseUrl}/og-default.png`;
     const shareUrl = `${supabaseUrl}/functions/v1/share?id=${planId}`;
     const redirectUrl = `${baseUrl}/p/${planId}?src=sc`;
     
