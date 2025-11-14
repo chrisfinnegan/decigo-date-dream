@@ -79,12 +79,12 @@ serve(async (req) => {
             {
               width: '120',
               height: '80',
-              viewBox: '0 0 120 80',
+              viewBox: '0 0 140 100',
               style: { flexShrink: 0 }
             },
             // Left arc (teal)
             React.createElement('path', {
-              d: 'M 20,40 A 20,20 0 1,1 60,40',
+              d: 'M 30,50 A 20,20 0 1,1 70,50',
               fill: 'none',
               stroke: '#4FADAD',
               strokeWidth: '18',
@@ -92,7 +92,7 @@ serve(async (req) => {
             }),
             // Right arc (lime green)
             React.createElement('path', {
-              d: 'M 60,40 A 20,20 0 1,1 100,40',
+              d: 'M 70,50 A 20,20 0 1,1 110,50',
               fill: 'none',
               stroke: '#A8D05D',
               strokeWidth: '18',
