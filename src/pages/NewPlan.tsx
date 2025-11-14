@@ -91,7 +91,7 @@ const NewPlan = () => {
 
       toast({
         title: "Plan created!",
-        description: "You can now share the voting link with your group",
+        description: "Click 'Manage Plan' button to edit details, send invites, or cancel",
       });
 
       localStorage.setItem(`plan_${data.planId}_mode`, resultMode);
