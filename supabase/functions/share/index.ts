@@ -31,9 +31,12 @@ serve(async (req) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? '';
     let baseUrl = Deno.env.get('BASE_URL') ?? '';
     
-    // Ensure HTTPS for production URLs
+    // Ensure HTTPS for all URLs
     if (baseUrl && !baseUrl.startsWith('http://localhost') && baseUrl.startsWith('http://')) {
       baseUrl = baseUrl.replace('http://', 'https://');
+    }
+    if (!baseUrl.startsWith('https://') && !baseUrl.startsWith('http://localhost')) {
+      baseUrl = `https://${baseUrl}`;
     }
 
     // Get plan
@@ -114,8 +117,8 @@ serve(async (req) => {
     const userAgent = req.headers.get('user-agent') || '';
     const isCrawler = /bot|crawler|spider|whatsapp|facebook|twitter|slack|discord|telegram|facebookexternalhit|twitterbot|linkedinbot|slackbot|skypeuripreview|line/i.test(userAgent);
     
-    // Use edge function to serve the OG image reliably
-    const ogImageUrl = `${supabaseUrl}/functions/v1/og-image`;
+    // Use direct image URL for better reliability
+    const ogImageUrl = `${baseUrl}/og-default.png`;
     const shareUrl = `${supabaseUrl}/functions/v1/share?id=${planId}`;
     const redirectUrl = `${baseUrl}/p/${planId}?src=sc`;
     
@@ -145,7 +148,7 @@ serve(async (req) => {
   <meta property="og:description" content="${description}">
   <meta property="og:image" content="${ogImageUrl}">
   <meta property="og:image:secure_url" content="${ogImageUrl}">
-  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="${title}">
@@ -161,9 +164,7 @@ serve(async (req) => {
   <title>${title}</title>
 </head>
 <body>
-  <h1>${title}</h1>
-  <p>${description}</p>
-  <p><a href="${redirectUrl}">Click here to vote</a></p>
+  <!-- Empty body - chat apps should only use Open Graph meta tags -->
 </body>
 </html>`;
 
@@ -176,6 +177,7 @@ serve(async (req) => {
           'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0',
           'Pragma': 'no-cache',
           'Expires': '0',
+          'X-Robots-Tag': 'noindex, nofollow',
         },
       });
     }
