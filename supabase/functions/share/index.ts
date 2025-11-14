@@ -114,8 +114,10 @@ serve(async (req) => {
     const userAgent = req.headers.get('user-agent') || '';
     const isCrawler = /bot|crawler|spider|whatsapp|facebook|twitter|slack|discord|telegram|facebookexternalhit|twitterbot|linkedinbot|slackbot|skypeuripreview|line/i.test(userAgent);
     
-    // Use static PNG for OG image - must be absolute HTTPS URL
-    const ogImageUrl = `${baseUrl}/og-default.png`;
+    // Use a reliable absolute URL for the OG image
+    // Try using the base URL with cache-busting query parameter
+    const timestamp = Date.now();
+    const ogImageUrl = `${baseUrl}/og-default.png?v=${timestamp}`;
     const shareUrl = `${supabaseUrl}/functions/v1/share?id=${planId}`;
     const redirectUrl = `${baseUrl}/p/${planId}?src=sc`;
     
@@ -123,8 +125,9 @@ serve(async (req) => {
       planId,
       state,
       isCrawler,
-      redirectUrl,
+      baseUrl,
       ogImageUrl,
+      redirectUrl,
       userAgent: userAgent.substring(0, 100),
     });
 
@@ -144,7 +147,7 @@ serve(async (req) => {
   <meta property="og:description" content="${description}">
   <meta property="og:image" content="${ogImageUrl}">
   <meta property="og:image:secure_url" content="${ogImageUrl}">
-  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="${title}">
@@ -177,10 +180,12 @@ serve(async (req) => {
     h1 {
       color: #0C4A5A;
       margin-bottom: 16px;
+      font-size: 24px;
     }
     p {
       color: #334155;
       margin-bottom: 24px;
+      font-size: 16px;
     }
     a {
       display: inline-block;
@@ -194,6 +199,12 @@ serve(async (req) => {
     a:hover {
       background: #119DA4;
     }
+    .debug {
+      margin-top: 40px;
+      font-size: 12px;
+      color: #666;
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -201,14 +212,20 @@ serve(async (req) => {
     <h1>${title}</h1>
     <p>${description}</p>
     <a href="${redirectUrl}">Vote now</a>
+    <div class="debug">
+      <p>Image URL: ${ogImageUrl}</p>
+      <p>Base URL: ${baseUrl}</p>
+    </div>
   </div>
 </body>
 </html>`;
 
       return new Response(html, {
+        status: 200,
         headers: {
-          ...corsHeaders,
           'Content-Type': 'text/html; charset=utf-8',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
           'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0',
           'Pragma': 'no-cache',
           'Expires': '0',
