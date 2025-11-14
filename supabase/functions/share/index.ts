@@ -112,15 +112,103 @@ serve(async (req) => {
 
     // Track sharecard impression (server-side)
     const userAgent = req.headers.get('user-agent') || '';
+    const isCrawler = /bot|crawler|spider|whatsapp|facebook|twitter|slack|discord|telegram|facebookexternalhit|twitterbot|linkedinbot|slackbot/i.test(userAgent);
+    
+    // Use static PNG for OG image
+    const ogImageUrl = `${baseUrl}/og-default.png`;
+    const shareUrl = `${supabaseUrl}/functions/v1/share?id=${planId}`;
     const redirectUrl = `${baseUrl}/p/${planId}?src=sc`;
     
-    console.log('Share redirect:', {
+    console.log('Share request:', {
       planId,
       state,
-      baseUrl,
+      isCrawler,
       redirectUrl,
       userAgent: userAgent.substring(0, 100),
     });
+
+    // For crawlers, return HTML with Open Graph meta tags
+    if (isCrawler) {
+      const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="${shareUrl}">
+  <meta property="og:title" content="${title}">
+  <meta property="og:description" content="${description}">
+  <meta property="og:image" content="${ogImageUrl}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="${shareUrl}">
+  <meta name="twitter:title" content="${title}">
+  <meta name="twitter:description" content="${description}">
+  <meta name="twitter:image" content="${ogImageUrl}">
+  
+  <title>${title}</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #FFF8F2;
+      color: #0C4A5A;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+    .container {
+      max-width: 400px;
+    }
+    h1 {
+      color: #0C4A5A;
+      margin-bottom: 16px;
+    }
+    p {
+      color: #334155;
+      margin-bottom: 24px;
+    }
+    a {
+      display: inline-block;
+      background: #0C4A5A;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 16px;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    a:hover {
+      background: #119DA4;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>${title}</h1>
+    <p>${description}</p>
+    <a href="${redirectUrl}">Vote now</a>
+  </div>
+</body>
+</html>`;
+
+      return new Response(html, {
+        headers: {
+          ...corsHeaders,
+          'Content-Type': 'text/html; charset=utf-8',
+          'Cache-Control': 'public, max-age=300',
+        },
+      });
+    }
+    
+    // For regular users, redirect immediately
 
     // Always redirect - no HTML rendering
     return new Response(null, {
