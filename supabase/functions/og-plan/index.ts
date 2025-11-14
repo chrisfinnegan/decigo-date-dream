@@ -15,7 +15,10 @@ serve(async (req) => {
     const url = new URL(req.url);
     const planId = url.searchParams.get('id');
 
+    console.log('OG image requested for plan:', planId);
+
     if (!planId) {
+      console.error('No planId provided');
       return new Response(
         JSON.stringify({ error: 'id is required' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -36,11 +39,14 @@ serve(async (req) => {
       .single();
 
     if (planError || !plan) {
+      console.error('Plan not found:', planError);
       return new Response(
         JSON.stringify({ error: 'Plan not found' }),
         { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
+
+    console.log('Plan found, generating OG image for state:', plan.locked ? 'locked' : 'created');
 
     // Get options (top 3)
     const { data: options } = await supabaseClient
