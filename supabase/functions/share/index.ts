@@ -129,14 +129,13 @@ serve(async (req) => {
       userAgent: userAgent.substring(0, 100),
     });
 
-    // For crawlers, return HTML with Open Graph meta tags
+    // For crawlers, return HTML with Open Graph meta tags only
     if (isCrawler) {
       const html = `<!DOCTYPE html>
 <html lang="en" prefix="og: http://ogp.me/ns#">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="refresh" content="0;url=${redirectUrl}">
   
   <!-- Essential Open Graph tags -->
   <meta property="og:type" content="website">
@@ -162,7 +161,9 @@ serve(async (req) => {
   <title>${title}</title>
 </head>
 <body>
-  <!-- Empty body to prevent chat apps from rendering page content -->
+  <h1>${title}</h1>
+  <p>${description}</p>
+  <p><a href="${redirectUrl}">Click here to vote</a></p>
 </body>
 </html>`;
 
