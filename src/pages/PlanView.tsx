@@ -61,7 +61,9 @@ const PlanView = () => {
     
     // Check if user has management token (creator only)
     const token = localStorage.getItem(`plan_${planId}_token`);
-    setHasManagementAccess(!!token);
+    const hasToken = !!token;
+    console.log('PlanView - Management access check:', { planId, hasToken, token: token ? 'exists' : 'none' });
+    setHasManagementAccess(hasToken);
     
     // Track if this is from a sharecard
     const urlParams = new URLSearchParams(window.location.search);
