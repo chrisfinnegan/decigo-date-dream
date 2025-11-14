@@ -1,17 +1,24 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { z } from "https://deno.land/x/zod@v3.23.8/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-interface Contact {
-  name?: string;
-  channel: 'sms' | 'email';
-  value: string;
-  consentAt: string;
-}
+const ContactSchema = z.object({
+  name: z.string().max(100).optional(),
+  channel: z.enum(['sms', 'email']),
+  value: z.string().min(1).max(255),
+  consentAt: z.string(),
+});
+
+const InvitesAddSchema = z.object({
+  planId: z.string().uuid(),
+  token: z.string().min(1).max(100),
+  contacts: z.array(ContactSchema).min(1).max(50),
+});
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -19,18 +26,9 @@ serve(async (req) => {
   }
 
   try {
-    const { planId, token, contacts } = await req.json() as { 
-      planId: string; 
-      token: string; 
-      contacts: Contact[] 
-    };
-
-    if (!planId || !token || !contacts || !Array.isArray(contacts)) {
-      return new Response(
-        JSON.stringify({ error: 'planId, token, and contacts array are required' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
+    // Validate input
+    const body = await req.json();
+    const { planId, token, contacts } = InvitesAddSchema.parse(body);
 
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
@@ -46,8 +44,9 @@ serve(async (req) => {
       .single();
 
     if (planError || !plan || plan.canceled) {
+      console.error('Plan verification failed:', planError);
       return new Response(
-        JSON.stringify({ error: 'Invalid plan or token' }),
+        JSON.stringify({ error: 'Unable to add invites. Invalid credentials or plan is canceled.' }),
         { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
@@ -74,7 +73,7 @@ serve(async (req) => {
     if (invitesError) {
       console.error('Error upserting invites:', invitesError);
       return new Response(
-        JSON.stringify({ error: invitesError.message }),
+        JSON.stringify({ error: 'Unable to save invites. Please try again.' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
@@ -90,8 +89,11 @@ serve(async (req) => {
     );
   } catch (error) {
     console.error('Error in invites-add:', error);
+    const errorMessage = error instanceof z.ZodError 
+      ? 'Invalid contact information provided'
+      : 'An unexpected error occurred. Please try again.';
     return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : 'Unknown error' }),
+      JSON.stringify({ error: errorMessage }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }

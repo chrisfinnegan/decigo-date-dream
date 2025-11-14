@@ -1,10 +1,15 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { z } from "https://deno.land/x/zod@v3.23.8/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
+
+const LockAttemptSchema = z.object({
+  planId: z.string().uuid(),
+});
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -12,14 +17,9 @@ serve(async (req) => {
   }
 
   try {
-    const { planId } = await req.json();
-
-    if (!planId) {
-      return new Response(
-        JSON.stringify({ error: 'planId is required' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
+    // Validate input
+    const body = await req.json();
+    const { planId } = LockAttemptSchema.parse(body);
 
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
@@ -35,8 +35,9 @@ serve(async (req) => {
       .single();
 
     if (planError || !plan) {
+      console.error('Plan not found:', planError);
       return new Response(
-        JSON.stringify({ error: 'Plan not found' }),
+        JSON.stringify({ error: 'Plan not found or has been canceled' }),
         { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
@@ -107,8 +108,11 @@ serve(async (req) => {
     );
   } catch (error) {
     console.error('Error in lock-attempt:', error);
+    const errorMessage = error instanceof z.ZodError 
+      ? 'Invalid request data'
+      : 'An unexpected error occurred. Please try again.';
     return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : 'Unknown error' }),
+      JSON.stringify({ error: errorMessage }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
