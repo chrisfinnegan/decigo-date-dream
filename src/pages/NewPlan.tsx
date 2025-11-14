@@ -89,8 +89,8 @@ const NewPlan = () => {
         localStorage.setItem(`plan_${data.planId}_token`, data.magicToken);
       }
 
-      const baseUrl = import.meta.env.VITE_SUPABASE_URL?.replace('/supabase', '') || window.location.origin;
-      const shareUrl = `${baseUrl}/s/${data.planId}`;
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const shareUrl = `${supabaseUrl}/functions/v1/share?id=${data.planId}`;
 
       toast({
         title: "Plan created!",
