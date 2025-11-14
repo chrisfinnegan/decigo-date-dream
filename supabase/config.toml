@@ -6,6 +6,9 @@ verify_jwt = false
 [functions.plans-get]
 verify_jwt = false
 
+[functions.plans-update]
+verify_jwt = false
+
 [functions.votes-cast]
 verify_jwt = false
 
@@ -19,6 +22,9 @@ verify_jwt = false
 verify_jwt = false
 
 [functions.invites-add]
+verify_jwt = false
+
+[functions.invites-list]
 verify_jwt = false
 
 [functions.invites-send]
