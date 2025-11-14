@@ -1,5 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import React from "https://esm.sh/react@18.2.0";
+import { ImageResponse } from "https://deno.land/x/og_edge@0.0.6/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -111,70 +113,164 @@ serve(async (req) => {
       }
     }
 
-    // Create options list with proper escaping
-    const optionsList = options?.slice(0, 3).map((opt, i) => {
-      const escapedName = opt.name.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-      return `<text x="600" y="${340 + (i * 50)}" font-family="Inter, Arial, sans-serif" font-size="24" fill="#334155" text-anchor="middle" font-weight="500">${i + 1}. ${escapedName}</text>`;
-    }).join('') || '';
+    console.log('Generating PNG image for plan:', planId, 'state:', state);
 
-    // Generate SVG (we'll use SVG as it's simpler than PNG generation in Deno)
-    const svg = `<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
-  <!-- Background -->
-  <rect width="1200" height="630" fill="#FFF8F2"/>
-  
-  <!-- Brand gradient stripe (top) -->
-  <defs>
-    <linearGradient id="brandGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#119DA4;stop-opacity:1" />
-      <stop offset="60%" style="stop-color:#6EE28E;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#B7F464;stop-opacity:1" />
-    </linearGradient>
-  </defs>
-  <rect width="1200" height="8" fill="url(#brandGradient)"/>
-  
-  <!-- Logo mark (top-left) -->
-  <circle cx="50" cy="50" r="20" fill="#119DA4"/>
-  <circle cx="50" cy="50" r="12" fill="#FFF8F2"/>
-  
-  <!-- State badge -->
-  <rect x="80" y="80" width="${state.length * 16 + 40}" height="48" rx="24" fill="#0C4A5A"/>
-  <text x="${80 + (state.length * 16 + 40) / 2}" y="110" font-family="Inter, Arial, sans-serif" font-size="20" fill="#FFFFFF" text-anchor="middle" font-weight="600">${state}</text>
-  
-  <!-- Title -->
-  <text x="600" y="200" font-family="Poppins, Arial, sans-serif" font-size="48" fill="#0C4A5A" text-anchor="middle" font-weight="700">${titleText}</text>
-  
-  <!-- Body line -->
-  <text x="600" y="250" font-family="Inter, Arial, sans-serif" font-size="24" fill="#334155" text-anchor="middle" font-weight="400">${bodyText}</text>
-  
-  ${countdownChip ? `
-  <!-- Countdown chip -->
-  <rect x="${600 - (countdownChip.length * 8)}" y="270" width="${countdownChip.length * 16}" height="36" rx="18" fill="#E53935" opacity="0.1"/>
-  <text x="600" y="295" font-family="Inter, Arial, sans-serif" font-size="18" fill="#E53935" text-anchor="middle" font-weight="600">${countdownChip}</text>
-  ` : ''}
-  
-  ${!plan.locked ? `
-  <!-- Options list -->
-  ${optionsList}
-  ` : ''}
-  
-  ${plan.locked ? `
-  <!-- Add to Calendar label -->
-  <text x="600" y="360" font-family="Inter, Arial, sans-serif" font-size="28" fill="#119DA4" text-anchor="middle" font-weight="600">📅 Add to Calendar</text>
-  ` : ''}
-  
-  <!-- Footer CTA -->
-  <text x="600" y="${plan.locked ? 520 : 540}" font-family="Inter, Arial, sans-serif" font-size="22" fill="#334155" text-anchor="middle" opacity="0.8">${plan.locked ? 'Tap to see details' : 'Vote now to lock in your plans'}</text>
-  
-  <!-- Bottom accent line -->
-  <rect y="622" width="1200" height="8" fill="url(#brandGradient)"/>
-</svg>`;
+    // Build options list elements
+    const optionElements = !plan.locked && options ? options.slice(0, 3).map((opt, i) =>
+      React.createElement('div', {
+        key: i,
+        style: {
+          fontSize: '20px',
+          color: '#334155',
+          fontWeight: 500,
+        }
+      }, `${i + 1}. ${opt.name}`)
+    ) : [];
 
-    console.log('OG image generated for plan:', planId, 'state:', state);
+    const content = React.createElement('div', {
+      style: {
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: '#FFF8F2',
+        fontFamily: 'Inter, Arial, sans-serif',
+        position: 'relative',
+      }
+    },
+      // Top gradient stripe
+      React.createElement('div', {
+        style: {
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '8px',
+          background: 'linear-gradient(90deg, #119DA4 0%, #6EE28E 60%, #B7F464 100%)',
+        }
+      }),
+      // Logo mark
+      React.createElement('div', {
+        style: {
+          position: 'absolute',
+          top: '30px',
+          left: '30px',
+          width: '40px',
+          height: '40px',
+          borderRadius: '50%',
+          background: '#119DA4',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }
+      }, React.createElement('div', {
+        style: {
+          width: '24px',
+          height: '24px',
+          borderRadius: '50%',
+          background: '#FFF8F2',
+        }
+      })),
+      // State badge
+      React.createElement('div', {
+        style: {
+          position: 'absolute',
+          top: '80px',
+          left: '80px',
+          padding: '12px 24px',
+          borderRadius: '24px',
+          background: '#0C4A5A',
+          color: '#FFFFFF',
+          fontSize: '20px',
+          fontWeight: 600,
+        }
+      }, state),
+      // Main content
+      React.createElement('div', {
+        style: {
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '0 80px',
+          textAlign: 'center',
+        }
+      },
+        React.createElement('h1', {
+          style: {
+            fontSize: '48px',
+            fontWeight: 700,
+            color: '#0C4A5A',
+            margin: '20px 0',
+            fontFamily: 'Poppins, Arial, sans-serif',
+          }
+        }, titleText),
+        React.createElement('p', {
+          style: {
+            fontSize: '24px',
+            color: '#334155',
+            margin: '10px 0',
+          }
+        }, bodyText),
+        countdownChip ? React.createElement('div', {
+          style: {
+            marginTop: '20px',
+            padding: '8px 16px',
+            borderRadius: '18px',
+            background: 'rgba(229, 57, 53, 0.1)',
+            color: '#E53935',
+            fontSize: '18px',
+            fontWeight: 600,
+          }
+        }, countdownChip) : null,
+        // Options list or calendar prompt
+        optionElements.length > 0 ? React.createElement('div', {
+          style: {
+            marginTop: '40px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px',
+          }
+        }, ...optionElements) : null,
+        plan.locked ? React.createElement('div', {
+          style: {
+            marginTop: '40px',
+            fontSize: '28px',
+            color: '#119DA4',
+            fontWeight: 600,
+          }
+        }, '📅 Add to Calendar') : null
+      ),
+      // Footer CTA
+      React.createElement('div', {
+        style: {
+          position: 'absolute',
+          bottom: '60px',
+          fontSize: '22px',
+          color: '#334155',
+          opacity: 0.8,
+        }
+      }, plan.locked ? 'Tap to see details' : 'Vote now to lock in your plans'),
+      // Bottom accent line
+      React.createElement('div', {
+        style: {
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: '8px',
+          background: 'linear-gradient(90deg, #119DA4 0%, #6EE28E 60%, #B7F464 100%)',
+        }
+      })
+    );
 
-    return new Response(svg, {
+    return new ImageResponse(content, {
+      width: 1200,
+      height: 630,
       headers: {
         ...corsHeaders,
-        'Content-Type': 'image/svg+xml',
         'Cache-Control': 'public, max-age=300',
         'ETag': `"${planId}-${plan.locked ? 'locked' : voteCount}"`,
       },
