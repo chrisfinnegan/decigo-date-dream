@@ -29,18 +29,11 @@ serve(async (req) => {
     );
 
     const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? '';
+    let baseUrl = Deno.env.get('BASE_URL') ?? '';
     
-    // Get the app base URL from Referer header or construct from request
-    const referer = req.headers.get('referer');
-    let baseUrl = '';
-    if (referer) {
-      const refererUrl = new URL(referer);
-      baseUrl = `${refererUrl.protocol}//${refererUrl.host}`;
-    } else {
-      // Fallback: try to construct from request URL
-      const requestUrl = new URL(req.url);
-      // For Lovable apps, the app is usually at the same host as the function
-      baseUrl = `${requestUrl.protocol}//${requestUrl.host}`.replace('.supabase.co', '.lovable.app');
+    // Ensure HTTPS for production URLs
+    if (baseUrl && !baseUrl.startsWith('http://localhost') && baseUrl.startsWith('http://')) {
+      baseUrl = baseUrl.replace('http://', 'https://');
     }
 
     // Get plan
