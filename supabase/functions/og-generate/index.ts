@@ -11,7 +11,16 @@ serve(async (req) => {
   }
 
   try {
-    const { title, description, neighborhood, state } = await req.json();
+    const { title, description, neighborhood, state } = await req.json().catch(() => {
+      // If JSON parsing fails, try to get params from URL
+      const url = new URL(req.url);
+      return {
+        title: decodeURIComponent(url.searchParams.get('title') || ''),
+        description: decodeURIComponent(url.searchParams.get('description') || ''),
+        neighborhood: decodeURIComponent(url.searchParams.get('neighborhood') || ''),
+        state: url.searchParams.get('state') || 'created',
+      };
+    });
     
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
     if (!LOVABLE_API_KEY) {

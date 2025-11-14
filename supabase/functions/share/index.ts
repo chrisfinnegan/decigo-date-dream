@@ -118,7 +118,13 @@ serve(async (req) => {
     const isCrawler = /bot|crawler|spider|whatsapp|facebook|twitter|slack|discord|telegram|facebookexternalhit|twitterbot|linkedinbot|slackbot|skypeuripreview|line/i.test(userAgent);
     
     // Generate dynamic OG image URL with plan details
-    const ogImageUrl = `${supabaseUrl}/functions/v1/og-generate`;
+    const ogImageParams = new URLSearchParams({
+      title: encodeURIComponent(title),
+      description: encodeURIComponent(description),
+      neighborhood: encodeURIComponent(plan.neighborhood),
+      state: state,
+    });
+    const ogImageUrl = `${supabaseUrl}/functions/v1/og-generate?${ogImageParams.toString()}`;
     const shareUrl = `${supabaseUrl}/functions/v1/share?id=${planId}`;
     const redirectUrl = `${baseUrl}/p/${planId}?src=sc`;
     
