@@ -110,13 +110,16 @@ serve(async (req) => {
       }
     }
 
-    const ogImageUrl = `${supabaseUrl}/functions/v1/og-plan?id=${planId}&t=${Date.now()}`;
-    const shareUrl = `${supabaseUrl}/functions/v1/share?id=${planId}`;
-    const redirectUrl = `${baseUrl}/p/${planId}?src=sc`;
-
     // Track sharecard impression (server-side)
     const userAgent = req.headers.get('user-agent') || '';
     const isCrawler = /bot|crawler|spider|whatsapp|facebook|twitter|slack|discord/i.test(userAgent);
+
+    // For WhatsApp/social previews, we need a stable image URL without cache busting
+    // Only add cache busting for non-crawler requests
+    const cacheBuster = isCrawler ? '' : `&t=${Date.now()}`;
+    const ogImageUrl = `${supabaseUrl}/functions/v1/og-plan?id=${planId}${cacheBuster}`;
+    const shareUrl = `${supabaseUrl}/functions/v1/share?id=${planId}`;
+    const redirectUrl = `${baseUrl}/p/${planId}?src=sc`;
     
     console.log('Share page accessed:', {
       planId,
