@@ -68,49 +68,90 @@ const PlanView = () => {
       }
       
       loadPlan();
+      
+      // Set timeout to prevent infinite loading
+      const timeout = setTimeout(() => {
+        if (loading) {
+          console.error('Loading timeout');
+          setLoading(false);
+          toast({
+            title: "Loading timeout",
+            description: "The plan is taking too long to load. Please try again.",
+            variant: "destructive",
+          });
+        }
+      }, 10000); // 10 second timeout
+      
+      return () => clearTimeout(timeout);
     }
   }, [planId]);
 
   const loadPlan = async () => {
+    if (!planId) return;
+    
     try {
+      setLoading(true);
+      console.log('Loading plan:', planId);
+      
       // Get plan details
       const { data: planData, error: planError } = await supabase.functions.invoke('plans-get', {
         body: { id: planId },
       });
 
-      if (planError) throw planError;
+      if (planError) {
+        console.error('Plan error:', planError);
+        throw planError;
+      }
+      
+      if (!planData?.plan) {
+        throw new Error('Plan not found');
+      }
 
+      console.log('Plan loaded:', planData.plan);
       setPlan(planData.plan);
-      setVotesByOption(planData.votesByOption);
+      setVotesByOption(planData.votesByOption || {});
 
       // Get options
+      console.log('Loading options...');
       const { data: optionsData, error: optionsError } = await supabase.functions.invoke('options-list', {
         body: { planId, mode: showAll ? 'full20' : 'top3' },
       });
 
-      if (optionsError) throw optionsError;
+      if (optionsError) {
+        console.error('Options error:', optionsError);
+        throw optionsError;
+      }
+      
+      if (!optionsData?.options) {
+        throw new Error('Options not found');
+      }
 
+      console.log('Options loaded:', optionsData.options.length);
       setOptions(optionsData.options);
       
-      // Track analytics with source and metadata
-      const source = optionsData.options[0]?.source_id ? 'google_places' : 'mock';
-      const hasPhotos = optionsData.options.filter((o: Option) => o.photo_ref).length;
-      const hasRatings = optionsData.options.filter((o: any) => o.rating).length;
-      
-      analytics.trackOptionsShown(showAll ? 'full20' : 'top3', {
-        planId,
-        daypart: planData.plan?.daypart,
-        neighborhood: planData.plan?.neighborhood,
-        source,
-        price_level: planData.plan?.budget_band,
-        rating_present: hasRatings > 0,
-        photo_count: hasPhotos,
-      });
+      // Track analytics with source and metadata (non-blocking)
+      try {
+        const source = optionsData.options[0]?.source_id ? 'google_places' : 'mock';
+        const hasPhotos = optionsData.options.filter((o: Option) => o.photo_ref).length;
+        const hasRatings = optionsData.options.filter((o: any) => o.rating).length;
+        
+        analytics.trackOptionsShown(showAll ? 'full20' : 'top3', {
+          planId,
+          daypart: planData.plan?.daypart,
+          neighborhood: planData.plan?.neighborhood,
+          source,
+          price_level: planData.plan?.budget_band,
+          rating_present: hasRatings > 0,
+          photo_count: hasPhotos,
+        });
+      } catch (analyticsError) {
+        console.warn('Analytics error:', analyticsError);
+      }
     } catch (error) {
       console.error('Error loading plan:', error);
       toast({
         title: "Error",
-        description: "Failed to load plan",
+        description: error instanceof Error ? error.message : "Failed to load plan",
         variant: "destructive",
       });
     } finally {
