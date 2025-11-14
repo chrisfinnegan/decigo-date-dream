@@ -75,8 +75,8 @@ export const SharePlanCard = ({ planId, state: initialState }: SharePlanCardProp
   };
 
   const getShareUrl = () => {
-    const baseUrl = import.meta.env.VITE_SUPABASE_URL?.replace('/supabase', '') || window.location.origin;
-    return `${baseUrl}/s/${planId}`;
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    return `${supabaseUrl}/functions/v1/share?id=${planId}`;
   };
 
   const copyShareLink = () => {

@@ -200,8 +200,8 @@ const PlanView = () => {
   };
 
   const copyShareLink = () => {
-    const baseUrl = import.meta.env.VITE_SUPABASE_URL?.replace('/supabase', '') || window.location.origin;
-    const shareUrl = `${baseUrl}/s/${planId}`;
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const shareUrl = `${supabaseUrl}/functions/v1/share?id=${planId}`;
     navigator.clipboard.writeText(shareUrl);
     
     // Track sharecard click

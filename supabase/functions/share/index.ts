@@ -28,7 +28,8 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_ANON_KEY') ?? ''
     );
 
-    const baseUrl = Deno.env.get('BASE_URL') ?? '';
+    const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? '';
+    const baseUrl = supabaseUrl.replace('/supabase', '');
 
     // Get plan
     const { data: plan, error: planError } = await supabaseClient
@@ -104,8 +105,8 @@ serve(async (req) => {
       }
     }
 
-    const ogImageUrl = `${baseUrl}/functions/v1/og-plan?id=${planId}&t=${Date.now()}`;
-    const shareUrl = `${baseUrl}/s/${planId}`;
+    const ogImageUrl = `${supabaseUrl}/functions/v1/og-plan?id=${planId}&t=${Date.now()}`;
+    const shareUrl = `${supabaseUrl}/functions/v1/share?id=${planId}`;
     const redirectUrl = `${baseUrl}/p/${planId}?src=sc`;
 
     // Track sharecard impression (server-side)
