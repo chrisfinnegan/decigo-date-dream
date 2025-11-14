@@ -101,7 +101,10 @@ async function fetchGooglePlacesCandidates(
 
 // Fetch Place Details
 async function fetchPlaceDetails(apiKey: string, placeId: string) {
-  const response = await fetch(`https://places.googleapis.com/v1/${placeId}`, {
+  // Google Places API v1 requires "places/" prefix
+  const placeIdWithPrefix = placeId.startsWith('places/') ? placeId : `places/${placeId}`;
+  
+  const response = await fetch(`https://places.googleapis.com/v1/${placeIdWithPrefix}`, {
     headers: {
       'X-Goog-Api-Key': apiKey,
       'X-Goog-FieldMask': 'id,displayName,formattedAddress,location,priceLevel,rating,currentOpeningHours,websiteUri,internationalPhoneNumber,photos,editorialSummary'
@@ -109,7 +112,7 @@ async function fetchPlaceDetails(apiKey: string, placeId: string) {
   });
 
   if (!response.ok) {
-    console.error('Place Details error:', response.status);
+    console.error('Place Details error:', response.status, placeId);
     return null;
   }
 
