@@ -184,6 +184,8 @@ serve(async (req) => {
       }
 
       predictions.push({
+        id: placeId,
+        name: name,
         description: name,
         place_id: placeId,
         types,
