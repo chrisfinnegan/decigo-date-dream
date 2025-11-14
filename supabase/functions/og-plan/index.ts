@@ -45,7 +45,7 @@ serve(async (req) => {
     // Get options (top 3)
     const { data: options } = await supabaseClient
       .from('options')
-      .select('name')
+      .select('name, address, rank')
       .eq('plan_id', planId)
       .order('rank', { ascending: true })
       .limit(3);
@@ -60,33 +60,117 @@ serve(async (req) => {
     const threshold = plan.threshold || Math.min(4, plan.headcount);
 
     // Determine state
-    let state = 'Created';
+    const now = new Date();
+    const dateStart = new Date(plan.date_start);
+    const decisionDeadline = new Date(plan.decision_deadline);
+    const isTonight = dateStart.toDateString() === now.toDateString();
+    const daysUntil = Math.ceil((dateStart.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+    const hoursUntilDeadline = Math.ceil((decisionDeadline.getTime() - now.getTime()) / (1000 * 60 * 60));
+
+    let state = '';
+    let titleText = '';
+    let bodyText = '';
+
     if (plan.locked) {
       state = 'Locked';
+      const lockedOption = options?.[0];
+      const startTime = dateStart.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+      titleText = lockedOption ? `${lockedOption.name}` : `Locked`;
+      bodyText = lockedOption ? `${startTime} • ${lockedOption.address}` : `${plan.daypart} in ${plan.neighborhood}`;
     } else if (voteCount >= threshold - 1 && voteCount < threshold) {
-      state = `Near-Lock (${voteCount}/${threshold} voted)`;
+      state = 'Near-Lock';
+      titleText = `${voteCount}/${threshold} voted — one more to lock`;
+      bodyText = `${plan.daypart} • ${plan.neighborhood} • ${plan.budget_band}`;
+    } else {
+      state = 'Vote Now';
+      if (isTonight) {
+        titleText = 'Vote on tonight\'s plan';
+      } else if (daysUntil <= 7) {
+        const weekday = dateStart.toLocaleDateString('en-US', { weekday: 'long' });
+        titleText = `Vote for ${weekday} night`;
+      } else {
+        titleText = `Vote on ${plan.daypart} plans`;
+      }
+      bodyText = `${plan.daypart} • ${plan.neighborhood} • ${plan.budget_band}`;
     }
 
-    // Generate simple SVG (placeholder for actual image generation)
-    const svg = `
-      <svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
-        <rect width="1200" height="630" fill="#1a1a1a"/>
-        <text x="600" y="150" font-family="Arial" font-size="48" fill="#ffffff" text-anchor="middle">${state}</text>
-        <text x="600" y="220" font-family="Arial" font-size="24" fill="#888888" text-anchor="middle">${plan.daypart} • ${plan.neighborhood} • ${plan.budget_band}</text>
-        ${options?.map((opt, i) => `
-          <text x="600" y="${300 + (i * 60)}" font-family="Arial" font-size="32" fill="#cccccc" text-anchor="middle">${i + 1}. ${opt.name}</text>
-        `).join('')}
-        <text x="600" y="580" font-family="Arial" font-size="20" fill="#666666" text-anchor="middle">Vote now to lock in your plans</text>
-      </svg>
-    `;
+    // Build countdown chip if scheduled
+    let countdownChip = '';
+    if (!plan.locked && hoursUntilDeadline > 0 && hoursUntilDeadline < 72) {
+      if (hoursUntilDeadline < 24) {
+        countdownChip = `Locks in ${hoursUntilDeadline}h`;
+      } else {
+        const daysLeft = Math.ceil(hoursUntilDeadline / 24);
+        countdownChip = `Locks in ${daysLeft}d`;
+      }
+    }
 
-    console.log('OG image generated for plan:', planId);
+    // Create options list with proper escaping
+    const optionsList = options?.slice(0, 3).map((opt, i) => {
+      const escapedName = opt.name.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      return `<text x="600" y="${340 + (i * 50)}" font-family="Inter, Arial, sans-serif" font-size="24" fill="#334155" text-anchor="middle" font-weight="500">${i + 1}. ${escapedName}</text>`;
+    }).join('') || '';
+
+    // Generate SVG (we'll use SVG as it's simpler than PNG generation in Deno)
+    const svg = `<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#FFF8F2"/>
+  
+  <!-- Brand gradient stripe (top) -->
+  <defs>
+    <linearGradient id="brandGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#119DA4;stop-opacity:1" />
+      <stop offset="60%" style="stop-color:#6EE28E;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#B7F464;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="8" fill="url(#brandGradient)"/>
+  
+  <!-- Logo mark (top-left) -->
+  <circle cx="50" cy="50" r="20" fill="#119DA4"/>
+  <circle cx="50" cy="50" r="12" fill="#FFF8F2"/>
+  
+  <!-- State badge -->
+  <rect x="80" y="80" width="${state.length * 16 + 40}" height="48" rx="24" fill="#0C4A5A"/>
+  <text x="${80 + (state.length * 16 + 40) / 2}" y="110" font-family="Inter, Arial, sans-serif" font-size="20" fill="#FFFFFF" text-anchor="middle" font-weight="600">${state}</text>
+  
+  <!-- Title -->
+  <text x="600" y="200" font-family="Poppins, Arial, sans-serif" font-size="48" fill="#0C4A5A" text-anchor="middle" font-weight="700">${titleText}</text>
+  
+  <!-- Body line -->
+  <text x="600" y="250" font-family="Inter, Arial, sans-serif" font-size="24" fill="#334155" text-anchor="middle" font-weight="400">${bodyText}</text>
+  
+  ${countdownChip ? `
+  <!-- Countdown chip -->
+  <rect x="${600 - (countdownChip.length * 8)}" y="270" width="${countdownChip.length * 16}" height="36" rx="18" fill="#E53935" opacity="0.1"/>
+  <text x="600" y="295" font-family="Inter, Arial, sans-serif" font-size="18" fill="#E53935" text-anchor="middle" font-weight="600">${countdownChip}</text>
+  ` : ''}
+  
+  ${!plan.locked ? `
+  <!-- Options list -->
+  ${optionsList}
+  ` : ''}
+  
+  ${plan.locked ? `
+  <!-- Add to Calendar label -->
+  <text x="600" y="360" font-family="Inter, Arial, sans-serif" font-size="28" fill="#119DA4" text-anchor="middle" font-weight="600">📅 Add to Calendar</text>
+  ` : ''}
+  
+  <!-- Footer CTA -->
+  <text x="600" y="${plan.locked ? 520 : 540}" font-family="Inter, Arial, sans-serif" font-size="22" fill="#334155" text-anchor="middle" opacity="0.8">${plan.locked ? 'Tap to see details' : 'Vote now to lock in your plans'}</text>
+  
+  <!-- Bottom accent line -->
+  <rect y="622" width="1200" height="8" fill="url(#brandGradient)"/>
+</svg>`;
+
+    console.log('OG image generated for plan:', planId, 'state:', state);
 
     return new Response(svg, {
       headers: {
         ...corsHeaders,
         'Content-Type': 'image/svg+xml',
-        'Cache-Control': 'public, max-age=3600',
+        'Cache-Control': 'public, max-age=300',
+        'ETag': `"${planId}-${plan.locked ? 'locked' : voteCount}"`,
       },
     });
   } catch (error) {

@@ -57,6 +57,16 @@ const PlanView = () => {
       // Check if user has management token
       const token = localStorage.getItem(`plan_${planId}_token`);
       setHasManagementAccess(!!token);
+      
+      // Track if this is from a sharecard
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('src') === 'sc') {
+        analytics.track('sharecard_click', {
+          planId,
+          source: 'og_unfurl',
+        });
+      }
+      
       loadPlan();
     }
   }, [planId]);
@@ -120,6 +130,15 @@ const PlanView = () => {
 
       if (error) throw error;
 
+      // Track if vote came from sharecard
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('src') === 'sc') {
+        analytics.track('sharecard_to_vote', {
+          planId,
+          optionId,
+        });
+      }
+
       analytics.trackVoteCast({
         planId,
         optionId,
@@ -181,8 +200,16 @@ const PlanView = () => {
   };
 
   const copyShareLink = () => {
-    const shareUrl = window.location.href;
+    const baseUrl = import.meta.env.VITE_SUPABASE_URL?.replace('/supabase', '') || window.location.origin;
+    const shareUrl = `${baseUrl}/s/${planId}`;
     navigator.clipboard.writeText(shareUrl);
+    
+    // Track sharecard click
+    analytics.track('sharecard_click', {
+      planId,
+      source: 'copy_button',
+    });
+    
     toast({
       title: "Link copied!",
       description: "Share this link with your group to vote",

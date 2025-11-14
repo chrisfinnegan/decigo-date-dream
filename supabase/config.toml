@@ -39,6 +39,9 @@ verify_jwt = false
 [functions.og-plan]
 verify_jwt = false
 
+[functions.share]
+verify_jwt = false
+
 [functions.webhooks-twilio]
 verify_jwt = false
 

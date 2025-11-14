@@ -10,6 +10,7 @@ import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { SharePlanCard } from "@/components/SharePlanCard";
 
 interface Plan {
   id: string;
@@ -240,6 +241,12 @@ const PlanManage = () => {
             {plan.locked && <Badge variant="default">Locked</Badge>}
             {plan.canceled && <Badge variant="destructive">Canceled</Badge>}
           </div>
+        </div>
+
+        {/* Share Plan Card */}
+        <div>
+          <h2 className="text-lg font-semibold mb-3">Share Card</h2>
+          <SharePlanCard planId={planId!} />
         </div>
 
         <Card>
