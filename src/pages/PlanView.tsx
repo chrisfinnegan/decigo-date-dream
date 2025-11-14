@@ -51,6 +51,9 @@ const PlanView = () => {
   useEffect(() => {
     if (!planId) return;
 
+    let isCancelled = false;
+    const controller = new AbortController();
+
     const preferredMode = localStorage.getItem(`plan_${planId}_mode`) as 'top3' | 'full20' | null;
     if (preferredMode) {
       setShowAll(preferredMode === 'full20');
@@ -76,10 +79,19 @@ const PlanView = () => {
         
         const mode = preferredMode || 'top3';
         
-        // Get plan details
-        const { data: planData, error: planError } = await supabase.functions.invoke('plans-get', {
+        // Get plan details with timeout
+        const planPromise = supabase.functions.invoke('plans-get', {
           body: { id: planId },
         });
+
+        const { data: planData, error: planError } = await Promise.race([
+          planPromise,
+          new Promise<any>((_, reject) => 
+            setTimeout(() => reject(new Error('Plan request timeout')), 8000)
+          )
+        ]);
+
+        if (isCancelled) return;
 
         if (planError) {
           console.error('Plan error:', planError);
@@ -94,11 +106,20 @@ const PlanView = () => {
         setPlan(planData.plan);
         setVotesByOption(planData.votesByOption || {});
 
-        // Get options
+        // Get options with timeout
         console.log('Loading options with mode:', mode);
-        const { data: optionsData, error: optionsError } = await supabase.functions.invoke('options-list', {
+        const optionsPromise = supabase.functions.invoke('options-list', {
           body: { planId, mode },
         });
+
+        const { data: optionsData, error: optionsError } = await Promise.race([
+          optionsPromise,
+          new Promise<any>((_, reject) => 
+            setTimeout(() => reject(new Error('Options request timeout')), 8000)
+          )
+        ]);
+
+        if (isCancelled) return;
 
         if (optionsError) {
           console.error('Options error:', optionsError);
@@ -131,30 +152,27 @@ const PlanView = () => {
           console.warn('Analytics error:', analyticsError);
         }
       } catch (error) {
+        if (isCancelled) return;
+        
         console.error('Error loading plan:', error);
         toast({
-          title: "Error",
-          description: error instanceof Error ? error.message : "Failed to load plan",
+          title: "Error loading plan",
+          description: error instanceof Error ? error.message : "Failed to load plan. Please try again.",
           variant: "destructive",
         });
       } finally {
-        setLoading(false);
+        if (!isCancelled) {
+          setLoading(false);
+        }
       }
     };
     
     loadPlanData();
     
-    // Set timeout to prevent infinite loading
-    const timeout = setTimeout(() => {
-      setLoading(false);
-      toast({
-        title: "Loading timeout",
-        description: "The plan is taking too long to load. Please try again.",
-        variant: "destructive",
-      });
-    }, 10000); // 10 second timeout
-    
-    return () => clearTimeout(timeout);
+    return () => {
+      isCancelled = true;
+      controller.abort();
+    };
   }, [planId]);
 
   const loadPlan = async () => {
