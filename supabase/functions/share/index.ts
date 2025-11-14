@@ -112,9 +112,9 @@ serve(async (req) => {
 
     // Track sharecard impression (server-side)
     const userAgent = req.headers.get('user-agent') || '';
-    const isCrawler = /bot|crawler|spider|whatsapp|facebook|twitter|slack|discord|telegram|facebookexternalhit|twitterbot|linkedinbot|slackbot/i.test(userAgent);
+    const isCrawler = /bot|crawler|spider|whatsapp|facebook|twitter|slack|discord|telegram|facebookexternalhit|twitterbot|linkedinbot|slackbot|skypeuripreview|line/i.test(userAgent);
     
-    // Use static PNG for OG image
+    // Use static PNG for OG image - must be absolute HTTPS URL
     const ogImageUrl = `${baseUrl}/og-default.png`;
     const shareUrl = `${supabaseUrl}/functions/v1/share?id=${planId}`;
     const redirectUrl = `${baseUrl}/p/${planId}?src=sc`;
@@ -124,32 +124,38 @@ serve(async (req) => {
       state,
       isCrawler,
       redirectUrl,
+      ogImageUrl,
       userAgent: userAgent.substring(0, 100),
     });
 
     // For crawlers, return HTML with Open Graph meta tags
     if (isCrawler) {
       const html = `<!DOCTYPE html>
-<html lang="en">
+<html lang="en" prefix="og: http://ogp.me/ns#">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <!-- Open Graph / Facebook -->
+  <!-- Essential Open Graph tags -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="${shareUrl}">
+  <meta property="og:site_name" content="Decigo">
   <meta property="og:title" content="${title}">
   <meta property="og:description" content="${description}">
   <meta property="og:image" content="${ogImageUrl}">
+  <meta property="og:image:secure_url" content="${ogImageUrl}">
+  <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="${title}">
   
-  <!-- Twitter -->
+  <!-- Twitter Card tags -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:url" content="${shareUrl}">
+  <meta name="twitter:site" content="@decigo">
   <meta name="twitter:title" content="${title}">
   <meta name="twitter:description" content="${description}">
   <meta name="twitter:image" content="${ogImageUrl}">
+  <meta name="twitter:image:alt" content="${title}">
   
   <title>${title}</title>
   <style>
@@ -203,7 +209,9 @@ serve(async (req) => {
         headers: {
           ...corsHeaders,
           'Content-Type': 'text/html; charset=utf-8',
-          'Cache-Control': 'public, max-age=300',
+          'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0',
+          'Pragma': 'no-cache',
+          'Expires': '0',
         },
       });
     }
