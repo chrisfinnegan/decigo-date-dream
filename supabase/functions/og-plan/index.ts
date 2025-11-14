@@ -1,8 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import satori from "https://esm.sh/satori@0.10.9";
-import { Resvg } from "https://esm.sh/@resvg/resvg-js@2.6.0";
-import { h } from "https://esm.sh/preact@10.11.3";
+import React from "https://esm.sh/react@18.2.0";
+import { ImageResponse } from "https://deno.land/x/og_edge@0.0.6/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -51,7 +50,7 @@ serve(async (req) => {
 
     console.log('Plan found, generating OG image for state:', plan.locked ? 'locked' : 'created');
 
-    // Get options (top 2)
+    // Get options (top 2 for better readability)
     const { data: options } = await supabaseClient
       .from('options')
       .select('name, address, rank')
@@ -71,7 +70,6 @@ serve(async (req) => {
     // Determine state
     const now = new Date();
     const dateStart = new Date(plan.date_start);
-    const decisionDeadline = new Date(plan.decision_deadline);
     const isTonight = dateStart.toDateString() === now.toDateString();
     const daysUntil = Math.ceil((dateStart.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
 
@@ -104,11 +102,11 @@ serve(async (req) => {
 
     console.log('Generating PNG image for plan:', planId, 'state:', state);
 
-    // Build options list
-    const optionsList = !plan.locked && options && options.length > 0 
+    // Build options elements
+    const optionsElements = !plan.locked && options && options.length > 0
       ? options.map((opt, i) =>
-          h('div', {
-            key: `opt-${i}`,
+          React.createElement('div', {
+            key: i,
             style: {
               display: 'flex',
               alignItems: 'center',
@@ -116,10 +114,11 @@ serve(async (req) => {
               padding: '20px 24px',
               borderRadius: '16px',
               background: 'rgba(255, 255, 255, 0.15)',
+              backdropFilter: 'blur(10px)',
               border: '2px solid rgba(255, 255, 255, 0.2)',
             }
           }, [
-            h('div', {
+            React.createElement('div', {
               style: {
                 fontSize: '40px',
                 fontWeight: 900,
@@ -127,7 +126,7 @@ serve(async (req) => {
                 minWidth: '50px',
               }
             }, `${i + 1}`),
-            h('div', {
+            React.createElement('div', {
               style: {
                 fontSize: '28px',
                 fontWeight: 600,
@@ -139,194 +138,187 @@ serve(async (req) => {
         )
       : [];
 
-    const svg = await satori(
-      h('div', {
+    const content = React.createElement('div', {
+      style: {
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        background: 'linear-gradient(135deg, #0C4A5A 0%, #119DA4 100%)',
+        fontFamily: 'system-ui, -apple-system, sans-serif',
+        position: 'relative',
+        padding: '60px',
+      }
+    }, [
+      // Gradient overlay
+      React.createElement('div', {
         style: {
-          width: '100%',
-          height: '100%',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'radial-gradient(circle at top right, rgba(110, 226, 142, 0.2) 0%, transparent 50%)',
+        }
+      }),
+      // Main content container
+      React.createElement('div', {
+        style: {
           display: 'flex',
           flexDirection: 'column',
-          background: 'linear-gradient(135deg, #0C4A5A 0%, #119DA4 100%)',
-          fontFamily: 'sans-serif',
+          justifyContent: 'space-between',
+          height: '100%',
           position: 'relative',
-          padding: '60px',
+          zIndex: 1,
         }
       }, [
-        // Gradient overlay
-        h('div', {
-          style: {
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'radial-gradient(circle at top right, rgba(110, 226, 142, 0.2) 0%, transparent 50%)',
-          }
-        }),
-        // Main content
-        h('div', {
+        // Header section
+        React.createElement('div', {
           style: {
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'space-between',
-            height: '100%',
-            position: 'relative',
-            zIndex: 1,
+            gap: '24px',
           }
         }, [
-          // Header
-          h('div', {
+          // Logo and badge row
+          React.createElement('div', {
             style: {
               display: 'flex',
-              flexDirection: 'column',
-              gap: '24px',
+              alignItems: 'center',
+              justifyContent: 'space-between',
             }
           }, [
-            // Logo and badge
-            h('div', {
+            // Logo
+            React.createElement('div', {
               style: {
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'space-between',
+                gap: '12px',
               }
             }, [
-              // Logo
-              h('div', {
+              React.createElement('div', {
                 style: {
+                  width: '48px',
+                  height: '48px',
+                  borderRadius: '50%',
+                  background: '#6EE28E',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '12px',
+                  justifyContent: 'center',
                 }
               }, [
-                h('div', {
+                React.createElement('div', {
                   style: {
-                    width: '48px',
-                    height: '48px',
+                    width: '28px',
+                    height: '28px',
                     borderRadius: '50%',
-                    background: '#6EE28E',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
+                    background: '#0C4A5A',
                   }
-                }, [
-                  h('div', {
-                    style: {
-                      width: '28px',
-                      height: '28px',
-                      borderRadius: '50%',
-                      background: '#0C4A5A',
-                    }
-                  })
-                ]),
-                h('div', {
-                  style: {
-                    fontSize: '28px',
-                    fontWeight: 700,
-                    color: '#FFFFFF',
-                    letterSpacing: '-0.5px',
-                  }
-                }, 'decigo')
+                })
               ]),
-              // State badge
-              h('div', {
+              React.createElement('div', {
                 style: {
-                  padding: '16px 32px',
-                  borderRadius: '30px',
-                  background: plan.locked ? '#6EE28E' : 'rgba(255, 255, 255, 0.2)',
-                  border: '2px solid rgba(255, 255, 255, 0.3)',
+                  fontSize: '28px',
+                  fontWeight: 700,
+                  color: '#FFFFFF',
+                  letterSpacing: '-0.5px',
                 }
-              }, [
-                h('div', {
-                  style: {
-                    fontSize: '24px',
-                    fontWeight: 700,
-                    color: plan.locked ? '#0C4A5A' : '#FFFFFF',
-                    textTransform: 'uppercase',
-                    letterSpacing: '1px',
-                  }
-                }, state)
-              ])
+              }, 'decigo')
             ]),
-            // Title section
-            h('div', {
+            // State badge
+            React.createElement('div', {
               style: {
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '16px',
-                marginTop: '20px',
+                padding: '16px 32px',
+                borderRadius: '30px',
+                background: plan.locked ? '#6EE28E' : 'rgba(255, 255, 255, 0.2)',
+                backdropFilter: 'blur(10px)',
+                border: '2px solid rgba(255, 255, 255, 0.3)',
               }
             }, [
-              h('h1', {
+              React.createElement('div', {
                 style: {
-                  fontSize: '72px',
-                  fontWeight: 900,
-                  color: '#FFFFFF',
-                  lineHeight: '1.1',
-                  letterSpacing: '-2px',
-                  margin: 0,
+                  fontSize: '24px',
+                  fontWeight: 700,
+                  color: plan.locked ? '#0C4A5A' : '#FFFFFF',
+                  textTransform: 'uppercase',
+                  letterSpacing: '1px',
                 }
-              }, titleText),
-              h('p', {
-                style: {
-                  fontSize: '32px',
-                  color: 'rgba(255, 255, 255, 0.9)',
-                  fontWeight: 500,
-                  margin: 0,
-                  lineHeight: '1.4',
-                }
-              }, bodyText)
+              }, state)
             ])
           ]),
-          // Middle section - Options
-          optionsList.length > 0 ? h('div', {
+          // Title section
+          React.createElement('div', {
             style: {
               display: 'flex',
               flexDirection: 'column',
               gap: '16px',
-              marginTop: '40px',
-            }
-          }, optionsList) : null,
-          // Footer
-          h('div', {
-            style: {
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '24px 32px',
-              borderRadius: '20px',
-              background: 'rgba(255, 255, 255, 0.1)',
-              border: '2px solid rgba(255, 255, 255, 0.2)',
               marginTop: '20px',
             }
           }, [
-            h('div', {
+            React.createElement('h1', {
               style: {
-                fontSize: '28px',
-                fontWeight: 600,
+                fontSize: '72px',
+                fontWeight: 900,
                 color: '#FFFFFF',
-                letterSpacing: '0.5px',
+                lineHeight: '1.1',
+                letterSpacing: '-2px',
+                margin: 0,
+                textShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
               }
-            }, plan.locked ? '👆 Tap to see details' : '🗳️ Vote now to lock in your plans')
+            }, titleText),
+            React.createElement('p', {
+              style: {
+                fontSize: '32px',
+                color: 'rgba(255, 255, 255, 0.9)',
+                fontWeight: 500,
+                margin: 0,
+                lineHeight: '1.4',
+              }
+            }, bodyText)
           ])
+        ]),
+        // Middle section - Options
+        optionsElements.length > 0 ? React.createElement('div', {
+          style: {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '16px',
+            marginTop: '40px',
+          }
+        }, optionsElements) : null,
+        // Footer
+        React.createElement('div', {
+          style: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '24px 32px',
+            borderRadius: '20px',
+            background: 'rgba(255, 255, 255, 0.1)',
+            backdropFilter: 'blur(10px)',
+            border: '2px solid rgba(255, 255, 255, 0.2)',
+            marginTop: '20px',
+          }
+        }, [
+          React.createElement('div', {
+            style: {
+              fontSize: '28px',
+              fontWeight: 600,
+              color: '#FFFFFF',
+              letterSpacing: '0.5px',
+            }
+          }, plan.locked ? '👆 Tap to see details' : '🗳️ Vote now to lock in your plans')
         ])
-      ]),
-      {
-        width: 1200,
-        height: 630,
-      }
-    );
+      ])
+    ]);
 
-    // Convert SVG to PNG using Resvg
-    const resvg = new Resvg(svg);
-    const pngData = resvg.render();
-    const pngBuffer = pngData.asPng();
-
-    return new Response(pngBuffer, {
+    return new ImageResponse(content, {
+      width: 1200,
+      height: 630,
       headers: {
         ...corsHeaders,
-        'Content-Type': 'image/png',
         'Cache-Control': 'public, max-age=300',
-        'ETag': `"${planId}-${plan.locked ? 'locked' : voteCount}"`,
+        'Content-Type': 'image/png',
       },
     });
   } catch (error) {
