@@ -133,137 +133,264 @@ serve(async (req) => {
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: '#FFF8F2',
-        fontFamily: 'Inter, Arial, sans-serif',
+        background: 'linear-gradient(135deg, #0C4A5A 0%, #119DA4 100%)',
+        fontFamily: 'system-ui, -apple-system, sans-serif',
         position: 'relative',
+        padding: '60px',
       }
     },
-      // Top gradient stripe
+      // Gradient overlay for depth
       React.createElement('div', {
         style: {
           position: 'absolute',
           top: 0,
           left: 0,
           right: 0,
-          height: '8px',
-          background: 'linear-gradient(90deg, #119DA4 0%, #6EE28E 60%, #B7F464 100%)',
+          bottom: 0,
+          background: 'radial-gradient(circle at top right, rgba(110, 226, 142, 0.2) 0%, transparent 50%)',
         }
       }),
-      // Logo mark
-      React.createElement('div', {
-        style: {
-          position: 'absolute',
-          top: '30px',
-          left: '30px',
-          width: '40px',
-          height: '40px',
-          borderRadius: '50%',
-          background: '#119DA4',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }
-      }, React.createElement('div', {
-        style: {
-          width: '24px',
-          height: '24px',
-          borderRadius: '50%',
-          background: '#FFF8F2',
-        }
-      })),
-      // State badge
-      React.createElement('div', {
-        style: {
-          position: 'absolute',
-          top: '80px',
-          left: '80px',
-          padding: '12px 24px',
-          borderRadius: '24px',
-          background: '#0C4A5A',
-          color: '#FFFFFF',
-          fontSize: '20px',
-          fontWeight: 600,
-        }
-      }, state),
-      // Main content
+      
+      // Content container
       React.createElement('div', {
         style: {
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: '0 80px',
-          textAlign: 'center',
+          justifyContent: 'space-between',
+          height: '100%',
+          position: 'relative',
+          zIndex: 1,
         }
       },
-        React.createElement('h1', {
+        // Header section
+        React.createElement('div', {
           style: {
-            fontSize: '48px',
-            fontWeight: 700,
-            color: '#0C4A5A',
-            margin: '20px 0',
-            fontFamily: 'Poppins, Arial, sans-serif',
-          }
-        }, titleText),
-        React.createElement('p', {
-          style: {
-            fontSize: '24px',
-            color: '#334155',
-            margin: '10px 0',
-          }
-        }, bodyText),
-        countdownChip ? React.createElement('div', {
-          style: {
-            marginTop: '20px',
-            padding: '8px 16px',
-            borderRadius: '18px',
-            background: 'rgba(229, 57, 53, 0.1)',
-            color: '#E53935',
-            fontSize: '18px',
-            fontWeight: 600,
-          }
-        }, countdownChip) : null,
-        // Options list or calendar prompt
-        optionElements.length > 0 ? React.createElement('div', {
-          style: {
-            marginTop: '40px',
             display: 'flex',
             flexDirection: 'column',
-            gap: '12px',
+            gap: '24px',
           }
-        }, ...optionElements) : null,
-        plan.locked ? React.createElement('div', {
+        },
+          // Logo and state badge
+          React.createElement('div', {
+            style: {
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }
+          },
+            // Logo
+            React.createElement('div', {
+              style: {
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+              }
+            },
+              React.createElement('div', {
+                style: {
+                  width: '48px',
+                  height: '48px',
+                  borderRadius: '50%',
+                  background: '#6EE28E',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }
+              }, React.createElement('div', {
+                style: {
+                  width: '28px',
+                  height: '28px',
+                  borderRadius: '50%',
+                  background: '#0C4A5A',
+                }
+              })),
+              React.createElement('div', {
+                style: {
+                  fontSize: '28px',
+                  fontWeight: 700,
+                  color: '#FFFFFF',
+                  letterSpacing: '-0.5px',
+                }
+              }, 'decigo')
+            ),
+            // State badge
+            React.createElement('div', {
+              style: {
+                padding: '16px 32px',
+                borderRadius: '30px',
+                background: plan.locked ? '#6EE28E' : 'rgba(255, 255, 255, 0.2)',
+                backdropFilter: 'blur(10px)',
+                border: '2px solid rgba(255, 255, 255, 0.3)',
+              }
+            }, React.createElement('div', {
+              style: {
+                fontSize: '24px',
+                fontWeight: 700,
+                color: plan.locked ? '#0C4A5A' : '#FFFFFF',
+                textTransform: 'uppercase',
+                letterSpacing: '1px',
+              }
+            }, state))
+          ),
+          
+          // Main title
+          React.createElement('div', {
+            style: {
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '16px',
+              marginTop: '20px',
+            }
+          },
+            React.createElement('h1', {
+              style: {
+                fontSize: '72px',
+                fontWeight: 900,
+                color: '#FFFFFF',
+                lineHeight: '1.1',
+                letterSpacing: '-2px',
+                margin: 0,
+                textShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
+              }
+            }, titleText),
+            React.createElement('p', {
+              style: {
+                fontSize: '32px',
+                color: 'rgba(255, 255, 255, 0.9)',
+                fontWeight: 500,
+                margin: 0,
+                lineHeight: '1.4',
+              }
+            }, bodyText)
+          )
+        ),
+        
+        // Middle section - Options or countdown
+        React.createElement('div', {
           style: {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '20px',
             marginTop: '40px',
-            fontSize: '28px',
-            color: '#119DA4',
-            fontWeight: 600,
           }
-        }, '📅 Add to Calendar') : null
-      ),
-      // Footer CTA
-      React.createElement('div', {
-        style: {
-          position: 'absolute',
-          bottom: '60px',
-          fontSize: '22px',
-          color: '#334155',
-          opacity: 0.8,
-        }
-      }, plan.locked ? 'Tap to see details' : 'Vote now to lock in your plans'),
-      // Bottom accent line
-      React.createElement('div', {
-        style: {
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          height: '8px',
-          background: 'linear-gradient(90deg, #119DA4 0%, #6EE28E 60%, #B7F464 100%)',
-        }
-      })
+        },
+          countdownChip ? React.createElement('div', {
+            style: {
+              display: 'flex',
+              alignItems: 'center',
+              gap: '16px',
+              padding: '20px 32px',
+              borderRadius: '20px',
+              background: 'rgba(229, 57, 53, 0.2)',
+              border: '2px solid #E53935',
+              backdropFilter: 'blur(10px)',
+            }
+          },
+            React.createElement('div', {
+              style: {
+                fontSize: '40px',
+              }
+            }, '⏰'),
+            React.createElement('div', {
+              style: {
+                fontSize: '32px',
+                fontWeight: 700,
+                color: '#FFFFFF',
+                letterSpacing: '0.5px',
+              }
+            }, countdownChip)
+          ) : null,
+          
+          // Options list (only show top 2 for space)
+          !plan.locked && options && options.length > 0 ? React.createElement('div', {
+            style: {
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '16px',
+            }
+          }, ...options.slice(0, 2).map((opt, i) =>
+            React.createElement('div', {
+              key: i,
+              style: {
+                display: 'flex',
+                alignItems: 'center',
+                gap: '20px',
+                padding: '20px 24px',
+                borderRadius: '16px',
+                background: 'rgba(255, 255, 255, 0.15)',
+                backdropFilter: 'blur(10px)',
+                border: '2px solid rgba(255, 255, 255, 0.2)',
+              }
+            },
+              React.createElement('div', {
+                style: {
+                  fontSize: '40px',
+                  fontWeight: 900,
+                  color: '#6EE28E',
+                  minWidth: '50px',
+                }
+              }, `${i + 1}`),
+              React.createElement('div', {
+                style: {
+                  fontSize: '28px',
+                  fontWeight: 600,
+                  color: '#FFFFFF',
+                  lineHeight: '1.3',
+                }
+              }, opt.name.length > 40 ? opt.name.substring(0, 40) + '...' : opt.name)
+            )
+          )) : null,
+          
+          // Calendar icon for locked plans
+          plan.locked ? React.createElement('div', {
+            style: {
+              display: 'flex',
+              alignItems: 'center',
+              gap: '20px',
+              padding: '28px 36px',
+              borderRadius: '20px',
+              background: 'rgba(110, 226, 142, 0.2)',
+              border: '3px solid #6EE28E',
+              backdropFilter: 'blur(10px)',
+            }
+          },
+            React.createElement('div', {
+              style: {
+                fontSize: '48px',
+              }
+            }, '📅'),
+            React.createElement('div', {
+              style: {
+                fontSize: '36px',
+                fontWeight: 700,
+                color: '#6EE28E',
+              }
+            }, 'Add to Calendar')
+          ) : null
+        ),
+        
+        // Footer CTA
+        React.createElement('div', {
+          style: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '24px 32px',
+            borderRadius: '20px',
+            background: 'rgba(255, 255, 255, 0.1)',
+            backdropFilter: 'blur(10px)',
+            border: '2px solid rgba(255, 255, 255, 0.2)',
+            marginTop: '20px',
+          }
+        }, React.createElement('div', {
+          style: {
+            fontSize: '28px',
+            fontWeight: 600,
+            color: '#FFFFFF',
+            letterSpacing: '0.5px',
+          }
+        }, plan.locked ? '👆 Tap to see details' : '🗳️ Vote now to lock in your plans'))
+      )
     );
 
     return new ImageResponse(content, {
