@@ -102,6 +102,18 @@ class Analytics {
   trackInviteSent(properties: EventProperties) {
     this.track('invite_sent', properties);
   }
+
+  trackSharecardImpression(properties: EventProperties) {
+    this.track('sharecard_impression', properties);
+  }
+
+  trackSharecardClick(properties: EventProperties) {
+    this.track('sharecard_click', properties);
+  }
+
+  trackSharecardToVote(properties: EventProperties) {
+    this.track('sharecard_to_vote', properties);
+  }
 }
 
 export const analytics = new Analytics();

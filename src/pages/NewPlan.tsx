@@ -89,10 +89,16 @@ const NewPlan = () => {
         localStorage.setItem(`plan_${data.planId}_token`, data.magicToken);
       }
 
+      const baseUrl = import.meta.env.VITE_SUPABASE_URL?.replace('/supabase', '') || window.location.origin;
+      const shareUrl = `${baseUrl}/s/${data.planId}`;
+
       toast({
         title: "Plan created!",
-        description: "Click 'Manage Plan' button to edit details, send invites, or cancel",
+        description: "Share link copied to clipboard. Click 'Manage Plan' to edit or send invites.",
       });
+
+      // Copy share link to clipboard
+      navigator.clipboard.writeText(shareUrl);
 
       localStorage.setItem(`plan_${data.planId}_mode`, resultMode);
       navigate(`/p/${data.planId}`);

@@ -1,0 +1,232 @@
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Calendar, MapPin, Copy, Share2 } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+
+interface SharePlanCardProps {
+  planId: string;
+  state?: 'created' | 'nearlock' | 'locked' | 'scheduled';
+}
+
+interface PlanData {
+  id: string;
+  daypart: string;
+  date_start: string;
+  date_end: string;
+  neighborhood: string;
+  headcount: number;
+  budget_band: string;
+  threshold: number;
+  decision_deadline: string;
+  locked: boolean;
+}
+
+export const SharePlanCard = ({ planId, state: initialState }: SharePlanCardProps) => {
+  const [plan, setPlan] = useState<PlanData | null>(null);
+  const [voteCount, setVoteCount] = useState(0);
+  const [state, setState] = useState(initialState);
+  const [lockedOption, setLockedOption] = useState<{ name: string; address: string } | null>(null);
+
+  useEffect(() => {
+    loadPlanData();
+  }, [planId]);
+
+  const loadPlanData = async () => {
+    try {
+      const { data: planData } = await supabase.functions.invoke('plans-get', {
+        body: { id: planId },
+      });
+
+      if (planData?.plan) {
+        setPlan(planData.plan);
+        setVoteCount(Object.values(planData.votesByOption || {}).reduce((a: number, b: number) => a + b, 0) as number);
+
+        // Determine state
+        if (planData.plan.locked) {
+          setState('locked');
+          // Get locked option
+          const { data: options } = await supabase
+            .from('options')
+            .select('name, address')
+            .eq('plan_id', planId)
+            .order('rank', { ascending: true })
+            .limit(1);
+          if (options?.[0]) {
+            setLockedOption(options[0]);
+          }
+        } else {
+          const threshold = planData.plan.threshold;
+          const maxVotes = Math.max(...Object.values(planData.votesByOption || {}).map(v => Number(v)));
+          if (maxVotes >= threshold - 1) {
+            setState('nearlock');
+          } else {
+            const now = new Date();
+            const dateStart = new Date(planData.plan.date_start);
+            const isTonight = dateStart.toDateString() === now.toDateString();
+            setState(isTonight ? 'created' : 'scheduled');
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error loading plan data:', error);
+    }
+  };
+
+  const getShareUrl = () => {
+    const baseUrl = import.meta.env.VITE_SUPABASE_URL?.replace('/supabase', '') || window.location.origin;
+    return `${baseUrl}/s/${planId}`;
+  };
+
+  const copyShareLink = () => {
+    const shareUrl = getShareUrl();
+    navigator.clipboard.writeText(shareUrl);
+    toast({
+      title: "Link copied!",
+      description: "Share this link to let others vote",
+    });
+  };
+
+  const shareCard = async () => {
+    const shareUrl = getShareUrl();
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: getTitle(),
+          text: getDescription(),
+          url: shareUrl,
+        });
+      } catch (error) {
+        console.log('Share canceled or failed:', error);
+      }
+    } else {
+      copyShareLink();
+    }
+  };
+
+  const downloadICS = () => {
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const icsUrl = `${supabaseUrl}/functions/v1/ics?planId=${planId}`;
+    window.open(icsUrl, '_blank');
+  };
+
+  const getTitle = () => {
+    if (!plan) return '';
+    
+    const dateStart = new Date(plan.date_start);
+    const startTime = dateStart.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+
+    switch (state) {
+      case 'locked':
+        return lockedOption ? `${lockedOption.name} — ${startTime}` : 'Plan Locked';
+      case 'nearlock':
+        return `${voteCount}/${plan.threshold} voted — one more to lock`;
+      case 'scheduled':
+        const weekday = dateStart.toLocaleDateString('en-US', { weekday: 'long' });
+        return `Vote for ${weekday} night`;
+      case 'created':
+      default:
+        return 'Vote on tonight\'s plan';
+    }
+  };
+
+  const getDescription = () => {
+    if (!plan) return '';
+    
+    switch (state) {
+      case 'locked':
+        return lockedOption?.address || `${plan.neighborhood}`;
+      case 'nearlock':
+        return 'One more vote locks it!';
+      case 'scheduled':
+      case 'created':
+      default:
+        return `${plan.daypart} • ${plan.neighborhood} • ${plan.budget_band}`;
+    }
+  };
+
+  const getChips = () => {
+    if (!plan) return [];
+    
+    const chips = [];
+    const now = new Date();
+    const dateStart = new Date(plan.date_start);
+    const dateEnd = new Date(plan.date_end);
+    const decisionDeadline = new Date(plan.decision_deadline);
+    
+    // Time window
+    const startTime = dateStart.toLocaleTimeString('en-US', { hour: 'numeric' });
+    const endTime = dateEnd.toLocaleTimeString('en-US', { hour: 'numeric' });
+    chips.push(`${startTime}–${endTime}`);
+    
+    // Budget
+    chips.push(plan.budget_band);
+    
+    // Countdown for scheduled plans
+    if (!plan.locked && state === 'scheduled') {
+      const hoursUntil = Math.ceil((decisionDeadline.getTime() - now.getTime()) / (1000 * 60 * 60));
+      if (hoursUntil > 0 && hoursUntil < 72) {
+        if (hoursUntil < 24) {
+          chips.push(`Locks in ${hoursUntil}h`);
+        } else {
+          chips.push(`Locks in ${Math.ceil(hoursUntil / 24)}d`);
+        }
+      }
+    }
+    
+    return chips;
+  };
+
+  if (!plan) {
+    return (
+      <div className="card animate-pulse">
+        <div className="h-32 bg-muted rounded-lg"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="card space-y-4">
+      <div className="space-y-2">
+        <div className="flex items-start justify-between">
+          <h3 className="font-bold text-lg text-primary">{getTitle()}</h3>
+          {state === 'nearlock' && (
+            <Badge className="bg-destructive text-white">Almost there!</Badge>
+          )}
+        </div>
+        <p className="text-sm text-muted-foreground flex items-center gap-1">
+          <MapPin className="w-4 h-4" />
+          {getDescription()}
+        </p>
+      </div>
+
+      <div className="flex gap-2 flex-wrap">
+        {getChips().map((chip, i) => (
+          <span key={i} className="chip text-xs">
+            {chip}
+          </span>
+        ))}
+      </div>
+
+      <div className="flex gap-2">
+        {state === 'locked' ? (
+          <Button onClick={downloadICS} className="flex-1 btn-primary">
+            <Calendar className="w-4 h-4 mr-2" />
+            Add to Calendar
+          </Button>
+        ) : (
+          <Button onClick={() => window.location.href = `/p/${planId}`} className="flex-1 btn-primary">
+            Vote now
+          </Button>
+        )}
+        <Button onClick={shareCard} variant="outline" className="btn-secondary">
+          <Share2 className="w-4 h-4" />
+        </Button>
+        <Button onClick={copyShareLink} variant="outline" className="btn-secondary">
+          <Copy className="w-4 h-4" />
+        </Button>
+      </div>
+    </div>
+  );
+};
