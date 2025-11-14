@@ -114,9 +114,8 @@ serve(async (req) => {
     const userAgent = req.headers.get('user-agent') || '';
     const isCrawler = /bot|crawler|spider|whatsapp|facebook|twitter|slack|discord|telegram|facebookexternalhit|twitterbot|linkedinbot|slackbot|skypeuripreview|line/i.test(userAgent);
     
-    // Use a unique URL per plan to bypass aggressive caching
-    // Add plan ID to make URL unique
-    const ogImageUrl = `${baseUrl}/og-default.png?plan=${planId}`;
+    // Use edge function to serve the OG image reliably
+    const ogImageUrl = `${supabaseUrl}/functions/v1/og-image`;
     const shareUrl = `${supabaseUrl}/functions/v1/share?id=${planId}`;
     const redirectUrl = `${baseUrl}/p/${planId}?src=sc`;
     
