@@ -37,10 +37,14 @@ const PlanLocked = () => {
   const [plan, setPlan] = useState<Plan | null>(null);
   const [option, setOption] = useState<Option | null>(null);
   const [loading, setLoading] = useState(true);
+  const [hasManagementAccess, setHasManagementAccess] = useState(false);
   const { showInstallPrompt, installApp, dismissPrompt, markPlanLocked } = usePWA();
 
   useEffect(() => {
     if (planId) {
+      // Check if user has management token
+      const token = localStorage.getItem(`plan_${planId}_token`);
+      setHasManagementAccess(!!token);
       loadLockedPlan();
     }
   }, [planId]);
@@ -95,6 +99,13 @@ const PlanLocked = () => {
       ? `maps://maps.apple.com/?q=${encodeURIComponent(option.address)}`
       : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(option.address)}`;
     window.open(url, '_blank');
+  };
+
+  const goToManagement = () => {
+    const token = localStorage.getItem(`plan_${planId}_token`);
+    if (token) {
+      window.location.href = `/p/${planId}/manage?token=${token}`;
+    }
   };
 
   if (loading) {
@@ -190,6 +201,15 @@ const PlanLocked = () => {
                 Google Maps
               </button>
             </div>
+
+            {hasManagementAccess && (
+              <button
+                onClick={goToManagement}
+                className="btn-primary w-full h-10 flex items-center justify-center gap-2"
+              >
+                Manage Plan
+              </button>
+            )}
           </div>
         </div>
 
