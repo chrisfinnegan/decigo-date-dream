@@ -56,3 +56,6 @@ verify_jwt = false
 
 [functions.og-image]
 verify_jwt = false
+
+[functions.og-generate]
+verify_jwt = false
