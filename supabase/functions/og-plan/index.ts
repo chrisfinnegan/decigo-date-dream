@@ -1,7 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { ImageResponse } from "https://deno.land/x/og_edge@0.0.6/mod.ts";
-import React from "https://esm.sh/react@18.2.0";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -48,55 +46,32 @@ serve(async (req) => {
       );
     }
 
-    console.log('Generating PNG image - simplified logo version');
+    console.log('Serving static Decigo logo');
 
-    // Simplified design - just show Decigo logo
-    return new ImageResponse(
-      React.createElement(
-        'div',
-        {
-          style: {
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: '#F5F3ED',
-          },
-        },
-        React.createElement(
-          'div',
-          {
-            style: {
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '24px',
-            },
-          },
-          // Logo circle
-          React.createElement('div', {
-            style: {
-              width: '80px',
-              height: '80px',
-              borderRadius: '50%',
-              background: '#0C4A5A',
-            }
-          }),
-          // Decigo text
-          React.createElement('div', {
-            style: {
-              fontSize: '72px',
-              fontWeight: '700',
-              color: '#0C4A5A',
-              fontFamily: 'system-ui, sans-serif',
-            }
-          }, 'decigo')
-        )
-      ),
-      { width: 1200, height: 630 }
-    );
+    // Get the base URL from environment
+    const baseUrl = Deno.env.get('SUPABASE_URL')?.replace('/functions/v1', '') || '';
+    const logoUrl = `${baseUrl}/brand/logo-share-card.png`;
+    
+    // Fetch the static logo image
+    const imageResponse = await fetch(logoUrl);
+    
+    if (!imageResponse.ok) {
+      console.error('Failed to fetch logo image');
+      return new Response(
+        JSON.stringify({ error: 'Failed to load logo' }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    
+    const imageBuffer = await imageResponse.arrayBuffer();
+    
+    return new Response(imageBuffer, {
+      headers: {
+        ...corsHeaders,
+        'Content-Type': 'image/png',
+        'Cache-Control': 'public, max-age=3600',
+      },
+    });
   } catch (error) {
     console.error('Error generating OG image:', error);
     return new Response(
