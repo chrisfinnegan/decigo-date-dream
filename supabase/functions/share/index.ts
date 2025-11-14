@@ -138,6 +138,7 @@ serve(async (req) => {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="refresh" content="0;url=${redirectUrl}">
   
   <!-- Essential Open Graph tags -->
   <meta property="og:type" content="website">
@@ -161,62 +162,9 @@ serve(async (req) => {
   <meta name="twitter:image:alt" content="${title}">
   
   <title>${title}</title>
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #FFF8F2;
-      color: #0C4A5A;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      margin: 0;
-      padding: 20px;
-      text-align: center;
-    }
-    .container {
-      max-width: 400px;
-    }
-    h1 {
-      color: #0C4A5A;
-      margin-bottom: 16px;
-      font-size: 24px;
-    }
-    p {
-      color: #334155;
-      margin-bottom: 24px;
-      font-size: 16px;
-    }
-    a {
-      display: inline-block;
-      background: #0C4A5A;
-      color: white;
-      padding: 12px 24px;
-      border-radius: 16px;
-      text-decoration: none;
-      font-weight: 500;
-    }
-    a:hover {
-      background: #119DA4;
-    }
-    .debug {
-      margin-top: 40px;
-      font-size: 12px;
-      color: #666;
-      display: none;
-    }
-  </style>
 </head>
 <body>
-  <div class="container">
-    <h1>${title}</h1>
-    <p>${description}</p>
-    <a href="${redirectUrl}">Vote now</a>
-    <div class="debug">
-      <p>Image URL: ${ogImageUrl}</p>
-      <p>Base URL: ${baseUrl}</p>
-    </div>
-  </div>
+  <!-- Empty body to prevent chat apps from rendering page content -->
 </body>
 </html>`;
 
