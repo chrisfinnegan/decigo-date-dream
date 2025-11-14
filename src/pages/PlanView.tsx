@@ -162,11 +162,9 @@ const PlanView = () => {
   const handleVote = async (optionId: string) => {
     setVoting(true);
     try {
-      // Generate voter hash (in production, use device ID or similar)
-      const voterHash = crypto.randomUUID();
-
+      // Voter hash is now generated server-side based on IP and User-Agent
       const { data, error } = await supabase.functions.invoke('votes-cast', {
-        body: { planId, optionId, voterHash },
+        body: { planId, optionId },
       });
 
       if (error) throw error;
