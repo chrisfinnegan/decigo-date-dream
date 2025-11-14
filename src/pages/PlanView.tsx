@@ -49,41 +49,112 @@ const PlanView = () => {
   const [hasManagementAccess, setHasManagementAccess] = useState(false);
 
   useEffect(() => {
-    if (planId) {
-      const preferredMode = localStorage.getItem(`plan_${planId}_mode`) as 'top3' | 'full20' | null;
-      if (preferredMode) {
-        setShowAll(preferredMode === 'full20');
-      }
-      // Check if user has management token
-      const token = localStorage.getItem(`plan_${planId}_token`);
-      setHasManagementAccess(!!token);
-      
-      // Track if this is from a sharecard
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get('src') === 'sc') {
-        analytics.track('sharecard_click', {
-          planId,
-          source: 'og_unfurl',
-        });
-      }
-      
-      loadPlan();
-      
-      // Set timeout to prevent infinite loading
-      const timeout = setTimeout(() => {
-        if (loading) {
-          console.error('Loading timeout');
-          setLoading(false);
-          toast({
-            title: "Loading timeout",
-            description: "The plan is taking too long to load. Please try again.",
-            variant: "destructive",
-          });
-        }
-      }, 10000); // 10 second timeout
-      
-      return () => clearTimeout(timeout);
+    if (!planId) return;
+
+    const preferredMode = localStorage.getItem(`plan_${planId}_mode`) as 'top3' | 'full20' | null;
+    if (preferredMode) {
+      setShowAll(preferredMode === 'full20');
     }
+    
+    // Check if user has management token
+    const token = localStorage.getItem(`plan_${planId}_token`);
+    setHasManagementAccess(!!token);
+    
+    // Track if this is from a sharecard
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('src') === 'sc') {
+      analytics.track('sharecard_click', {
+        planId,
+        source: 'og_unfurl',
+      });
+    }
+    
+    const loadPlanData = async () => {
+      try {
+        setLoading(true);
+        console.log('Loading plan:', planId);
+        
+        const mode = preferredMode || 'top3';
+        
+        // Get plan details
+        const { data: planData, error: planError } = await supabase.functions.invoke('plans-get', {
+          body: { id: planId },
+        });
+
+        if (planError) {
+          console.error('Plan error:', planError);
+          throw planError;
+        }
+        
+        if (!planData?.plan) {
+          throw new Error('Plan not found');
+        }
+
+        console.log('Plan loaded:', planData.plan);
+        setPlan(planData.plan);
+        setVotesByOption(planData.votesByOption || {});
+
+        // Get options
+        console.log('Loading options with mode:', mode);
+        const { data: optionsData, error: optionsError } = await supabase.functions.invoke('options-list', {
+          body: { planId, mode },
+        });
+
+        if (optionsError) {
+          console.error('Options error:', optionsError);
+          throw optionsError;
+        }
+        
+        if (!optionsData?.options) {
+          throw new Error('Options not found');
+        }
+
+        console.log('Options loaded:', optionsData.options.length);
+        setOptions(optionsData.options);
+        
+        // Track analytics with source and metadata (non-blocking)
+        try {
+          const source = optionsData.options[0]?.source_id ? 'google_places' : 'mock';
+          const hasPhotos = optionsData.options.filter((o: Option) => o.photo_ref).length;
+          const hasRatings = optionsData.options.filter((o: any) => o.rating).length;
+          
+          analytics.trackOptionsShown(mode, {
+            planId,
+            daypart: planData.plan?.daypart,
+            neighborhood: planData.plan?.neighborhood,
+            source,
+            price_level: planData.plan?.budget_band,
+            rating_present: hasRatings > 0,
+            photo_count: hasPhotos,
+          });
+        } catch (analyticsError) {
+          console.warn('Analytics error:', analyticsError);
+        }
+      } catch (error) {
+        console.error('Error loading plan:', error);
+        toast({
+          title: "Error",
+          description: error instanceof Error ? error.message : "Failed to load plan",
+          variant: "destructive",
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    loadPlanData();
+    
+    // Set timeout to prevent infinite loading
+    const timeout = setTimeout(() => {
+      setLoading(false);
+      toast({
+        title: "Loading timeout",
+        description: "The plan is taking too long to load. Please try again.",
+        variant: "destructive",
+      });
+    }, 10000); // 10 second timeout
+    
+    return () => clearTimeout(timeout);
   }, [planId]);
 
   const loadPlan = async () => {
@@ -91,7 +162,9 @@ const PlanView = () => {
     
     try {
       setLoading(true);
-      console.log('Loading plan:', planId);
+      console.log('Reloading plan:', planId);
+      
+      const mode = showAll ? 'full20' : 'top3';
       
       // Get plan details
       const { data: planData, error: planError } = await supabase.functions.invoke('plans-get', {
@@ -107,14 +180,14 @@ const PlanView = () => {
         throw new Error('Plan not found');
       }
 
-      console.log('Plan loaded:', planData.plan);
+      console.log('Plan reloaded:', planData.plan);
       setPlan(planData.plan);
       setVotesByOption(planData.votesByOption || {});
 
       // Get options
-      console.log('Loading options...');
+      console.log('Reloading options with mode:', mode);
       const { data: optionsData, error: optionsError } = await supabase.functions.invoke('options-list', {
-        body: { planId, mode: showAll ? 'full20' : 'top3' },
+        body: { planId, mode },
       });
 
       if (optionsError) {
@@ -126,32 +199,13 @@ const PlanView = () => {
         throw new Error('Options not found');
       }
 
-      console.log('Options loaded:', optionsData.options.length);
+      console.log('Options reloaded:', optionsData.options.length);
       setOptions(optionsData.options);
-      
-      // Track analytics with source and metadata (non-blocking)
-      try {
-        const source = optionsData.options[0]?.source_id ? 'google_places' : 'mock';
-        const hasPhotos = optionsData.options.filter((o: Option) => o.photo_ref).length;
-        const hasRatings = optionsData.options.filter((o: any) => o.rating).length;
-        
-        analytics.trackOptionsShown(showAll ? 'full20' : 'top3', {
-          planId,
-          daypart: planData.plan?.daypart,
-          neighborhood: planData.plan?.neighborhood,
-          source,
-          price_level: planData.plan?.budget_band,
-          rating_present: hasRatings > 0,
-          photo_count: hasPhotos,
-        });
-      } catch (analyticsError) {
-        console.warn('Analytics error:', analyticsError);
-      }
     } catch (error) {
-      console.error('Error loading plan:', error);
+      console.error('Error reloading plan:', error);
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : "Failed to load plan",
+        description: error instanceof Error ? error.message : "Failed to reload plan",
         variant: "destructive",
       });
     } finally {
