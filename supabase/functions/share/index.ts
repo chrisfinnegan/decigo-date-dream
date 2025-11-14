@@ -205,6 +205,18 @@ serve(async (req) => {
 </body>
 </html>`;
 
+    // For non-crawler requests, redirect immediately
+    if (!isCrawler) {
+      return new Response(null, {
+        status: 302,
+        headers: {
+          ...corsHeaders,
+          'Location': redirectUrl,
+        },
+      });
+    }
+
+    // For crawlers, return HTML with meta tags
     return new Response(html, {
       headers: {
         ...corsHeaders,

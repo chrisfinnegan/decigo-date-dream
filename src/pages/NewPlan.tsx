@@ -54,6 +54,16 @@ const NewPlan = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!formData.dateStart) {
+      toast({
+        title: "Missing date",
+        description: "Please select a date and time",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     setLoading(true);
 
     try {
