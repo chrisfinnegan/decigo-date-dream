@@ -174,7 +174,7 @@ serve(async (req) => {
     return new Response(svg, {
       headers: {
         ...corsHeaders,
-        'Content-Type': 'image/svg+xml',
+        'Content-Type': 'image/png',
         'Cache-Control': 'public, max-age=300',
         'ETag': `"${planId}-${plan.locked ? 'locked' : voteCount}"`,
       },
