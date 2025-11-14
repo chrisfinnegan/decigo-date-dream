@@ -117,8 +117,8 @@ serve(async (req) => {
     const userAgent = req.headers.get('user-agent') || '';
     const isCrawler = /bot|crawler|spider|whatsapp|facebook|twitter|slack|discord|telegram|facebookexternalhit|twitterbot|linkedinbot|slackbot|skypeuripreview|line/i.test(userAgent);
     
-    // Use direct image URL for better reliability
-    const ogImageUrl = `${baseUrl}/og-default.png`;
+    // Use og-plan edge function for dynamic image generation
+    const ogImageUrl = `${supabaseUrl}/functions/v1/og-plan?id=${planId}`;
     const shareUrl = `${supabaseUrl}/functions/v1/share?id=${planId}`;
     const redirectUrl = `${baseUrl}/p/${planId}?src=sc`;
     
@@ -148,7 +148,7 @@ serve(async (req) => {
   <meta property="og:description" content="${description}">
   <meta property="og:image" content="${ogImageUrl}">
   <meta property="og:image:secure_url" content="${ogImageUrl}">
-  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:type" content="image/svg+xml">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="${title}">
