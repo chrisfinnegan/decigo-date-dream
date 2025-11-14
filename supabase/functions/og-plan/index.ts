@@ -50,13 +50,13 @@ serve(async (req) => {
 
     console.log('Plan found, generating OG image for state:', plan.locked ? 'locked' : 'created');
 
-    // Get options (top 2 for better readability)
+    // Get options (top 3)
     const { data: options } = await supabaseClient
       .from('options')
       .select('name, address, rank')
       .eq('plan_id', planId)
       .order('rank', { ascending: true })
-      .limit(2);
+      .limit(3);
 
     // Get vote counts
     const { data: votes } = await supabaseClient
@@ -102,7 +102,45 @@ serve(async (req) => {
 
     console.log('Generating PNG image for plan:', planId, 'state:', state);
 
-    // Generate PNG using ImageResponse with simplified design
+    // Build options elements
+    const optionElements = !plan.locked && options && options.length > 0 
+      ? options.map((opt, i) => 
+          React.createElement(
+            'div',
+            {
+              key: i,
+              style: {
+                display: 'flex',
+                alignItems: 'center',
+                gap: '20px',
+                padding: '16px 24px',
+                borderRadius: '12px',
+                background: 'rgba(255, 255, 255, 0.15)',
+              }
+            },
+            React.createElement('span', {
+              style: {
+                fontSize: '28px',
+                fontWeight: '900',
+                color: '#6EE28E',
+                flexShrink: 0,
+              }
+            }, String(i + 1)),
+            React.createElement('span', {
+              style: {
+                fontSize: '20px',
+                fontWeight: '600',
+                color: '#FFFFFF',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              }
+            }, opt.name.length > 50 ? opt.name.substring(0, 50) + '...' : opt.name)
+          )
+        )
+      : [];
+
+    // Generate PNG using ImageResponse with improved design
     return new ImageResponse(
       React.createElement(
         'div',
@@ -113,10 +151,11 @@ serve(async (req) => {
             display: 'flex',
             flexDirection: 'column',
             background: 'linear-gradient(135deg, #0C4A5A 0%, #119DA4 100%)',
-            padding: '60px',
+            padding: '50px',
             fontFamily: 'system-ui, sans-serif',
           }
         },
+        // Header
         React.createElement(
           'div',
           {
@@ -124,45 +163,44 @@ serve(async (req) => {
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-              marginBottom: '60px',
+              marginBottom: '40px',
             }
           },
+          // Logo
           React.createElement(
             'div',
             {
               style: {
                 display: 'flex',
                 alignItems: 'center',
-                gap: '20px',
+                gap: '16px',
               }
             },
             React.createElement('div', {
               style: {
-                width: '48px',
-                height: '48px',
+                width: '40px',
+                height: '40px',
                 borderRadius: '50%',
                 background: '#6EE28E',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
               }
             }),
             React.createElement('span', {
               style: {
-                fontSize: '32px',
+                fontSize: '28px',
                 fontWeight: '700',
                 color: '#FFFFFF',
               }
             }, 'decigo')
           ),
+          // State badge
           React.createElement(
             'div',
             {
               style: {
-                padding: '16px 32px',
-                borderRadius: '32px',
+                padding: '12px 28px',
+                borderRadius: '24px',
                 background: plan.locked ? '#6EE28E' : 'rgba(255, 255, 255, 0.2)',
-                fontSize: '20px',
+                fontSize: '18px',
                 fontWeight: '700',
                 color: plan.locked ? '#0C4A5A' : '#FFFFFF',
               }
@@ -170,76 +208,52 @@ serve(async (req) => {
             state.toUpperCase()
           )
         ),
+        // Title
         React.createElement('div', {
           style: {
-            fontSize: '64px',
+            fontSize: '56px',
             fontWeight: '900',
             color: '#FFFFFF',
-            marginBottom: '20px',
+            marginBottom: '16px',
             lineHeight: 1.1,
+            maxWidth: '1000px',
           }
-        }, titleText.length > 30 ? titleText.substring(0, 30) + '...' : titleText),
+        }, titleText.length > 35 ? titleText.substring(0, 35) + '...' : titleText),
+        // Body text
         React.createElement('div', {
           style: {
-            fontSize: '28px',
+            fontSize: '24px',
             fontWeight: '500',
             color: 'rgba(255, 255, 255, 0.9)',
-            marginBottom: '40px',
+            marginBottom: plan.locked ? '60px' : '30px',
           }
         }, bodyText),
-        !plan.locked && options && options.length > 0 ? React.createElement(
+        // Options
+        optionElements.length > 0 ? React.createElement(
           'div',
           {
             style: {
               display: 'flex',
               flexDirection: 'column',
-              gap: '20px',
-              marginBottom: '40px',
+              gap: '12px',
+              marginBottom: '30px',
             }
           },
-          ...options.slice(0, 2).map((opt, i) => 
-            React.createElement(
-              'div',
-              {
-                key: i,
-                style: {
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '30px',
-                  padding: '24px 30px',
-                  borderRadius: '16px',
-                  background: 'rgba(255, 255, 255, 0.15)',
-                }
-              },
-              React.createElement('span', {
-                style: {
-                  fontSize: '36px',
-                  fontWeight: '900',
-                  color: '#6EE28E',
-                }
-              }, String(i + 1)),
-              React.createElement('span', {
-                style: {
-                  fontSize: '24px',
-                  fontWeight: '600',
-                  color: '#FFFFFF',
-                }
-              }, opt.name.length > 50 ? opt.name.substring(0, 50) + '...' : opt.name)
-            )
-          )
+          ...optionElements
         ) : null,
+        // Footer CTA
         React.createElement(
           'div',
           {
             style: {
-              marginTop: 'auto',
-              padding: '24px',
-              borderRadius: '20px',
+              padding: '20px',
+              borderRadius: '16px',
               background: 'rgba(255, 255, 255, 0.1)',
               textAlign: 'center',
-              fontSize: '24px',
+              fontSize: '22px',
               fontWeight: '600',
               color: '#FFFFFF',
+              marginTop: plan.locked || optionElements.length === 0 ? '60px' : '0',
             }
           },
           plan.locked ? '👆 Tap to see details' : '🗳️ Vote now to lock in your plans'
