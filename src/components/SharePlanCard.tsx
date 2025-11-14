@@ -209,6 +209,10 @@ export const SharePlanCard = ({ planId, state: initialState }: SharePlanCardProp
         ))}
       </div>
 
+      <div className="text-xs text-muted-foreground">
+        decigo.ai
+      </div>
+
       <div className="flex gap-2">
         {state === 'locked' ? (
           <Button onClick={downloadICS} className="flex-1 btn-primary">

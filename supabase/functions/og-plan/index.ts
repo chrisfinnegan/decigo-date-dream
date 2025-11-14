@@ -32,7 +32,7 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_ANON_KEY') ?? ''
     );
 
-    // Get plan
+    // Get plan to verify it exists
     const { data: plan, error: planError } = await supabaseClient
       .from('plans')
       .select('*')
@@ -48,99 +48,9 @@ serve(async (req) => {
       );
     }
 
-    console.log('Plan found, generating OG image for state:', plan.locked ? 'locked' : 'created');
+    console.log('Generating PNG image - simplified logo version');
 
-    // Get options (top 3)
-    const { data: options } = await supabaseClient
-      .from('options')
-      .select('name, address, rank')
-      .eq('plan_id', planId)
-      .order('rank', { ascending: true })
-      .limit(3);
-
-    // Get vote counts
-    const { data: votes } = await supabaseClient
-      .from('votes')
-      .select('option_id')
-      .eq('plan_id', planId);
-
-    const voteCount = votes?.length || 0;
-    const threshold = plan.threshold || Math.min(4, plan.headcount);
-
-    // Determine state
-    const now = new Date();
-    const dateStart = new Date(plan.date_start);
-    const isTonight = dateStart.toDateString() === now.toDateString();
-    const daysUntil = Math.ceil((dateStart.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
-
-    let state = '';
-    let titleText = '';
-    let bodyText = '';
-
-    if (plan.locked) {
-      state = 'Locked';
-      const lockedOption = options?.[0];
-      const startTime = dateStart.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
-      titleText = lockedOption ? `${lockedOption.name}` : `Locked`;
-      bodyText = lockedOption ? `${startTime} • ${lockedOption.address}` : `${plan.daypart} in ${plan.neighborhood}`;
-    } else if (voteCount >= threshold - 1 && voteCount < threshold) {
-      state = 'Near-Lock';
-      titleText = `${voteCount}/${threshold} voted — one more to lock`;
-      bodyText = `${plan.daypart} • ${plan.neighborhood}`;
-    } else {
-      state = 'Vote Now';
-      if (isTonight) {
-        titleText = 'Vote on tonight\'s plan';
-      } else if (daysUntil <= 7) {
-        const weekday = dateStart.toLocaleDateString('en-US', { weekday: 'long' });
-        titleText = `Vote for ${weekday} night`;
-      } else {
-        titleText = `Vote on ${plan.daypart} plans`;
-      }
-      bodyText = `${plan.daypart} • ${plan.neighborhood}`;
-    }
-
-    console.log('Generating PNG image for plan:', planId, 'state:', state);
-
-    // Build options elements
-    const optionElements = !plan.locked && options && options.length > 0 
-      ? options.map((opt, i) => 
-          React.createElement(
-            'div',
-            {
-              key: i,
-              style: {
-                display: 'flex',
-                alignItems: 'center',
-                gap: '20px',
-                padding: '16px 24px',
-                borderRadius: '12px',
-                background: 'rgba(255, 255, 255, 0.15)',
-              }
-            },
-            React.createElement('span', {
-              style: {
-                fontSize: '28px',
-                fontWeight: '900',
-                color: '#6EE28E',
-                flexShrink: 0,
-              }
-            }, String(i + 1)),
-            React.createElement('span', {
-              style: {
-                fontSize: '20px',
-                fontWeight: '600',
-                color: '#FFFFFF',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-              }
-            }, opt.name.length > 50 ? opt.name.substring(0, 50) + '...' : opt.name)
-          )
-        )
-      : [];
-
-    // Generate PNG using ImageResponse with improved design
+    // Simplified design - just show Decigo logo
     return new ImageResponse(
       React.createElement(
         'div',
@@ -149,125 +59,48 @@ serve(async (req) => {
             width: '100%',
             height: '100%',
             display: 'flex',
-            flexDirection: 'column',
-            background: 'linear-gradient(135deg, #0C4A5A 0%, #119DA4 100%)',
-            padding: '50px',
-            fontFamily: 'system-ui, sans-serif',
-          }
-        },
-        // Header
-        React.createElement(
-          'div',
-          {
-            style: {
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginBottom: '40px',
-            }
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#F5F3ED',
           },
-          // Logo
-          React.createElement(
-            'div',
-            {
-              style: {
-                display: 'flex',
-                alignItems: 'center',
-                gap: '16px',
-              }
-            },
-            React.createElement('div', {
-              style: {
-                width: '40px',
-                height: '40px',
-                borderRadius: '50%',
-                background: '#6EE28E',
-              }
-            }),
-            React.createElement('span', {
-              style: {
-                fontSize: '28px',
-                fontWeight: '700',
-                color: '#FFFFFF',
-              }
-            }, 'decigo')
-          ),
-          // State badge
-          React.createElement(
-            'div',
-            {
-              style: {
-                padding: '12px 28px',
-                borderRadius: '24px',
-                background: plan.locked ? '#6EE28E' : 'rgba(255, 255, 255, 0.2)',
-                fontSize: '18px',
-                fontWeight: '700',
-                color: plan.locked ? '#0C4A5A' : '#FFFFFF',
-              }
-            },
-            state.toUpperCase()
-          )
-        ),
-        // Title
-        React.createElement('div', {
-          style: {
-            fontSize: '56px',
-            fontWeight: '900',
-            color: '#FFFFFF',
-            marginBottom: '16px',
-            lineHeight: 1.1,
-            maxWidth: '1000px',
-          }
-        }, titleText.length > 35 ? titleText.substring(0, 35) + '...' : titleText),
-        // Body text
-        React.createElement('div', {
-          style: {
-            fontSize: '24px',
-            fontWeight: '500',
-            color: 'rgba(255, 255, 255, 0.9)',
-            marginBottom: plan.locked ? '60px' : '30px',
-          }
-        }, bodyText),
-        // Options
-        optionElements.length > 0 ? React.createElement(
+        },
+        React.createElement(
           'div',
           {
             style: {
               display: 'flex',
               flexDirection: 'column',
-              gap: '12px',
-              marginBottom: '30px',
-            }
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '24px',
+            },
           },
-          ...optionElements
-        ) : null,
-        // Footer CTA
-        React.createElement(
-          'div',
-          {
+          // Logo circle
+          React.createElement('div', {
             style: {
-              padding: '20px',
-              borderRadius: '16px',
-              background: 'rgba(255, 255, 255, 0.1)',
-              textAlign: 'center',
-              fontSize: '22px',
-              fontWeight: '600',
-              color: '#FFFFFF',
-              marginTop: plan.locked || optionElements.length === 0 ? '60px' : '0',
+              width: '80px',
+              height: '80px',
+              borderRadius: '50%',
+              background: '#0C4A5A',
             }
-          },
-          plan.locked ? '👆 Tap to see details' : '🗳️ Vote now to lock in your plans'
+          }),
+          // Decigo text
+          React.createElement('div', {
+            style: {
+              fontSize: '72px',
+              fontWeight: '700',
+              color: '#0C4A5A',
+              fontFamily: 'system-ui, sans-serif',
+            }
+          }, 'decigo')
         )
       ),
-      {
-        width: 1200,
-        height: 630,
-      }
+      { width: 1200, height: 630 }
     );
   } catch (error) {
-    console.error('Error in og-plan:', error);
+    console.error('Error generating OG image:', error);
     return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : 'Unknown error' }),
+      JSON.stringify({ error: 'Internal server error' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
