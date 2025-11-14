@@ -29,7 +29,19 @@ serve(async (req) => {
     );
 
     const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? '';
-    const baseUrl = supabaseUrl.replace('/supabase', '');
+    
+    // Get the app base URL from Referer header or construct from request
+    const referer = req.headers.get('referer');
+    let baseUrl = '';
+    if (referer) {
+      const refererUrl = new URL(referer);
+      baseUrl = `${refererUrl.protocol}//${refererUrl.host}`;
+    } else {
+      // Fallback: try to construct from request URL
+      const requestUrl = new URL(req.url);
+      // For Lovable apps, the app is usually at the same host as the function
+      baseUrl = `${requestUrl.protocol}//${requestUrl.host}`.replace('.supabase.co', '.lovable.app');
+    }
 
     // Get plan
     const { data: plan, error: planError } = await supabaseClient
@@ -117,6 +129,9 @@ serve(async (req) => {
       planId,
       state,
       isCrawler,
+      baseUrl,
+      redirectUrl,
+      shareUrl,
       userAgent: userAgent.substring(0, 100),
     });
 
