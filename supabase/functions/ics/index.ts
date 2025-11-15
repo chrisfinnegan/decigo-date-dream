@@ -14,6 +14,7 @@ serve(async (req) => {
   try {
     const url = new URL(req.url);
     const planId = url.searchParams.get('planId');
+    const optionId = url.searchParams.get('optionId');
 
     if (!planId) {
       return new Response(
@@ -43,22 +44,40 @@ serve(async (req) => {
       );
     }
 
-    // Get the winning option (first option for now - should be determined by lock-attempt)
-    const { data: options, error: optionsError } = await supabaseClient
-      .from('options')
-      .select('*')
-      .eq('plan_id', planId)
-      .order('rank', { ascending: true })
-      .limit(1);
-
-    if (optionsError || !options || options.length === 0) {
-      return new Response(
-        JSON.stringify({ error: 'No options found' }),
-        { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+    // Get the winning option
+    // Priority: 1) optionId from query, 2) top-ranked option
+    let option;
+    if (optionId) {
+      const { data, error } = await supabaseClient
+        .from('options')
+        .select('*')
+        .eq('id', optionId)
+        .eq('plan_id', planId)
+        .single();
+      
+      if (!error && data) {
+        option = data;
+      }
     }
 
-    const option = options[0];
+    // Fallback to top-ranked option if not found by ID
+    if (!option) {
+      const { data: options, error: optionsError } = await supabaseClient
+        .from('options')
+        .select('*')
+        .eq('plan_id', planId)
+        .order('rank', { ascending: true })
+        .limit(1);
+
+      if (optionsError || !options || options.length === 0) {
+        return new Response(
+          JSON.stringify({ error: 'No options found' }),
+          { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+
+      option = options[0];
+    }
 
     // Format dates for ICS
     const formatICSDate = (date: string) => {
@@ -68,6 +87,20 @@ serve(async (req) => {
     const startDate = formatICSDate(plan.date_start);
     const endDate = formatICSDate(plan.date_end);
     const now = formatICSDate(new Date().toISOString());
+
+    // Build rich description
+    const descriptionParts = [];
+    if (option.why_it_fits) {
+      descriptionParts.push(`Why this place: ${option.why_it_fits}`);
+    }
+    if (option.tip) {
+      descriptionParts.push(`Insider tip: ${option.tip}`);
+    }
+    if (plan.notes_raw) {
+      descriptionParts.push(`Notes: ${plan.notes_raw}`);
+    }
+    descriptionParts.push('Created with Decigo');
+    const description = descriptionParts.join('\\n\\n');
 
     // Generate ICS content
     const icsContent = `BEGIN:VCALENDAR
@@ -82,7 +115,7 @@ DTSTART:${startDate}
 DTEND:${endDate}
 SUMMARY:${option.name}
 LOCATION:${option.address}
-DESCRIPTION:${option.why_it_fits || 'Your locked plan from Decigo'}
+DESCRIPTION:${description}
 ORGANIZER;CN=Decigo:mailto:noreply@decigo.app
 STATUS:CONFIRMED
 END:VEVENT

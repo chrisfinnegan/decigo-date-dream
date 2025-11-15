@@ -91,21 +91,48 @@ const PlanLocked = () => {
     }
   };
 
-  const downloadICS = () => {
+  const handleAddToCalendar = () => {
+    if (!planId || !option) return;
+
     analytics.trackCalendarAdded({
       planId,
-      optionId: option?.id,
+      optionId: option.id,
+      provider: 'default',
     });
+
     const baseUrl = import.meta.env.VITE_SUPABASE_URL || '';
-    const icsUrl = `${baseUrl}/functions/v1/ics?planId=${planId}`;
+    const icsUrl = `${baseUrl}/functions/v1/ics?planId=${planId}&optionId=${option.id}`;
     
-    // Create a temporary link and trigger download
-    const link = document.createElement('a');
-    link.href = icsUrl;
-    link.download = 'decigo-plan.ics';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    // Use location.href to let OS/browser hand off to default calendar app
+    window.location.href = icsUrl;
+  };
+
+  const openInGoogleCalendar = () => {
+    if (!plan || !option) return;
+
+    const start = new Date(plan.date_start);
+    const end = new Date(plan.date_end);
+
+    // Format for Google as YYYYMMDDTHHMMSSZ
+    const formatForGoogle = (d: Date) =>
+      d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+
+    const dates = `${formatForGoogle(start)}/${formatForGoogle(end)}`;
+    const text = encodeURIComponent(option.name);
+    const location = encodeURIComponent(option.address || '');
+    const details = encodeURIComponent(
+      option.why_it_fits || 'Planned with Decigo'
+    );
+
+    const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${text}&dates=${dates}&details=${details}&location=${location}`;
+
+    analytics.trackCalendarAdded({
+      planId,
+      optionId: option.id,
+      provider: 'google',
+    });
+
+    window.open(url, '_blank');
   };
 
   const openInMaps = (provider: 'apple' | 'google') => {
@@ -196,13 +223,25 @@ const PlanLocked = () => {
           )}
 
           <div className="space-y-2 pt-4">
+            <p className="text-xs text-decigo-slate-600 mb-2">
+              Add this plan to your calendar so everyone knows where and when you're meeting
+            </p>
             <button
-              onClick={downloadICS}
+              onClick={handleAddToCalendar}
               className="btn-primary w-full h-12 flex items-center justify-center gap-2"
             >
               <Calendar className="w-5 h-5" />
               Add to Calendar
             </button>
+            
+            <Button
+              variant="outline"
+              className="w-full h-10 flex items-center justify-center gap-2"
+              onClick={openInGoogleCalendar}
+            >
+              <Calendar className="w-4 h-4" />
+              Add to Google Calendar
+            </Button>
 
             <div className="flex gap-2">
               <button
