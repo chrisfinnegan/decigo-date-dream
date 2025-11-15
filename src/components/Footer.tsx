@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export const Footer = () => {
   return (
-    <footer className="bg-background border-t border-border py-6 px-4 mt-12">
+    <footer className="bg-background py-6 px-4 mt-12 shadow-[0_-1px_3px_0_rgb(0,0,0,0.05)]">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
         <p className="text-sm text-decigo-slate-700">
           Privacy-light by design. Your data, your plan, your call.
