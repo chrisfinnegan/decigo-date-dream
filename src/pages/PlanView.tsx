@@ -612,6 +612,17 @@ const PlanView = () => {
   }
 
   const totalVotes = Object.values(votesByOption).reduce((a, b) => a + b, 0);
+  const isSmallGroup = plan.headcount >= 2 && plan.headcount <= 3;
+  const hasEnoughOptions = options.length >= 3;
+
+  // Debug logging
+  console.log('PlanView render:', { 
+    headcount: plan.headcount, 
+    isSmallGroup, 
+    optionsCount: options.length,
+    hasEnoughOptions,
+    willShowRanking: isSmallGroup && hasEnoughOptions 
+  });
 
   return (
     <div className="min-h-screen bg-background">
@@ -698,7 +709,7 @@ const PlanView = () => {
         )}
 
         {/* Small Group Ranked Voting (2-3 people) */}
-        {plan.headcount >= 2 && plan.headcount <= 3 && options.length >= 3 ? (
+        {isSmallGroup && hasEnoughOptions ? (
           <RankingInterface
             options={options.slice(0, 3)}
             groupSize={plan.headcount}
