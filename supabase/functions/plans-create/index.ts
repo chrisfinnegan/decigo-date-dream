@@ -176,6 +176,8 @@ serve(async (req) => {
     );
 
     const body = await req.json();
+    
+    // Validate required fields
     const {
       daypart,
       date_start,
@@ -191,6 +193,16 @@ serve(async (req) => {
       notes_chips = [],
       mode = 'top3',
     } = body;
+
+    if (!daypart || !date_start || !neighborhood || !headcount || !budget_band) {
+      return new Response(
+        JSON.stringify({ 
+          error: 'Missing required fields',
+          details: 'daypart, date_start, neighborhood, headcount, and budget_band are required'
+        }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
 
     // Check feature flag
     const { data: flagData } = await supabaseClient
@@ -359,13 +371,22 @@ serve(async (req) => {
     }
 
     return new Response(
-      JSON.stringify({ planId: plan.id, magicToken: magic_token }),
+      JSON.stringify({ 
+        success: true,
+        planId: plan.id, 
+        magicToken: magic_token 
+      }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   } catch (error) {
     console.error('Error in plans-create:', error);
+    const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
     return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : 'Unknown error' }),
+      JSON.stringify({ 
+        success: false,
+        error: 'Unable to create plan',
+        details: errorMessage
+      }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }

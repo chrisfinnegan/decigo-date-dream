@@ -108,8 +108,8 @@ const PlanManage = () => {
     } catch (error) {
       console.error('Error canceling plan:', error);
       toast({
-        title: "Error",
-        description: "Failed to cancel plan",
+        title: "Could not cancel plan",
+        description: "Please try again or check your connection",
         variant: "destructive",
       });
     }

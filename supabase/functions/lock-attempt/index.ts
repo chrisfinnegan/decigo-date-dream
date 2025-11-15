@@ -42,10 +42,37 @@ serve(async (req) => {
       );
     }
 
-    // Check if already locked
+    // Check if already locked (idempotent response)
     if (plan.locked) {
+      // Get the locked option
+      const { data: votes } = await supabaseClient
+        .from('votes')
+        .select('option_id')
+        .eq('plan_id', planId);
+
+      const votesByOption = votes?.reduce((acc: Record<string, number>, vote) => {
+        acc[vote.option_id] = (acc[vote.option_id] || 0) + 1;
+        return acc;
+      }, {}) || {};
+
+      let winningOptionId: string | null = null;
+      let maxVotes = 0;
+      for (const [optionId, count] of Object.entries(votesByOption)) {
+        if (count > maxVotes) {
+          maxVotes = count;
+          winningOptionId = optionId;
+        }
+      }
+
       return new Response(
-        JSON.stringify({ locked: true, alreadyLocked: true }),
+        JSON.stringify({ 
+          success: true,
+          locked: true, 
+          alreadyLocked: true,
+          locked_at: plan.locked_at,
+          chosen_option_id: winningOptionId,
+          total_votes: maxVotes
+        }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
@@ -80,25 +107,37 @@ serve(async (req) => {
     const shouldLock = (maxVotes >= threshold) || (now >= deadline && winningOptionId);
 
     if (shouldLock && winningOptionId) {
-      // Lock the plan
-      await supabaseClient
+      // Lock the plan (with idempotency check)
+      const { error: lockError } = await supabaseClient
         .from('plans')
         .update({ 
           locked: true, 
           locked_at: now.toISOString()
         })
-        .eq('id', planId);
+        .eq('id', planId)
+        .eq('locked', false); // Only lock if not already locked
 
-      console.log('Plan locked:', planId, 'Option:', winningOptionId);
+      if (lockError) {
+        console.error('Error locking plan:', lockError);
+      }
+
+      console.log('Plan locked:', planId, 'Option:', winningOptionId, 'Votes:', maxVotes);
 
       return new Response(
-        JSON.stringify({ locked: true, optionId: winningOptionId }),
+        JSON.stringify({ 
+          success: true,
+          locked: true, 
+          locked_at: now.toISOString(),
+          chosen_option_id: winningOptionId,
+          total_votes: maxVotes
+        }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
     return new Response(
       JSON.stringify({ 
+        success: true,
         locked: false, 
         currentVotes: maxVotes, 
         threshold,

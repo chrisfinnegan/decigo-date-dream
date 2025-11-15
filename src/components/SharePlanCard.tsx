@@ -79,23 +79,54 @@ export const SharePlanCard = ({ planId, state: initialState }: SharePlanCardProp
     return `${supabaseUrl}/functions/v1/share?id=${planId}`;
   };
 
-  const copyShareLink = () => {
+  const copyShareLink = async () => {
     const shareUrl = getShareUrl();
-    navigator.clipboard.writeText(shareUrl);
-    toast({
-      title: "Link copied!",
-      description: "Share this link to let others vote",
-    });
+    
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      
+      // Track share
+      const { analytics } = await import('@/lib/analytics');
+      analytics.track('plan_shared', {
+        plan_id: planId,
+        share_method: 'copy_link',
+        state,
+      });
+      
+      toast({
+        title: "Link copied!",
+        description: "Share this link to let others vote",
+      });
+    } catch (error) {
+      console.error('Failed to copy to clipboard:', error);
+      toast({
+        title: "Could not copy link",
+        description: "Please try again",
+        variant: "destructive",
+      });
+    }
   };
 
   const shareCard = async () => {
     const shareUrl = getShareUrl();
+    const shareMessage = plan 
+      ? `Help me pick a spot for ${plan.daypart}! Vote here: ${shareUrl}`
+      : shareUrl;
+    
     if (navigator.share) {
       try {
         await navigator.share({
           title: getTitle(),
-          text: getDescription(),
+          text: shareMessage,
           url: shareUrl,
+        });
+        
+        // Track share
+        const { analytics } = await import('@/lib/analytics');
+        analytics.track('plan_shared', {
+          plan_id: planId,
+          share_method: 'native_share',
+          state,
         });
       } catch (error) {
         console.log('Share canceled or failed:', error);
