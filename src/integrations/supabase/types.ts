@@ -68,6 +68,13 @@ export type Database = {
             referencedRelation: "plans"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "invites_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "plans_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       options: {
@@ -119,6 +126,13 @@ export type Database = {
             columns: ["plan_id"]
             isOneToOne: false
             referencedRelation: "plans"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "options_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "plans_public"
             referencedColumns: ["id"]
           },
         ]
@@ -262,6 +276,13 @@ export type Database = {
             referencedRelation: "plans"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "reminders_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "plans_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       votes: {
@@ -301,11 +322,86 @@ export type Database = {
             referencedRelation: "plans"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "votes_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "plans_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
     }
     Views: {
-      [_ in never]: never
+      plans_public: {
+        Row: {
+          budget_band: string | null
+          canceled: boolean | null
+          created_at: string | null
+          date_end: string | null
+          date_start: string | null
+          daypart: string | null
+          decision_deadline: string | null
+          headcount: number | null
+          id: string | null
+          locked: boolean | null
+          locked_at: string | null
+          mode: string | null
+          neighborhood: string | null
+          neighborhood_lat: number | null
+          neighborhood_lng: number | null
+          neighborhood_place_id: string | null
+          notes_chips: string[] | null
+          notes_raw: string | null
+          threshold: number | null
+          two_stop: boolean | null
+        }
+        Insert: {
+          budget_band?: string | null
+          canceled?: boolean | null
+          created_at?: string | null
+          date_end?: string | null
+          date_start?: string | null
+          daypart?: string | null
+          decision_deadline?: string | null
+          headcount?: number | null
+          id?: string | null
+          locked?: boolean | null
+          locked_at?: string | null
+          mode?: string | null
+          neighborhood?: string | null
+          neighborhood_lat?: number | null
+          neighborhood_lng?: number | null
+          neighborhood_place_id?: string | null
+          notes_chips?: string[] | null
+          notes_raw?: string | null
+          threshold?: number | null
+          two_stop?: boolean | null
+        }
+        Update: {
+          budget_band?: string | null
+          canceled?: boolean | null
+          created_at?: string | null
+          date_end?: string | null
+          date_start?: string | null
+          daypart?: string | null
+          decision_deadline?: string | null
+          headcount?: number | null
+          id?: string | null
+          locked?: boolean | null
+          locked_at?: string | null
+          mode?: string | null
+          neighborhood?: string | null
+          neighborhood_lat?: number | null
+          neighborhood_lng?: number | null
+          neighborhood_place_id?: string | null
+          notes_chips?: string[] | null
+          notes_raw?: string | null
+          threshold?: number | null
+          two_stop?: boolean | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       [_ in never]: never
