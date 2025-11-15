@@ -293,6 +293,51 @@ const PlanLocked = () => {
           </button>
         </div>
 
+        {/* Recap Section */}
+        <div className="card">
+          <h3 className="text-lg font-bold text-brand-primary mb-3">Quick Recap</h3>
+          <div className="space-y-2 text-sm">
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">When:</span>
+              <span className="font-medium text-foreground">
+                {new Date(plan.date_start).toLocaleDateString('en-US', {
+                  weekday: 'short',
+                  month: 'short',
+                  day: 'numeric',
+                  hour: 'numeric',
+                  minute: '2-digit'
+                })}
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Where:</span>
+              <span className="font-medium text-foreground">{option.name}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Neighborhood:</span>
+              <span className="font-medium text-foreground">{plan.neighborhood}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Budget:</span>
+              <span className="font-medium text-foreground">{plan.budget_band}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Feedback Section */}
+        <div className="card bg-muted/30">
+          <h3 className="text-lg font-bold text-brand-primary mb-2">How did it go?</h3>
+          <p className="text-sm text-muted-foreground mb-3">
+            We'd love to hear about your experience to help improve Decigo
+          </p>
+          <a 
+            href={`mailto:feedback@decigo.app?subject=Plan Feedback - ${planId}`}
+            className="btn-secondary w-full inline-block text-center"
+          >
+            Share Feedback
+          </a>
+        </div>
+
         {/* Create Another Plan CTA */}
         <div className="text-center pt-4">
           <p className="text-sm text-muted-foreground mb-3">
