@@ -7,7 +7,7 @@ const Privacy = () => {
       <Header />
       <div className="max-w-4xl mx-auto p-4 py-8">
         <div className="card">
-          <h1 className="text-3xl font-bold text-decigo-deep-teal mb-6">Privacy <span className="brand-gradient bg-clip-text text-transparent">Policy</span></h1>
+          <h1 className="text-3xl font-bold text-decigo-deep-teal mb-6">Privacy Policy</h1>
           <p className="text-decigo-slate-700">Privacy policy content coming soon...</p>
         </div>
       </div>

@@ -236,7 +236,7 @@ const PlanManage = () => {
     <div className="min-h-screen bg-background p-4">
       <div className="max-w-4xl mx-auto space-y-6">
         <div>
-          <h1 className="text-3xl font-bold text-foreground mb-2">Manage <span className="brand-gradient bg-clip-text text-transparent">Plan</span></h1>
+          <h1 className="text-3xl font-bold text-foreground mb-2">Manage Plan</h1>
           <div className="flex gap-2 flex-wrap">
             {plan.locked && <Badge variant="default">Locked</Badge>}
             {plan.canceled && <Badge variant="destructive">Canceled</Badge>}

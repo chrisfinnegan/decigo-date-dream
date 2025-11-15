@@ -208,7 +208,7 @@ const NewPlan = () => {
         {/* Quick intro */}
         <div className="text-center space-y-3">
           <h1 className="text-3xl md:text-4xl font-bold text-decigo-deep-teal">
-            Create your <span className="brand-gradient bg-clip-text text-transparent">plan</span>
+            Create your plan
           </h1>
           <p className="text-base text-decigo-slate-600 max-w-xl mx-auto">
             Fill in the basics below and we'll generate top spots for your group to vote on.

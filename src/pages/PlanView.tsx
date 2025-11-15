@@ -428,7 +428,7 @@ const PlanView = () => {
         {/* Title and Subtitle */}
         <div className="text-center space-y-2 mb-6">
           <h1 className="text-3xl font-bold text-primary">
-            Help choose the <span className="brand-gradient bg-clip-text text-transparent">plan</span>
+            Help choose the plan
           </h1>
           <p className="text-base text-muted-foreground max-w-xl mx-auto">
             The organizer is deciding on a place in {plan.neighborhood}. Tap your favorites below — this takes under 30 seconds.
