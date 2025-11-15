@@ -713,6 +713,7 @@ const PlanView = () => {
           <RankingInterface
             options={options.slice(0, 3)}
             groupSize={plan.headcount}
+            planId={planId!}
             onSubmitRankings={handleSubmitRankings}
             existingRankings={myRankings || undefined}
             getMapThumbnail={getMapThumbnail}

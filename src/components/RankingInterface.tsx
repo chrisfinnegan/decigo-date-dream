@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, Image, GripVertical } from "lucide-react";
+import { MapPin, Image, ExternalLink } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { analytics } from "@/lib/analytics";
 
 interface Option {
   id: string;
@@ -20,6 +21,7 @@ interface Option {
 interface RankingInterfaceProps {
   options: Option[];
   groupSize: number;
+  planId: string;
   onSubmitRankings: (rankings: Record<string, number>) => Promise<void>;
   existingRankings?: Record<string, number>;
   getMapThumbnail: (option: Option) => string | null;
@@ -28,6 +30,7 @@ interface RankingInterfaceProps {
 export const RankingInterface = ({ 
   options, 
   groupSize,
+  planId,
   onSubmitRankings, 
   existingRankings,
   getMapThumbnail 
@@ -56,6 +59,24 @@ export const RankingInterface = ({
     const [movedOption] = newRanked.splice(fromIndex, 1);
     newRanked.splice(toIndex, 0, movedOption);
     setRankedOptions(newRanked);
+  };
+
+  const openInMaps = (option: Option, provider: 'apple' | 'google') => {
+    analytics.trackMapOpen({
+      planId,
+      optionId: option.id,
+      provider,
+    });
+    
+    const searchQuery = `${option.name}, ${option.address}`;
+    
+    if (provider === 'apple') {
+      const url = `maps://maps.apple.com/?q=${encodeURIComponent(searchQuery)}`;
+      window.location.href = url;
+    } else {
+      const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(searchQuery)}`;
+      window.location.href = url;
+    }
   };
 
   const handleSubmit = async () => {
@@ -201,6 +222,24 @@ export const RankingInterface = ({
                           💡 {option.tip}
                         </div>
                       )}
+
+                      {/* Map Buttons */}
+                      <div className="flex gap-2 flex-wrap pt-2">
+                        <button
+                          onClick={() => openInMaps(option, 'apple')}
+                          className="btn-secondary text-xs h-9 px-4 flex items-center min-h-[44px]"
+                        >
+                          <MapPin className="w-3 h-3 mr-1" />
+                          Apple Maps
+                        </button>
+                        <button
+                          onClick={() => openInMaps(option, 'google')}
+                          className="btn-secondary text-xs h-9 px-4 flex items-center min-h-[44px]"
+                        >
+                          <MapPin className="w-3 h-3 mr-1" />
+                          Google Maps
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
