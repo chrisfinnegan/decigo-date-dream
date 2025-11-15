@@ -55,10 +55,47 @@ const NewPlan = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Comprehensive validation
+    if (!formData.daypart) {
+      toast({
+        title: "Missing meal time",
+        description: "Please select when you want to go out",
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (!formData.dateStart) {
       toast({
         title: "Missing date",
         description: "Please select a date and time",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    if (!formData.neighborhood) {
+      toast({
+        title: "Missing location",
+        description: "Please select a neighborhood",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!formData.headcount) {
+      toast({
+        title: "Missing headcount",
+        description: "Please select how many people",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!formData.budgetBand) {
+      toast({
+        title: "Missing budget",
+        description: "Please select your budget",
         variant: "destructive",
       });
       return;
@@ -87,6 +124,23 @@ const NewPlan = () => {
 
       if (error) throw error;
 
+      if (!data?.planId) {
+        throw new Error('No plan ID returned from server');
+      }
+
+      // Track successful plan creation
+      analytics.track('plan_created', {
+        plan_id: data.planId,
+        daypart: formData.daypart,
+        neighborhood: formData.neighborhood,
+        headcount: parseInt(formData.headcount),
+        budget_band: formData.budgetBand,
+        result_mode: resultMode,
+        two_stop: formData.twoStop,
+        has_notes: !!formData.notesRaw,
+        chips_count: chips.length,
+      });
+
       analytics.trackIntakeComplete({
         daypart: formData.daypart,
         neighborhood: formData.neighborhood,
@@ -104,19 +158,24 @@ const NewPlan = () => {
 
       toast({
         title: "Plan created!",
-        description: "Share link copied to clipboard. Click 'Manage Plan' to edit or send invites.",
+        description: "Share link copied to clipboard.",
       });
 
       // Copy share link to clipboard
-      navigator.clipboard.writeText(shareUrl);
+      try {
+        await navigator.clipboard.writeText(shareUrl);
+      } catch (clipboardError) {
+        console.error('Failed to copy to clipboard:', clipboardError);
+      }
 
       localStorage.setItem(`plan_${data.planId}_mode`, resultMode);
       navigate(`/p/${data.planId}`);
     } catch (error) {
       console.error('Error creating plan:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
       toast({
-        title: "Error",
-        description: error instanceof Error ? error.message : "Failed to create plan",
+        title: "Something went wrong creating your plan",
+        description: `${errorMessage}. Please check your connection and try again.`,
         variant: "destructive",
       });
     } finally {

@@ -68,6 +68,13 @@ const PlanLocked = () => {
 
       if (optionsData.options && optionsData.options.length > 0) {
         setOption(optionsData.options[0]);
+        
+        // Track plan lock view
+        analytics.track('plan_locked', {
+          plan_id: planId,
+          chosen_option_id: optionsData.options[0].id,
+          chosen_option_name: optionsData.options[0].name,
+        });
       }
       
       // Mark plan as locked for PWA prompt

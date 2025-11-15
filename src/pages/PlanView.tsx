@@ -108,6 +108,14 @@ const PlanView = () => {
         setPlan(planData.plan);
         setVotesByOption(planData.votesByOption || {});
 
+        // Track plan view
+        analytics.track('plan_viewed', {
+          plan_id: planId,
+          is_owner: hasToken,
+          daypart: planData.plan.daypart,
+          locked: planData.plan.locked,
+        });
+
         // Get options with timeout
         console.log('Loading options with mode:', mode);
         const optionsPromise = supabase.functions.invoke('options-list', {
@@ -243,6 +251,17 @@ const PlanView = () => {
 
       if (error) throw error;
 
+      if (!data?.success) {
+        throw new Error('Vote was not recorded');
+      }
+
+      // Track successful vote
+      analytics.track('vote_cast', {
+        plan_id: planId,
+        option_id: optionId,
+        vote_id: data.voteId,
+      });
+
       // Track if vote came from sharecard
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get('src') === 'sc') {
@@ -260,8 +279,8 @@ const PlanView = () => {
       });
 
       toast({
-        title: "Vote cast!",
-        description: "Checking if plan is locked...",
+        title: "Vote recorded!",
+        description: "Thanks for voting!",
       });
 
       // Check lock status
@@ -281,9 +300,10 @@ const PlanView = () => {
       }
     } catch (error) {
       console.error('Error voting:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       toast({
-        title: "Error",
-        description: error instanceof Error ? error.message : "Failed to vote",
+        title: "Your vote was not saved",
+        description: `${errorMessage}. Check your connection and try again.`,
         variant: "destructive",
       });
     } finally {
@@ -312,21 +332,31 @@ const PlanView = () => {
     window.open(url, '_blank');
   };
 
-  const copyShareLink = () => {
+  const copyShareLink = async () => {
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
     const shareUrl = `${supabaseUrl}/functions/v1/share?id=${planId}`;
-    navigator.clipboard.writeText(shareUrl);
     
-    // Track sharecard click
-    analytics.track('sharecard_click', {
-      planId,
-      source: 'copy_button',
-    });
-    
-    toast({
-      title: "Link copied!",
-      description: "Share this link with your group to vote",
-    });
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      
+      // Track share
+      analytics.track('plan_shared', {
+        plan_id: planId,
+        share_method: 'copy_link',
+      });
+      
+      toast({
+        title: "Link copied!",
+        description: "Share this link with your group to vote",
+      });
+    } catch (error) {
+      console.error('Failed to copy to clipboard:', error);
+      toast({
+        title: "Could not copy link",
+        description: "Please try again or use the share button",
+        variant: "destructive",
+      });
+    }
   };
 
   const goToManagement = () => {
