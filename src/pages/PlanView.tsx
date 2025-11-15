@@ -634,7 +634,7 @@ const PlanView = () => {
             Help choose the plan
           </h1>
           <p className="text-base text-muted-foreground max-w-xl mx-auto">
-            The organizer is deciding on a place in {plan.neighborhood}. Tap your favorites below — this takes under 30 seconds.
+            The organizer is deciding on a place in {plan.neighborhood}. Tap your favorites below. This takes under 30 seconds.
           </p>
         </div>
 

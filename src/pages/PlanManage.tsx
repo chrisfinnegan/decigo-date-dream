@@ -308,7 +308,10 @@ const PlanManage = () => {
                     type="number"
                     min="1"
                     value={editedPlan.headcount || ''}
-                    onChange={(e) => setEditedPlan({ ...editedPlan, headcount: parseInt(e.target.value) })}
+                    onChange={(e) => {
+                      const value = e.target.value ? parseInt(e.target.value, 10) : 1;
+                      setEditedPlan({ ...editedPlan, headcount: value });
+                    }}
                   />
                 </div>
                 <div>
