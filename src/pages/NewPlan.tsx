@@ -207,10 +207,10 @@ const NewPlan = () => {
         
         {/* Quick intro */}
         <div className="text-center space-y-3">
-          <h1 className="text-3xl md:text-4xl font-bold text-brand-primary">
+          <h1 className="text-3xl md:text-4xl font-bold text-decigo-deep-teal">
             Create your plan
           </h1>
-          <p className="text-base text-muted-foreground max-w-xl mx-auto">
+          <p className="text-base text-decigo-slate-600 max-w-xl mx-auto">
             Fill in the basics below and we'll generate top spots for everyone to vote on.
           </p>
         </div>
@@ -219,7 +219,7 @@ const NewPlan = () => {
         <Card className="p-6 md:p-8">
           {/* 3. Step Label */}
           <div className="mb-6">
-            <h2 className="text-sm font-semibold text-muted-foreground mb-4">
+            <h2 className="text-sm font-semibold text-decigo-slate-600 mb-4">
               Step 1: Set the basics (15 seconds)
             </h2>
           </div>
@@ -227,7 +227,7 @@ const NewPlan = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Daypart */}
             <div>
-              <Label htmlFor="daypart" className="text-brand-primary font-semibold">
+              <Label htmlFor="daypart" className="text-decigo-deep-teal font-medium">
                 Occasion
               </Label>
               <RadioGroup
@@ -242,7 +242,7 @@ const NewPlan = () => {
                 className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-2"
               >
                 {['breakfast', 'brunch', 'lunch', 'dinner', 'drinks', 'date-night'].map((option) => (
-                  <div key={option} className="flex items-center space-x-2 p-3 border rounded-lg hover:border-ring cursor-pointer">
+                  <div key={option} className="flex items-center space-x-2 p-3 border rounded-lg hover:border-decigo-green cursor-pointer">
                     <RadioGroupItem value={option} id={option} />
                     <Label htmlFor={option} className="cursor-pointer capitalize flex-1">
                       {option === 'date-night' ? 'Date night' : option}
@@ -250,7 +250,7 @@ const NewPlan = () => {
                   </div>
                 ))}
               </RadioGroup>
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-xs text-decigo-slate-600 mt-1">
                 Helps us find spots that match the time of day.
               </p>
             </div>
@@ -265,7 +265,7 @@ const NewPlan = () => {
 
             {/* Neighborhood */}
             <div>
-              <Label htmlFor="neighborhood" className="text-brand-primary font-semibold">
+              <Label htmlFor="neighborhood" className="text-decigo-deep-teal font-medium">
                 Neighborhood
               </Label>
               <PlacesAutocomplete
@@ -288,14 +288,14 @@ const NewPlan = () => {
                   }
                 }}
               />
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-xs text-decigo-slate-600 mt-1">
                 Pick the area where you're meeting.
               </p>
             </div>
 
             {/* Headcount */}
             <div>
-              <Label htmlFor="headcount" className="text-brand-primary font-semibold">
+              <Label htmlFor="headcount" className="text-decigo-deep-teal font-medium">
                 Group Size
               </Label>
               <Input
@@ -306,14 +306,14 @@ const NewPlan = () => {
                 onChange={(e) => setFormData({ ...formData, headcount: e.target.value })}
                 className="mt-1"
               />
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-xs text-decigo-slate-600 mt-1">
                 We avoid places that can't fit your party size.
               </p>
             </div>
 
             {/* Budget */}
             <div>
-              <Label htmlFor="budget" className="text-brand-primary font-semibold">
+              <Label htmlFor="budget" className="text-decigo-deep-teal font-medium">
                 Budget
               </Label>
               <RadioGroup
@@ -322,7 +322,7 @@ const NewPlan = () => {
                 className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2"
               >
                 {['$', '$$', '$$$', '$$$$'].map((budget) => (
-                  <div key={budget} className="flex items-center space-x-2 p-3 border rounded-lg hover:border-ring cursor-pointer">
+                  <div key={budget} className="flex items-center space-x-2 p-3 border rounded-lg hover:border-decigo-green cursor-pointer">
                     <RadioGroupItem value={budget} id={`budget-${budget}`} />
                     <Label htmlFor={`budget-${budget}`} className="cursor-pointer flex-1">
                       {budget} {budget === '$' && 'Budget'}
@@ -333,14 +333,14 @@ const NewPlan = () => {
                   </div>
                 ))}
               </RadioGroup>
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-xs text-decigo-slate-600 mt-1">
                 We match places to your price comfort zone.
               </p>
             </div>
 
             {/* Optional Notes */}
             <div>
-              <Label htmlFor="notes" className="text-brand-primary font-semibold">
+              <Label htmlFor="notes" className="text-decigo-deep-teal font-medium">
                 Additional Notes (optional)
               </Label>
               <Textarea
@@ -371,13 +371,13 @@ const NewPlan = () => {
 
             {/* Advanced Options - Collapsible */}
             <Collapsible open={advancedOpen} onOpenChange={setAdvancedOpen}>
-              <CollapsibleTrigger className="flex items-center justify-between w-full py-2 text-sm font-semibold text-muted-foreground hover:text-brand-primary">
+              <CollapsibleTrigger className="flex items-center justify-between w-full py-2 text-sm font-semibold text-decigo-slate-600 hover:text-decigo-deep-teal">
                 <span>Advanced options</span>
                 <ChevronDown className={`h-4 w-4 transition-transform ${advancedOpen ? 'rotate-180' : ''}`} />
               </CollapsibleTrigger>
               <CollapsibleContent className="pt-4 space-y-4">
                 <div>
-                  <Label className="text-brand-primary font-semibold mb-2 block">
+                  <Label className="text-decigo-deep-teal font-medium mb-2 block">
                     Result Mode
                   </Label>
                   <RadioGroup
@@ -388,10 +388,10 @@ const NewPlan = () => {
                     <div className="flex items-start space-x-2 p-3 border rounded-lg">
                       <RadioGroupItem value="top3" id="mode-top3" className="mt-1" />
                       <div className="flex-1">
-                        <Label htmlFor="mode-top3" className="font-semibold cursor-pointer">
+                        <Label htmlFor="mode-top3" className="font-medium cursor-pointer">
                           Best 3 picks (recommended)
                         </Label>
-                        <p className="text-xs text-muted-foreground mt-1">
+                        <p className="text-xs text-decigo-slate-600 mt-1">
                           Quick decisions
                         </p>
                       </div>
@@ -399,10 +399,10 @@ const NewPlan = () => {
                     <div className="flex items-start space-x-2 p-3 border rounded-lg">
                       <RadioGroupItem value="full20" id="mode-full20" className="mt-1" />
                       <div className="flex-1">
-                        <Label htmlFor="mode-full20" className="font-semibold cursor-pointer">
+                        <Label htmlFor="mode-full20" className="font-medium cursor-pointer">
                           Full list (~20 places)
                         </Label>
-                        <p className="text-xs text-muted-foreground mt-1">
+                        <p className="text-xs text-decigo-slate-600 mt-1">
                           More options
                         </p>
                       </div>
@@ -443,7 +443,7 @@ const NewPlan = () => {
               >
                 {loading ? "Creating your plan..." : "Create Plan & Get Link"}
               </Button>
-              <p className="text-xs text-muted-foreground text-center mt-3">
+              <p className="text-xs text-decigo-slate-500 text-center mt-3">
                 Free • No login • Link copied automatically
               </p>
             </div>
