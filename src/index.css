@@ -122,11 +122,11 @@ All colors MUST be HSL.
   }
 
   .card {
-    @apply bg-white rounded-xl shadow-md p-4;
+    @apply bg-card rounded-xl shadow-sm border border-border p-4;
   }
 
   .chip {
-    @apply bg-decigo-cream border border-decigo-slate-300 text-decigo-deep-teal rounded-xl px-3 py-1 text-sm font-medium;
+    @apply bg-muted border border-border text-foreground rounded-xl px-3 py-1 text-sm font-medium;
   }
 
   .brand-gradient {

@@ -160,7 +160,7 @@ const PlanLocked = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-decigo-cream">
+      <div className="min-h-screen bg-background">
         <Header />
         <div className="p-4 flex items-center justify-center min-h-[60vh]">
           <p className="text-decigo-slate-700">Loading...</p>
@@ -172,7 +172,7 @@ const PlanLocked = () => {
 
   if (!plan || !option) {
     return (
-      <div className="min-h-screen bg-decigo-cream">
+      <div className="min-h-screen bg-background">
         <Header />
         <div className="p-4 flex items-center justify-center min-h-[60vh]">
           <p className="text-decigo-slate-700">Locked plan not found</p>
@@ -183,7 +183,7 @@ const PlanLocked = () => {
   }
 
   return (
-    <div className="min-h-screen bg-decigo-cream">
+    <div className="min-h-screen bg-background">
       <Header />
       <div className="p-4 max-w-4xl mx-auto space-y-6 py-8">
         {/* Celebration Header */}
