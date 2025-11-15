@@ -18,6 +18,17 @@ export default {
         inter: ['Inter', 'sans-serif'],
       },
       colors: {
+        // Brand colors from logo
+        'brand-primary': '#015F76', // App name, main headings
+        'brand-secondary': '#0D4659', // Secondary headings
+        'brand-teal': '#17C3AF', // Primary CTA buttons
+        'brand-accent': '#0896A8', // Hover/active states
+        'brand-cyan': '#056079', // UI accents
+        'brand-success': '#69CC7F', // Success states, chips
+        'brand-highlight': '#B3E340', // Special highlights
+        'brand-body': '#586679', // Body text
+        
+        // Legacy colors (keeping for gradual migration)
         'decigo-deep-teal': '#0C4A5A',
         'decigo-teal': '#119DA4',
         'decigo-green': '#6EE28E',
@@ -26,6 +37,7 @@ export default {
         'decigo-slate-700': '#334155',
         'decigo-slate-300': '#CBD5E1',
         'decigo-error': '#E53935',
+        
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

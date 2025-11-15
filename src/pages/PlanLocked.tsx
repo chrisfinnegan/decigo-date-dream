@@ -163,7 +163,7 @@ const PlanLocked = () => {
       <div className="min-h-screen bg-background">
         <Header />
         <div className="p-4 flex items-center justify-center min-h-[60vh]">
-          <p className="text-decigo-slate-700">Loading...</p>
+          <p className="text-brand-body">Loading...</p>
         </div>
         <Footer />
       </div>
@@ -175,7 +175,7 @@ const PlanLocked = () => {
       <div className="min-h-screen bg-background">
         <Header />
         <div className="p-4 flex items-center justify-center min-h-[60vh]">
-          <p className="text-decigo-slate-700">Locked plan not found</p>
+          <p className="text-brand-body">Locked plan not found</p>
         </div>
         <Footer />
       </div>
@@ -188,13 +188,13 @@ const PlanLocked = () => {
       <div className="p-4 max-w-4xl mx-auto space-y-6 py-8">
         {/* Celebration Header */}
         <div className="text-center space-y-2">
-          <div className="inline-block bg-decigo-green text-white px-4 py-2 rounded-2xl mb-2 font-medium">
+          <div className="inline-block bg-brand-success text-white px-4 py-2 rounded-2xl mb-2 font-medium">
             🎉 Locked!
           </div>
-          <h1 className="text-4xl font-bold text-decigo-deep-teal">
+          <h1 className="text-4xl font-bold text-brand-primary">
             You're going to {option.name}!
           </h1>
-          <p className="text-decigo-slate-700 text-lg">
+          <p className="text-brand-body text-lg">
             On {new Date(plan.date_start).toLocaleDateString('en-US', {
               weekday: 'long',
               month: 'long',
@@ -207,8 +207,8 @@ const PlanLocked = () => {
         </div>
 
         <div className="card">
-          <h2 className="text-2xl font-bold text-decigo-deep-teal mb-2">{option.name}</h2>
-          <p className="text-decigo-slate-700 mb-4">{option.address}</p>
+          <h2 className="text-2xl font-bold text-brand-primary mb-2">{option.name}</h2>
+          <p className="text-brand-body mb-4">{option.address}</p>
           
           <div className="flex gap-2 mb-4">
             <span className="chip">{plan.budget_band}</span>
@@ -217,19 +217,19 @@ const PlanLocked = () => {
           </div>
 
           <div className="mb-4">
-            <p className="text-sm font-medium text-decigo-deep-teal mb-1">Why this place:</p>
-            <p className="text-sm text-decigo-slate-700">{option.why_it_fits}</p>
+            <p className="text-sm font-medium text-brand-primary mb-1">Why this place:</p>
+            <p className="text-sm text-brand-body">{option.why_it_fits}</p>
           </div>
 
           {option.tip && (
             <div className="mb-4">
-              <p className="text-sm font-medium text-decigo-deep-teal mb-1">Insider tip:</p>
-              <p className="text-sm text-decigo-slate-700">{option.tip}</p>
+              <p className="text-sm font-medium text-brand-primary mb-1">Insider tip:</p>
+              <p className="text-sm text-brand-body">{option.tip}</p>
             </div>
           )}
 
           <div className="space-y-2 pt-4">
-            <p className="text-xs text-decigo-slate-600 mb-2">
+            <p className="text-xs text-muted-foreground mb-2">
               Add this plan to your calendar so everyone knows where and when you're meeting
             </p>
             <button
@@ -277,9 +277,9 @@ const PlanLocked = () => {
           </div>
         </div>
 
-        <div className="card bg-decigo-green/10">
-          <h3 className="text-lg font-bold text-decigo-deep-teal mb-2">Share the final plan</h3>
-          <p className="text-sm text-decigo-slate-700 mb-4">
+        <div className="card bg-brand-success/10">
+          <h3 className="text-lg font-bold text-brand-primary mb-2">Share the final plan</h3>
+          <p className="text-sm text-brand-body mb-4">
             Copy this link to share with anyone who hasn't seen the final plan
           </p>
           <button
@@ -295,7 +295,7 @@ const PlanLocked = () => {
 
         {/* Create Another Plan CTA */}
         <div className="text-center pt-4">
-          <p className="text-sm text-decigo-slate-600 mb-3">
+          <p className="text-sm text-muted-foreground mb-3">
             Planning something else soon?
           </p>
           <a href="/new" className="btn-primary inline-block px-6 py-2">

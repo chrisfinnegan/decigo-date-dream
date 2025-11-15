@@ -8,33 +8,42 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 240 4% 97%; /* #F5F5F7 */
-    --foreground: 215 16% 41%; /* #334155 */
+    /* Main backgrounds */
+    --background: 222 33% 98%; /* #F4F6FB - Light cool background */
+    --foreground: 216 15% 42%; /* #586679 - Body text */
 
-    --card: 0 0% 100%; /* White cards on subtle background */
-    --card-foreground: 215 16% 41%;
+    /* Card surfaces */
+    --card: 0 0% 100%; /* #FFFFFF - White cards */
+    --card-foreground: 216 15% 42%; /* #586679 - Body text on cards */
 
+    /* Popovers */
     --popover: 0 0% 100%;
-    --popover-foreground: 215 16% 41%;
+    --popover-foreground: 216 15% 42%;
 
-    --primary: 195 75% 20%; /* #0C4A5A */
-    --primary-foreground: 0 0% 100%;
+    /* Primary brand - Teal CTA */
+    --primary: 173 77% 43%; /* #17C3AF - Primary teal button */
+    --primary-foreground: 0 0% 100%; /* White text on primary */
 
-    --secondary: 240 4% 95%; /* Slightly darker than background */
-    --secondary-foreground: 195 75% 20%;
+    /* Secondary surfaces */
+    --secondary: 220 13% 96%; /* Slightly darker than background */
+    --secondary-foreground: 191 99% 23%; /* #015F76 - Brand color */
 
-    --muted: 240 4% 94%; /* Subtle muted tone */
-    --muted-foreground: 215 16% 41%;
+    /* Muted elements */
+    --muted: 222 20% 95%;
+    --muted-foreground: 216 15% 42%; /* Body text color */
 
-    --accent: 184 80% 36%; /* #119DA4 */
+    /* Accent - Used for hover states and highlights */
+    --accent: 186 92% 35%; /* #0896A8 - Hover/active state */
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 3 82% 57%; /* #E53935 */
+    /* Destructive states */
+    --destructive: 3 82% 57%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 214 32% 88%; /* Softer border for subtle background */
-    --input: 214 32% 88%;
-    --ring: 148 74% 71%; /* #6EE28E */
+    /* Borders and inputs */
+    --border: 220 13% 91%; /* #E5E7EB - Subtle borders */
+    --input: 220 13% 91%;
+    --ring: 131 53% 61%; /* #69CC7F - Success green for focus rings */
 
     --radius: 1rem;
 
@@ -56,25 +65,25 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 195 75% 20%;
+    --background: 195 73% 20%; /* #0D4659 - Dark mode background */
     --foreground: 0 0% 100%;
 
-    --card: 195 60% 25%;
+    --card: 191 95% 25%; /* #056079 - Darker cards */
     --card-foreground: 0 0% 100%;
 
-    --popover: 195 60% 25%;
+    --popover: 191 95% 25%;
     --popover-foreground: 0 0% 100%;
 
-    --primary: 0 0% 100%;
-    --primary-foreground: 195 75% 20%;
+    --primary: 173 77% 43%; /* Keep teal primary */
+    --primary-foreground: 0 0% 100%;
 
     --secondary: 195 60% 30%;
     --secondary-foreground: 0 0% 100%;
 
     --muted: 195 60% 30%;
-    --muted-foreground: 214 32% 83%;
+    --muted-foreground: 220 13% 83%;
 
-    --accent: 184 80% 36%;
+    --accent: 186 92% 35%; /* #0896A8 */
     --accent-foreground: 0 0% 100%;
 
     --destructive: 3 82% 57%;
@@ -82,15 +91,15 @@ All colors MUST be HSL.
 
     --border: 195 60% 30%;
     --input: 195 60% 30%;
-    --ring: 148 74% 71%;
+    --ring: 131 53% 61%; /* #69CC7F */
     --sidebar-background: 195 75% 15%;
     --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 184 80% 36%;
+    --sidebar-primary: 173 77% 43%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 195 60% 25%;
     --sidebar-accent-foreground: 0 0% 100%;
     --sidebar-border: 195 60% 25%;
-    --sidebar-ring: 148 74% 71%;
+    --sidebar-ring: 131 53% 61%;
   }
 }
 
@@ -104,21 +113,21 @@ All colors MUST be HSL.
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply text-decigo-deep-teal font-poppins font-bold;
+    @apply text-brand-primary font-poppins font-bold;
   }
 
   a {
-    @apply text-decigo-teal hover:text-decigo-deep-teal underline transition-colors;
+    @apply text-brand-teal hover:text-brand-accent underline transition-colors;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-decigo-deep-teal text-white rounded-2xl px-5 py-3 font-medium hover:bg-decigo-teal focus:outline-none focus:ring-2 focus:ring-decigo-green focus:ring-offset-2 transition-all;
+    @apply bg-primary text-primary-foreground rounded-2xl px-5 py-3 font-medium hover:bg-accent focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 transition-all;
   }
 
   .btn-secondary {
-    @apply bg-white text-decigo-deep-teal border border-decigo-slate-300 rounded-2xl px-5 py-3 font-medium hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-decigo-green focus:ring-offset-2 transition-all;
+    @apply bg-card text-secondary-foreground border border-border rounded-2xl px-5 py-3 font-medium hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 transition-all;
   }
 
   .card {
@@ -130,7 +139,7 @@ All colors MUST be HSL.
   }
 
   .brand-gradient {
-    background: linear-gradient(135deg, #119DA4 0%, #6EE28E 60%, #B7F464 100%);
+    background: linear-gradient(135deg, #17C3AF 0%, #69CC7F 60%, #B3E340 100%);
   }
 
   /* Fix datetime-local inputs on mobile */
