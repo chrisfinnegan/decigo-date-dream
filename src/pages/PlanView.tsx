@@ -10,6 +10,7 @@ import { analytics } from "@/lib/analytics";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { EmptyPlanState } from "@/components/EmptyPlanState";
+import { RankingInterface } from "@/components/RankingInterface";
 
 interface Option {
   id: string;
@@ -49,6 +50,9 @@ const PlanView = () => {
   const [showAll, setShowAll] = useState(false);
   const [hasManagementAccess, setHasManagementAccess] = useState(false);
   const [myVotes, setMyVotes] = useState<string[]>([]);
+  const [myRankings, setMyRankings] = useState<Record<string, number> | null>(null);
+  const [rankedVotesByOption, setRankedVotesByOption] = useState<Record<string, number>>({});
+  const [pollingForWinner, setPollingForWinner] = useState(false);
 
   useEffect(() => {
     if (!planId) return;
@@ -76,6 +80,18 @@ const PlanView = () => {
         console.log('Loaded saved votes:', votesArray);
       } catch (e) {
         console.error('Error parsing saved votes:', e);
+      }
+    }
+
+    // Load my rankings from localStorage for small groups
+    const savedRankings = localStorage.getItem(`plan_${planId}_rankings`);
+    if (savedRankings) {
+      try {
+        const rankingsObj = JSON.parse(savedRankings);
+        setMyRankings(rankingsObj);
+        console.log('Loaded saved rankings:', rankingsObj);
+      } catch (e) {
+        console.error('Error parsing saved rankings:', e);
       }
     }
     
@@ -118,9 +134,27 @@ const PlanView = () => {
           throw new Error('Plan not found');
         }
 
-        console.log('Plan loaded:', planData.plan);
+      console.log('Plan loaded:', planData.plan);
         setPlan(planData.plan);
         setVotesByOption(planData.votesByOption || {});
+
+        // For small groups (2-3), fetch ranked votes instead
+        if (planData.plan.headcount >= 2 && planData.plan.headcount <= 3) {
+          const { data: rankedVotesData } = await supabase
+            .from('ranked_votes')
+            .select('*')
+            .eq('plan_id', planId);
+          
+          if (rankedVotesData) {
+            const voteCounts: Record<string, number> = {};
+            rankedVotesData.forEach(() => {
+              // Count total votes received for display
+              Object.keys(voteCounts).forEach(key => voteCounts[key] = (voteCounts[key] || 0) + 1);
+            });
+            setRankedVotesByOption(voteCounts);
+            console.log('Loaded ranked votes:', rankedVotesData.length);
+          }
+        }
 
         // Track plan view
         analytics.track('plan_viewed', {
@@ -225,6 +259,22 @@ const PlanView = () => {
       console.log('Plan reloaded:', planData.plan);
       setPlan(planData.plan);
       setVotesByOption(planData.votesByOption || {});
+
+      // For small groups (2-3), fetch ranked votes
+      if (planData.plan.headcount >= 2 && planData.plan.headcount <= 3) {
+        const { data: rankedVotesData } = await supabase
+          .from('ranked_votes')
+          .select('*')
+          .eq('plan_id', planId);
+        
+        if (rankedVotesData) {
+          const voteCounts: Record<string, number> = {};
+          rankedVotesData.forEach(() => {
+            Object.keys(voteCounts).forEach(key => voteCounts[key] = (voteCounts[key] || 0) + 1);
+          });
+          setRankedVotesByOption(voteCounts);
+        }
+      }
 
       // Get options
       console.log('Reloading options with mode:', mode);
@@ -338,6 +388,142 @@ const PlanView = () => {
       setVoting(false);
     }
   };
+
+  const handleSubmitRankings = async (rankings: Record<string, number>) => {
+    if (!planId) return;
+
+    try {
+      setVoting(true);
+
+      // Submit ranked vote
+      const { data, error } = await supabase.functions.invoke('ranked-votes-cast', {
+        body: { planId, rankings },
+      });
+
+      if (error) throw error;
+
+      if (!data?.success) {
+        throw new Error(data?.error || 'Rankings were not recorded');
+      }
+
+      // Save rankings locally
+      setMyRankings(rankings);
+      localStorage.setItem(`plan_${planId}_rankings`, JSON.stringify(rankings));
+
+      // Track ranking submission
+      analytics.trackRankingSubmitted({
+        planId,
+        groupSize: plan?.headcount,
+        stepName: 'initial_ranking',
+      });
+
+      toast({
+        title: "Rankings recorded!",
+        description: "Thanks for ranking the options!",
+      });
+
+      // If all votes are in, start polling for winner
+      if (data.allVotesIn) {
+        setPollingForWinner(true);
+        // Trigger winner computation
+        await computeWinner();
+      } else {
+        // Show progress
+        toast({
+          title: "Waiting for others",
+          description: `${data.votesReceived}/${data.totalExpected} participants have ranked their choices`,
+        });
+      }
+    } catch (error) {
+      console.error('Error submitting rankings:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      toast({
+        title: "Error submitting rankings",
+        description: errorMessage,
+        variant: "destructive",
+      });
+    } finally {
+      setVoting(false);
+    }
+  };
+
+  const computeWinner = async () => {
+    if (!planId) return;
+
+    try {
+      const { data, error } = await supabase.functions.invoke('ranked-votes-compute-winner', {
+        body: { planId },
+      });
+
+      if (error) {
+        console.error('Error computing winner:', error);
+        return;
+      }
+
+      if (data?.success) {
+        // Track winner selection
+        analytics.trackSmallGroupWinnerSelected({
+          planId,
+          winnerId: data.winnerId,
+          groupSize: plan?.headcount,
+          tieBreakerUsed: data.tieBreakerUsed,
+        });
+
+        // Navigate to locked page
+        toast({
+          title: "Winner decided!",
+          description: "The group has chosen a place",
+        });
+
+        setTimeout(() => {
+          navigate(`/p/${planId}/locked`);
+        }, 1000);
+      }
+    } catch (error) {
+      console.error('Error computing winner:', error);
+    }
+  };
+
+  // Poll for winner if all votes might be in
+  useEffect(() => {
+    if (!pollingForWinner || !planId || !plan) return;
+
+    const pollInterval = setInterval(async () => {
+      // Check if plan is locked
+      const { data: planData } = await supabase.functions.invoke('plans-get', {
+        body: { id: planId },
+      });
+
+      if (planData?.plan?.locked) {
+        setPollingForWinner(false);
+        navigate(`/p/${planId}/locked`);
+      } else {
+        // Check vote count
+        const { count } = await supabase
+          .from('ranked_votes')
+          .select('*', { count: 'exact', head: true })
+          .eq('plan_id', planId);
+
+        if (count === plan.headcount) {
+          // All votes are in, try to compute winner
+          await computeWinner();
+        }
+      }
+    }, 3000); // Poll every 3 seconds
+
+    return () => clearInterval(pollInterval);
+  }, [pollingForWinner, planId, plan, navigate]);
+
+  // Track small group flow start
+  useEffect(() => {
+    if (plan && plan.headcount >= 2 && plan.headcount <= 3 && !plan.locked) {
+      analytics.trackSmallGroupFlowStarted({
+        planId,
+        groupSize: plan.headcount,
+        occasion: plan.daypart,
+      });
+    }
+  }, [plan, planId]);
 
   const toggleShowAll = () => {
     setShowAll(!showAll);
@@ -496,7 +682,7 @@ const PlanView = () => {
         </div>
 
         {/* Sticky Vote Recap */}
-        {myVotes.length > 0 && (
+        {myVotes.length > 0 && plan.headcount >= 4 && (
           <div className="card bg-primary/10 border-primary/20 sticky top-4 z-10">
             <div className="flex items-center justify-between">
               <div>
@@ -511,15 +697,26 @@ const PlanView = () => {
           </div>
         )}
 
-        {/* Voting Instructions */}
-        <div className="card bg-primary/5 border-primary/10">
-          <p className="text-sm text-primary font-medium text-center">
-            💡 Select one or more places below to cast your vote
-          </p>
-        </div>
+        {/* Small Group Ranked Voting (2-3 people) */}
+        {plan.headcount >= 2 && plan.headcount <= 3 && options.length >= 3 ? (
+          <RankingInterface
+            options={options.slice(0, 3)}
+            groupSize={plan.headcount}
+            onSubmitRankings={handleSubmitRankings}
+            existingRankings={myRankings || undefined}
+            getMapThumbnail={getMapThumbnail}
+          />
+        ) : (
+          <>
+            {/* Voting Instructions for larger groups */}
+            <div className="card bg-primary/5 border-primary/10">
+              <p className="text-sm text-primary font-medium text-center">
+                💡 Select one or more places below to cast your vote
+              </p>
+            </div>
 
-        {/* Options List */}
-        <div className="space-y-4">
+            {/* Options List */}
+            <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-semibold text-primary">
               {showAll ? "All Options" : "Best matches for you"}
@@ -621,15 +818,17 @@ const PlanView = () => {
               </div>
             );
           })}
-        </div>
+            </div>
 
-        {!showAll && options.length === 3 && (
-          <button
-            onClick={() => setShowAll(true)}
-            className="btn-secondary w-full"
-          >
-            See full list (~20 options)
-          </button>
+            {!showAll && options.length === 3 && (
+              <button
+                onClick={() => setShowAll(true)}
+                className="btn-secondary w-full"
+              >
+                See full list (~20 options)
+              </button>
+            )}
+          </>
         )}
       </div>
       <Footer />

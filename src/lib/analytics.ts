@@ -114,6 +114,23 @@ class Analytics {
   trackSharecardToVote(properties: EventProperties) {
     this.track('sharecard_to_vote', properties);
   }
+
+  // Small group ranked voting events
+  trackSmallGroupFlowStarted(properties: EventProperties) {
+    this.track('small_group_flow_started', properties);
+  }
+
+  trackRankingSubmitted(properties: EventProperties) {
+    this.track('ranking_submitted', properties);
+  }
+
+  trackSmallGroupWinnerSelected(properties: EventProperties) {
+    this.track('small_group_winner_selected', properties);
+  }
+
+  trackSmallGroupFlowCompleted(properties: EventProperties) {
+    this.track('small_group_flow_completed', properties);
+  }
 }
 
 export const analytics = new Analytics();

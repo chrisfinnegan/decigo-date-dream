@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      decision_history: {
+        Row: {
+          created_at: string | null
+          id: string
+          participant_hashes: Json
+          plan_id: string | null
+          winner_voter_hash: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          participant_hashes: Json
+          plan_id?: string | null
+          winner_voter_hash: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          participant_hashes?: Json
+          plan_id?: string | null
+          winner_voter_hash?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "decision_history_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "plans"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "decision_history_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "plans_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       flags: {
         Row: {
           key: string
@@ -168,6 +207,7 @@ export type Database = {
         Row: {
           budget_band: string
           canceled: boolean | null
+          computed_scores: Json | null
           created_at: string | null
           date_end: string
           date_start: string
@@ -186,11 +226,14 @@ export type Database = {
           notes_chips: string[] | null
           notes_raw: string | null
           threshold: number
+          tie_breaker_used: string | null
           two_stop: boolean | null
+          winner_option_id: string | null
         }
         Insert: {
           budget_band: string
           canceled?: boolean | null
+          computed_scores?: Json | null
           created_at?: string | null
           date_end: string
           date_start: string
@@ -209,11 +252,14 @@ export type Database = {
           notes_chips?: string[] | null
           notes_raw?: string | null
           threshold: number
+          tie_breaker_used?: string | null
           two_stop?: boolean | null
+          winner_option_id?: string | null
         }
         Update: {
           budget_band?: string
           canceled?: boolean | null
+          computed_scores?: Json | null
           created_at?: string | null
           date_end?: string
           date_start?: string
@@ -232,9 +278,58 @@ export type Database = {
           notes_chips?: string[] | null
           notes_raw?: string | null
           threshold?: number
+          tie_breaker_used?: string | null
           two_stop?: boolean | null
+          winner_option_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "plans_winner_option_id_fkey"
+            columns: ["winner_option_id"]
+            isOneToOne: false
+            referencedRelation: "options"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ranked_votes: {
+        Row: {
+          created_at: string | null
+          id: string
+          plan_id: string | null
+          rankings: Json
+          voter_hash: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          plan_id?: string | null
+          rankings: Json
+          voter_hash: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          plan_id?: string | null
+          rankings?: Json
+          voter_hash?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ranked_votes_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "plans"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ranked_votes_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "plans_public"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       reminders: {
         Row: {
