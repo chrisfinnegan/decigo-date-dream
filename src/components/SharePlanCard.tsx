@@ -226,7 +226,7 @@ export const SharePlanCard = ({ planId, state: initialState }: SharePlanCardProp
       {state === 'created' && plan && (
         <div className="bg-decigo-green/10 border border-decigo-green/20 rounded-lg p-3 mb-4">
           <p className="text-sm text-decigo-deep-teal font-medium mb-1">
-            📣 Share this link with your group and ask them to vote.
+            📣 Share this link with everyone and ask them to vote.
           </p>
           <p className="text-xs text-decigo-slate-700">
             Once you have at least {plan.threshold} votes, you can lock the plan.

@@ -176,7 +176,7 @@ const NewPlan = () => {
         await navigator.clipboard.writeText(shareUrl);
         toast({
           title: "Plan created! Link copied",
-          description: "Share it with your group to start voting",
+          description: "Share it with everyone to start voting",
         });
       } catch (clipErr) {
         console.warn('Clipboard copy failed:', clipErr);

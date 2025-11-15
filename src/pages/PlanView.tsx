@@ -384,7 +384,7 @@ const PlanView = () => {
       
       toast({
         title: "Link copied!",
-        description: "Share this link with your group to vote",
+        description: "Share this link with everyone to vote",
       });
     } catch (error) {
       console.error('Failed to copy to clipboard:', error);
@@ -466,7 +466,7 @@ const PlanView = () => {
             <div className="pt-2 border-t border-border">
               <p className="text-sm font-medium mb-2 flex items-center gap-2 text-primary">
                 <Share2 className="w-4 h-4" />
-                Share with your group
+                Share with everyone
               </p>
               <div className="space-y-2">
                 <button
