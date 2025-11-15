@@ -26,7 +26,7 @@ const App = () => {
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<NewPlan />} />
+          <Route path="/" element={<Index />} />
           <Route path="/new" element={<NewPlan />} />
           <Route path="/p/:planId" element={<PlanView />} />
           <Route path="/p/:planId/locked" element={<PlanLocked />} />

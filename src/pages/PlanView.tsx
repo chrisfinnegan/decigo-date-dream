@@ -256,11 +256,11 @@ const PlanView = () => {
   };
 
   const handleVote = async (optionId: string) => {
-    // Check if already voted for this option
-    if (myVotes.includes(optionId)) {
+    // Check if already voted (client-side check)
+    if (myVotes.length > 0) {
       toast({
         title: "Already voted",
-        description: "You've already voted for this option",
+        description: "You can only vote once per plan",
       });
       return;
     }
