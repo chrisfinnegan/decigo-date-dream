@@ -8,8 +8,8 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Main backgrounds */
-    --background: 220 9% 96%; /* #F3F4F6 - Neutral light gray */
+    /* Main backgrounds - ALL WHITE */
+    --background: 0 0% 100%; /* #FFFFFF - White background */
     --foreground: 195 73% 20%; /* #0D4659 - Dark body text */
 
     /* Card surfaces */
@@ -40,9 +40,9 @@ All colors MUST be HSL.
     --destructive: 3 82% 57%;
     --destructive-foreground: 0 0% 100%;
 
-    /* Borders and inputs */
-    --border: 218 11% 84%; /* #D1D5DB - Stronger borders */
-    --input: 218 11% 84%;
+    /* Borders and inputs - More visible on white */
+    --border: 214 14% 90%; /* #E5E7EB - Subtle borders */
+    --input: 214 14% 90%;
     --ring: 186 92% 35%; /* #0896A8 - Cyan for focus rings */
 
     --radius: 1rem;
@@ -132,6 +132,11 @@ All colors MUST be HSL.
 
   .card {
     @apply bg-card rounded-xl shadow-sm border border-border p-4;
+  }
+  
+  /* Enhanced card with more visible structure on white */
+  .card-elevated {
+    @apply bg-card rounded-xl shadow-md border border-border p-6;
   }
 
   .chip {

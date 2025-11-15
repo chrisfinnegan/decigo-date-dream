@@ -231,7 +231,7 @@ export const SharePlanCard = ({ planId, state: initialState }: SharePlanCardProp
     <div className="card space-y-4">
       {/* Organizer coaching text */}
       {state === 'created' && plan && (
-        <div className="bg-accent/10 rounded-lg p-3 mb-4 shadow-sm">
+        <div className="bg-card border-2 border-brand-teal/30 rounded-lg p-3 mb-4 shadow-sm">
           <p className="text-sm text-foreground font-semibold mb-1">
             📣 Share this link with everyone and ask them to vote.
           </p>
