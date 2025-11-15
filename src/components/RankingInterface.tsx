@@ -25,6 +25,7 @@ interface RankingInterfaceProps {
   onSubmitRankings: (rankings: Record<string, number>) => Promise<void>;
   existingRankings?: Record<string, number>;
   getMapThumbnail: (option: Option) => string | null;
+  occasion?: string;
 }
 
 export const RankingInterface = ({ 
@@ -33,7 +34,8 @@ export const RankingInterface = ({
   planId,
   onSubmitRankings, 
   existingRankings,
-  getMapThumbnail 
+  getMapThumbnail,
+  occasion
 }: RankingInterfaceProps) => {
   const [rankedOptions, setRankedOptions] = useState<Option[]>([]);
   const [submitting, setSubmitting] = useState(false);
@@ -112,10 +114,10 @@ export const RankingInterface = ({
       <div className="card bg-primary/5 border-primary/10">
         <div className="space-y-2">
           <h2 className="text-lg font-semibold text-primary">
-            {groupSize === 2 ? "🌟 Date Night Harmony" : "👥 Small Group Decision"}
+            {occasion === 'date-night' ? "🌟 Date Night Harmony" : "👥 Small Group Decision"}
           </h2>
           <p className="text-sm text-muted-foreground">
-            {groupSize === 2 
+            {occasion === 'date-night'
               ? "Rank all 3 spots. We'll find the best match for both of you." 
               : "Each of you, rank all 3 options. We'll pick the favorite of the group."}
           </p>

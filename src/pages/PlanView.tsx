@@ -717,6 +717,7 @@ const PlanView = () => {
             onSubmitRankings={handleSubmitRankings}
             existingRankings={myRankings || undefined}
             getMapThumbnail={getMapThumbnail}
+            occasion={plan.daypart}
           />
         ) : (
           <>
