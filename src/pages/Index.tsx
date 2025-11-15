@@ -37,7 +37,7 @@ const Index = () => {
               </h1>
               
               <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
-                No more endless group texts. We suggest spots, your group votes, winner locked—under a minute.
+                No more endless back-and-forth. We suggest spots, everyone votes, winner locked—under a minute.
               </p>
 
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
