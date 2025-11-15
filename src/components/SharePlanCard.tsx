@@ -82,7 +82,7 @@ export const SharePlanCard = ({ planId, state: initialState }: SharePlanCardProp
   const copyShareLink = async () => {
     const shareUrl = getShareUrl();
     const shareMessage = plan 
-      ? `Help me choose ${plan.daypart === 'dinner' ? 'tonight\'s' : 'a'} spot! Vote here: ${shareUrl}`
+      ? `Help choose ${plan.daypart === 'dinner' ? 'tonight\'s' : 'a'} spot! Vote here: ${shareUrl}`
       : shareUrl;
     
     try {
@@ -98,7 +98,7 @@ export const SharePlanCard = ({ planId, state: initialState }: SharePlanCardProp
       
       toast({
         title: "Share message copied!",
-        description: "Paste it into your group chat",
+        description: "Paste it to share with everyone",
       });
     } catch (error) {
       console.error('Failed to copy to clipboard:', error);
@@ -113,7 +113,7 @@ export const SharePlanCard = ({ planId, state: initialState }: SharePlanCardProp
   const shareCard = async () => {
     const shareUrl = getShareUrl();
     const shareMessage = plan 
-      ? `Help me pick a spot for ${plan.daypart}! Vote here: ${shareUrl}`
+      ? `Help pick a spot for ${plan.daypart}! Vote here: ${shareUrl}`
       : shareUrl;
     
     if (navigator.share) {

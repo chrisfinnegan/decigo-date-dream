@@ -416,7 +416,7 @@ const PlanManage = () => {
             </CardHeader>
             <CardContent className="space-y-4">
               <Textarea
-                placeholder="+1234567890&#10;friend@example.com"
+                placeholder="+1234567890&#10;contact@example.com"
                 value={inviteContacts}
                 onChange={(e) => setInviteContacts(e.target.value)}
                 rows={6}

@@ -67,6 +67,18 @@ const PlanView = () => {
     console.log('PlanView - Management access check:', { planId, hasToken, token: token ? 'exists' : 'none' });
     setHasManagementAccess(hasToken);
     
+    // Load my votes from localStorage
+    const savedVotes = localStorage.getItem(`plan_${planId}_votes`);
+    if (savedVotes) {
+      try {
+        const votesArray = JSON.parse(savedVotes);
+        setMyVotes(votesArray);
+        console.log('Loaded saved votes:', votesArray);
+      } catch (e) {
+        console.error('Error parsing saved votes:', e);
+      }
+    }
+    
     // Track if this is from a sharecard
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('src') === 'sc') {
@@ -244,6 +256,15 @@ const PlanView = () => {
   };
 
   const handleVote = async (optionId: string) => {
+    // Check if already voted for this option
+    if (myVotes.includes(optionId)) {
+      toast({
+        title: "Already voted",
+        description: "You've already voted for this option",
+      });
+      return;
+    }
+
     setVoting(true);
     try {
       // Voter hash is now generated server-side based on IP and User-Agent
@@ -254,8 +275,13 @@ const PlanView = () => {
       if (error) throw error;
 
       if (!data?.success) {
-        throw new Error('Vote was not recorded');
+        throw new Error(data?.error || 'Vote was not recorded');
       }
+
+      // Save vote locally
+      const newVotes = [...myVotes, optionId];
+      setMyVotes(newVotes);
+      localStorage.setItem(`plan_${planId}_votes`, JSON.stringify(newVotes));
 
       // Track successful vote
       analytics.track('vote_cast', {
@@ -335,9 +361,11 @@ const PlanView = () => {
       provider,
     });
     
+    // Use place name for better search results
+    const searchQuery = `${option.name}, ${option.address}`;
     const url = provider === 'apple'
-      ? `maps://maps.apple.com/?q=${encodeURIComponent(option.address)}`
-      : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(option.address)}`;
+      ? `maps://maps.apple.com/?q=${encodeURIComponent(searchQuery)}`
+      : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(searchQuery)}`;
     window.open(url, '_blank');
   };
 
@@ -403,7 +431,7 @@ const PlanView = () => {
             Help choose the plan
           </h1>
           <p className="text-base text-muted-foreground max-w-xl mx-auto">
-            Your friend is deciding on a place in {plan.neighborhood}. Tap your favorites below — this takes under 30 seconds.
+            The organizer is deciding on a place in {plan.neighborhood}. Tap your favorites below — this takes under 30 seconds.
           </p>
         </div>
 
@@ -460,6 +488,22 @@ const PlanView = () => {
             </div>
           </div>
         </div>
+
+        {/* Sticky Vote Recap */}
+        {myVotes.length > 0 && (
+          <div className="card bg-primary/10 border-primary/20 sticky top-4 z-10">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-semibold text-primary">
+                  ✓ You voted for {myVotes.length} {myVotes.length === 1 ? 'option' : 'options'}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  You can change your votes until the plan is locked
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Voting Instructions */}
         <div className="card bg-primary/5 border-primary/10">

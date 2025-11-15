@@ -211,7 +211,7 @@ const NewPlan = () => {
             Create a quick plan for your group
           </h1>
           <p className="text-xl text-decigo-slate-700 max-w-2xl mx-auto">
-            Tell us when and where. We'll suggest the best spots and your group votes to decide.
+            Tell us when and where. We'll suggest the best spots and everyone votes to decide.
           </p>
           
           {/* Benefits Row */}
@@ -231,13 +231,13 @@ const NewPlan = () => {
           </div>
         </div>
 
-        {/* 2. What Your Friends Will See Preview */}
+        {/* 2. What Everyone Will See Preview */}
         <Card className="p-6 bg-white border-2 border-decigo-green/20">
           <h3 className="text-lg font-bold text-decigo-deep-teal mb-3">
-            What your friends will see
+            What everyone will see
           </h3>
           <p className="text-sm text-decigo-slate-700 mb-4">
-            We'll show them {resultMode === 'top3' ? '3' : '~20'} great spots in your chosen area. They tap to vote, and you lock in the winner.
+            We'll show everyone {resultMode === 'top3' ? '3' : '~20'} great spots in your chosen area. They tap to vote, and you lock in the winner.
           </p>
           
           {/* Preview Option Rows */}
@@ -304,9 +304,9 @@ const NewPlan = () => {
               <RadioGroup
                 value={formData.daypart}
                 onValueChange={(value) => setFormData({ ...formData, daypart: value })}
-                className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2"
+                className="grid grid-cols-2 md:grid-cols-5 gap-3 mt-2"
               >
-                {['breakfast', 'lunch', 'dinner', 'drinks'].map((option) => (
+                {['breakfast', 'brunch', 'lunch', 'dinner', 'drinks'].map((option) => (
                   <div key={option} className="flex items-center space-x-2 p-3 border rounded-lg hover:border-decigo-green cursor-pointer">
                     <RadioGroupItem value={option} id={option} />
                     <Label htmlFor={option} className="cursor-pointer capitalize flex-1">
@@ -322,7 +322,7 @@ const NewPlan = () => {
 
             {/* Date & Time */}
             <div>
-              <Label htmlFor="dateStart" className="text-decigo-deep-teal font-medium">
+              <Label className="text-decigo-deep-teal font-medium">
                 Date & Time
               </Label>
               <DateTimePicker
@@ -522,7 +522,7 @@ const NewPlan = () => {
           
           {/* 9. Privacy Reassurance */}
           <p className="text-xs text-decigo-slate-500 text-center mt-6 pt-4 border-t">
-            We don't track your friends. Nothing is shared publicly.
+            We don't track anyone. Nothing is shared publicly.
           </p>
         </Card>
       </div>
