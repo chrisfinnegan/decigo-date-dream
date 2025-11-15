@@ -41,13 +41,13 @@ export function DateTimePicker({ value, onChange }: DateTimePickerProps) {
 
   return (
     <div className="space-y-2">
-      <Label className="text-decigo-deep-teal font-medium">Date & Time</Label>
+      <Label className="text-brand-primary font-semibold">Date & Time</Label>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
             variant="outline"
             className={cn(
-              "w-full justify-start text-left font-normal rounded-xl border-decigo-slate-300",
+              "w-full justify-start text-left font-normal rounded-xl border-border",
               !selectedDate && "text-muted-foreground"
             )}
           >

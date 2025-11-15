@@ -13,7 +13,7 @@ export const Header = () => {
   };
 
   return (
-    <header className="bg-background px-4 h-[69px] overflow-visible shadow-sm">
+    <header className="bg-background px-4 h-[69px] overflow-visible">
       <div className="max-w-7xl mx-auto flex items-center justify-between h-full">
         <Link to="/" className="flex items-center">
           <img src="/brand/logo-name.png" alt="Decigo" className="h-9 w-auto" />
@@ -21,7 +21,7 @@ export const Header = () => {
         <div className="flex items-center gap-4">
           <button 
             onClick={scrollToIntake}
-            className="hidden md:block text-decigo-teal hover:text-decigo-deep-teal font-medium text-sm no-underline transition-colors"
+            className="hidden md:block text-brand-cyan hover:text-brand-dark-teal font-semibold text-sm no-underline transition-colors"
           >
             How it works
           </button>
