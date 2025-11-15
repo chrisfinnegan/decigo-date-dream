@@ -322,9 +322,6 @@ const NewPlan = () => {
 
             {/* Date & Time */}
             <div>
-              <Label className="text-decigo-deep-teal font-medium">
-                Date & Time
-              </Label>
               <DateTimePicker
                 value={formData.dateStart}
                 onChange={(value) => setFormData({ ...formData, dateStart: value })}
