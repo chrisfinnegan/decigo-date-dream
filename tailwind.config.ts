@@ -18,15 +18,15 @@ export default {
         inter: ['Inter', 'sans-serif'],
       },
       colors: {
-        // Brand colors from logo
-        'brand-primary': '#015F76', // App name, main headings
-        'brand-secondary': '#0D4659', // Secondary headings
-        'brand-teal': '#17C3AF', // Primary CTA buttons
-        'brand-accent': '#0896A8', // Hover/active states
-        'brand-cyan': '#056079', // UI accents
-        'brand-success': '#69CC7F', // Success states, chips
-        'brand-highlight': '#B3E340', // Special highlights
-        'brand-body': '#586679', // Body text
+        // Brand colors from logo (bolder, darker system)
+        'brand-primary': '#015F76', // Primary headings, app name
+        'brand-body': '#0D4659', // Default body text (darker)
+        'brand-muted': '#586679', // Helper text only
+        'brand-teal': '#17C3AF', // Accent highlights
+        'brand-cyan': '#0896A8', // Focus rings, accents
+        'brand-dark-teal': '#056079', // Hover states
+        'brand-success': '#69CC7F', // Success states
+        'brand-highlight': '#B3E340', // Special badges
         
         // Legacy colors (keeping for gradual migration)
         'decigo-deep-teal': '#0C4A5A',

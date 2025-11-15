@@ -232,10 +232,10 @@ export const SharePlanCard = ({ planId, state: initialState }: SharePlanCardProp
       {/* Organizer coaching text */}
       {state === 'created' && plan && (
         <div className="bg-accent/10 rounded-lg p-3 mb-4 shadow-sm">
-          <p className="text-sm text-brand-primary font-medium mb-1">
+          <p className="text-sm text-foreground font-semibold mb-1">
             📣 Share this link with everyone and ask them to vote.
           </p>
-          <p className="text-xs text-brand-body">
+          <p className="text-xs text-foreground">
             Once you have at least {plan.threshold} votes, you can lock the plan.
             {plan.decision_deadline && ` Locks automatically at ${new Date(plan.decision_deadline).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })} or when you're ready.`}
           </p>

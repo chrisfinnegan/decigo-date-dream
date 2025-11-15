@@ -41,7 +41,7 @@ export function DateTimePicker({ value, onChange }: DateTimePickerProps) {
 
   return (
     <div className="space-y-2">
-      <Label className="text-brand-primary font-medium">Date & Time</Label>
+      <Label className="text-brand-primary font-semibold">Date & Time</Label>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button

@@ -9,31 +9,31 @@ All colors MUST be HSL.
 @layer base {
   :root {
     /* Main backgrounds */
-    --background: 222 33% 98%; /* #F4F6FB - Light cool background */
-    --foreground: 216 15% 42%; /* #586679 - Body text */
+    --background: 220 9% 96%; /* #F3F4F6 - Neutral light gray */
+    --foreground: 195 73% 20%; /* #0D4659 - Dark body text */
 
     /* Card surfaces */
     --card: 0 0% 100%; /* #FFFFFF - White cards */
-    --card-foreground: 216 15% 42%; /* #586679 - Body text on cards */
+    --card-foreground: 195 73% 20%; /* #0D4659 - Dark body text on cards */
 
     /* Popovers */
     --popover: 0 0% 100%;
-    --popover-foreground: 216 15% 42%;
+    --popover-foreground: 195 73% 20%;
 
-    /* Primary brand - Teal CTA */
-    --primary: 173 77% 43%; /* #17C3AF - Primary teal button */
+    /* Primary brand - Dark teal CTA */
+    --primary: 191 99% 23%; /* #015F76 - Dark confident teal */
     --primary-foreground: 0 0% 100%; /* White text on primary */
 
     /* Secondary surfaces */
-    --secondary: 220 13% 96%; /* Slightly darker than background */
-    --secondary-foreground: 191 99% 23%; /* #015F76 - Brand color */
+    --secondary: 0 0% 100%; /* White background for secondary buttons */
+    --secondary-foreground: 191 99% 23%; /* #015F76 - Dark teal text */
 
     /* Muted elements */
-    --muted: 222 20% 95%;
-    --muted-foreground: 216 15% 42%; /* Body text color */
+    --muted: 220 14% 96%;
+    --muted-foreground: 216 15% 42%; /* #586679 - Only for helper text */
 
-    /* Accent - Used for hover states and highlights */
-    --accent: 186 92% 35%; /* #0896A8 - Hover/active state */
+    /* Accent - Used for hover states */
+    --accent: 191 95% 25%; /* #056079 - Darker hover state */
     --accent-foreground: 0 0% 100%;
 
     /* Destructive states */
@@ -41,9 +41,9 @@ All colors MUST be HSL.
     --destructive-foreground: 0 0% 100%;
 
     /* Borders and inputs */
-    --border: 220 13% 91%; /* #E5E7EB - Subtle borders */
-    --input: 220 13% 91%;
-    --ring: 131 53% 61%; /* #69CC7F - Success green for focus rings */
+    --border: 218 11% 84%; /* #D1D5DB - Stronger borders */
+    --input: 218 11% 84%;
+    --ring: 186 92% 35%; /* #0896A8 - Cyan for focus rings */
 
     --radius: 1rem;
 
@@ -74,7 +74,7 @@ All colors MUST be HSL.
     --popover: 191 95% 25%;
     --popover-foreground: 0 0% 100%;
 
-    --primary: 173 77% 43%; /* Keep teal primary */
+    --primary: 191 99% 23%; /* Dark teal primary */
     --primary-foreground: 0 0% 100%;
 
     --secondary: 195 60% 30%;
@@ -83,7 +83,7 @@ All colors MUST be HSL.
     --muted: 195 60% 30%;
     --muted-foreground: 220 13% 83%;
 
-    --accent: 186 92% 35%; /* #0896A8 */
+    --accent: 191 95% 25%; /* #056079 */
     --accent-foreground: 0 0% 100%;
 
     --destructive: 3 82% 57%;
@@ -91,15 +91,15 @@ All colors MUST be HSL.
 
     --border: 195 60% 30%;
     --input: 195 60% 30%;
-    --ring: 131 53% 61%; /* #69CC7F */
+    --ring: 186 92% 35%; /* #0896A8 */
     --sidebar-background: 195 75% 15%;
     --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 173 77% 43%;
+    --sidebar-primary: 191 99% 23%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 195 60% 25%;
     --sidebar-accent-foreground: 0 0% 100%;
     --sidebar-border: 195 60% 25%;
-    --sidebar-ring: 131 53% 61%;
+    --sidebar-ring: 186 92% 35%;
   }
 }
 
@@ -117,17 +117,17 @@ All colors MUST be HSL.
   }
 
   a {
-    @apply text-brand-teal hover:text-brand-accent underline transition-colors;
+    @apply text-brand-cyan hover:text-brand-dark-teal underline transition-colors;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-primary text-primary-foreground rounded-2xl px-5 py-3 font-medium hover:bg-accent focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 transition-all;
+    @apply bg-primary text-primary-foreground rounded-2xl px-5 py-3 font-semibold hover:bg-accent focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 transition-all shadow-sm;
   }
 
   .btn-secondary {
-    @apply bg-card text-secondary-foreground border border-border rounded-2xl px-5 py-3 font-medium hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 transition-all;
+    @apply bg-card text-secondary-foreground border-2 border-secondary-foreground rounded-2xl px-5 py-3 font-semibold hover:bg-secondary-foreground/5 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 transition-all;
   }
 
   .card {
@@ -135,7 +135,7 @@ All colors MUST be HSL.
   }
 
   .chip {
-    @apply bg-muted border border-border text-foreground rounded-xl px-3 py-1 text-sm font-medium;
+    @apply bg-brand-teal/10 border border-brand-teal/20 text-foreground rounded-xl px-3 py-1 text-sm font-medium;
   }
 
   .brand-gradient {
