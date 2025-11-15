@@ -666,7 +666,7 @@ const PlanView = () => {
               <CountdownTimer deadline={plan.decision_deadline} />
             </div>
 
-            <div className="pt-2 border-t border-border">
+            <div className="pt-2">
               <p className="text-sm font-medium mb-2 flex items-center gap-2 text-primary">
                 <Share2 className="w-4 h-4" />
                 Share with everyone

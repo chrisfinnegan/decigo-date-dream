@@ -26,7 +26,7 @@ const Index = () => {
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-10">
             <div className="text-center space-y-5 max-w-3xl mx-auto">
               {returningUser && (
-                <div className="inline-flex items-center gap-2 bg-accent/10 text-primary px-3 py-1.5 rounded-full text-xs font-medium border border-accent/20">
+                <div className="inline-flex items-center gap-2 bg-accent/10 text-primary px-3 py-1.5 rounded-full text-xs font-medium shadow-sm">
                   <span>👋</span>
                   Welcome back
                 </div>
@@ -140,37 +140,37 @@ const Index = () => {
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-              <div className="p-4 rounded-lg bg-card border border-border">
+              <div className="p-4 rounded-lg bg-card shadow-sm">
                 <Users className="h-6 w-6 text-accent mb-2" />
                 <h3 className="text-sm font-semibold text-primary mb-1">Any size</h3>
                 <p className="text-xs text-muted-foreground">2 to 20 people</p>
               </div>
 
-              <div className="p-4 rounded-lg bg-card border border-border">
+              <div className="p-4 rounded-lg bg-card shadow-sm">
                 <Clock className="h-6 w-6 text-accent mb-2" />
                 <h3 className="text-sm font-semibold text-primary mb-1">Lightning fast</h3>
                 <p className="text-xs text-muted-foreground">No signup walls</p>
               </div>
 
-              <div className="p-4 rounded-lg bg-card border border-border">
+              <div className="p-4 rounded-lg bg-card shadow-sm">
                 <Shield className="h-6 w-6 text-accent mb-2" />
                 <h3 className="text-sm font-semibold text-primary mb-1">Private</h3>
                 <p className="text-xs text-muted-foreground">Nothing tracked</p>
               </div>
 
-              <div className="p-4 rounded-lg bg-card border border-border">
+              <div className="p-4 rounded-lg bg-card shadow-sm">
                 <Target className="h-6 w-6 text-accent mb-2" />
                 <h3 className="text-sm font-semibold text-primary mb-1">Smart picks</h3>
                 <p className="text-xs text-muted-foreground">Match your vibe</p>
               </div>
 
-              <div className="p-4 rounded-lg bg-card border border-border">
+              <div className="p-4 rounded-lg bg-card shadow-sm">
                 <Zap className="h-6 w-6 text-accent mb-2" />
                 <h3 className="text-sm font-semibold text-primary mb-1">One-tap vote</h3>
                 <p className="text-xs text-muted-foreground">No app needed</p>
               </div>
 
-              <div className="p-4 rounded-lg bg-card border border-border">
+              <div className="p-4 rounded-lg bg-card shadow-sm">
                 <CheckCircle className="h-6 w-6 text-accent mb-2" />
                 <h3 className="text-sm font-semibold text-primary mb-1">Lock it in</h3>
                 <p className="text-xs text-muted-foreground">Instant details</p>

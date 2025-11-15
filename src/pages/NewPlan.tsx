@@ -410,23 +410,23 @@ const NewPlan = () => {
                   </RadioGroup>
                   
                   {/* Preview moved here */}
-                  <div className="mt-4 p-4 bg-muted/30 border border-border rounded-lg">
-                    <p className="text-xs font-medium text-decigo-slate-700 mb-2">
+                  <div className="mt-4 p-4 bg-muted/30 rounded-lg shadow-sm">
+                    <p className="text-xs font-medium text-foreground mb-2">
                       Preview: {resultMode === 'top3' ? '3' : '~20'} spots will be shown
                     </p>
                     <div className="space-y-1.5">
-                      <div className="flex items-center justify-between text-xs p-2 bg-white rounded border border-decigo-slate-200">
-                        <span className="text-decigo-deep-teal font-medium">Cozy wine bar</span>
-                        <div className="w-4 h-4 rounded-full border-2 border-decigo-green"></div>
+                      <div className="flex items-center justify-between text-xs p-2 bg-card rounded shadow-sm">
+                        <span className="text-primary font-medium">Cozy wine bar</span>
+                        <div className="w-4 h-4 rounded-full border-2 border-accent"></div>
                       </div>
-                      <div className="flex items-center justify-between text-xs p-2 bg-white rounded border border-decigo-slate-200">
-                        <span className="text-decigo-deep-teal font-medium">Casual taco spot</span>
-                        <div className="w-4 h-4 rounded-full border-2 border-decigo-slate-300"></div>
+                      <div className="flex items-center justify-between text-xs p-2 bg-card rounded shadow-sm">
+                        <span className="text-primary font-medium">Casual taco spot</span>
+                        <div className="w-4 h-4 rounded-full border-2 border-muted-foreground"></div>
                       </div>
                       {resultMode === 'top3' && (
-                        <div className="flex items-center justify-between text-xs p-2 bg-white rounded border border-decigo-slate-200">
-                          <span className="text-decigo-deep-teal font-medium">Italian bistro</span>
-                          <div className="w-4 h-4 rounded-full border-2 border-decigo-slate-300"></div>
+                        <div className="flex items-center justify-between text-xs p-2 bg-card rounded shadow-sm">
+                          <span className="text-primary font-medium">Italian bistro</span>
+                          <div className="w-4 h-4 rounded-full border-2 border-muted-foreground"></div>
                         </div>
                       )}
                     </div>
