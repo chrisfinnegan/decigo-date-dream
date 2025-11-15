@@ -230,14 +230,16 @@ export const RankingInterface = ({
                           className="btn-secondary text-xs h-10 px-3 flex items-center justify-center gap-1"
                         >
                           <MapPin className="w-3 h-3" />
-                          <span className="hidden sm:inline">Apple</span> Maps
+                          <span className="sm:hidden">Apple</span>
+                          <span className="hidden sm:inline">Apple Maps</span>
                         </button>
                         <button
                           onClick={() => openInMaps(option, 'google')}
                           className="btn-secondary text-xs h-10 px-3 flex items-center justify-center gap-1"
                         >
                           <MapPin className="w-3 h-3" />
-                          <span className="hidden sm:inline">Google</span> Maps
+                          <span className="sm:hidden">Google</span>
+                          <span className="hidden sm:inline">Google Maps</span>
                         </button>
                       </div>
                     </div>
