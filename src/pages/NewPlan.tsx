@@ -270,7 +270,7 @@ const NewPlan = () => {
               </Label>
               <PlacesAutocomplete
                 value={formData.neighborhood}
-                placeholder="e.g., Downtown, SoHo, Marina District"
+                placeholder="e.g., SoHo, Brooklyn"
                 onChange={(value, placeData) => {
                   if (placeData) {
                     setFormData({
