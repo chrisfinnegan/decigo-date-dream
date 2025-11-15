@@ -201,7 +201,7 @@ const NewPlan = () => {
   };
 
   return (
-    <div className="min-h-screen bg-decigo-cream">
+    <div className="min-h-screen bg-background">
       <Header />
       <div className="max-w-3xl mx-auto px-4 py-8 space-y-8">
         
@@ -410,7 +410,7 @@ const NewPlan = () => {
                   </RadioGroup>
                   
                   {/* Preview moved here */}
-                  <div className="mt-4 p-4 bg-decigo-cream/50 border border-decigo-slate-200 rounded-lg">
+                  <div className="mt-4 p-4 bg-muted/30 border border-border rounded-lg">
                     <p className="text-xs font-medium text-decigo-slate-700 mb-2">
                       Preview: {resultMode === 'top3' ? '3' : '~20'} spots will be shown
                     </p>
