@@ -232,14 +232,20 @@ const NewPlan = () => {
               </Label>
               <RadioGroup
                 value={formData.daypart}
-                onValueChange={(value) => setFormData({ ...formData, daypart: value })}
-                className="grid grid-cols-2 md:grid-cols-5 gap-3 mt-2"
+                onValueChange={(value) => {
+                  setFormData({ 
+                    ...formData, 
+                    daypart: value,
+                    headcount: value === 'date-night' ? '2' : formData.headcount
+                  });
+                }}
+                className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-2"
               >
-                {['breakfast', 'brunch', 'lunch', 'dinner', 'drinks'].map((option) => (
+                {['breakfast', 'brunch', 'lunch', 'dinner', 'drinks', 'date-night'].map((option) => (
                   <div key={option} className="flex items-center space-x-2 p-3 border rounded-lg hover:border-decigo-green cursor-pointer">
                     <RadioGroupItem value={option} id={option} />
                     <Label htmlFor={option} className="cursor-pointer capitalize flex-1">
-                      {option}
+                      {option === 'date-night' ? 'Date night' : option}
                     </Label>
                   </div>
                 ))}
