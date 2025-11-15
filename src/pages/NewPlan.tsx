@@ -205,85 +205,14 @@ const NewPlan = () => {
       <Header />
       <div className="max-w-3xl mx-auto px-4 py-8 space-y-8">
         
-        {/* 1. Explanation Panel */}
-        <div className="text-center space-y-4">
-          <h1 className="text-4xl md:text-5xl font-bold text-decigo-deep-teal">
-            Create a quick plan for your group
+        {/* Quick intro */}
+        <div className="text-center space-y-3">
+          <h1 className="text-3xl md:text-4xl font-bold text-decigo-deep-teal">
+            Create your plan
           </h1>
-          <p className="text-xl text-decigo-slate-700 max-w-2xl mx-auto">
-            Tell us when and where. We'll suggest the best spots and everyone votes to decide.
+          <p className="text-base text-decigo-slate-600 max-w-xl mx-auto">
+            Fill in the basics below and we'll generate top spots for your group to vote on.
           </p>
-          
-          {/* Benefits Row */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6">
-            <div className="flex flex-col items-center text-center">
-              <div className="text-2xl mb-2">⚡</div>
-              <p className="text-sm font-medium text-decigo-slate-700">Takes under 30 seconds</p>
-            </div>
-            <div className="flex flex-col items-center text-center">
-              <div className="text-2xl mb-2">🤖</div>
-              <p className="text-sm font-medium text-decigo-slate-700">We suggest places automatically</p>
-            </div>
-            <div className="flex flex-col items-center text-center">
-              <div className="text-2xl mb-2">👥</div>
-              <p className="text-sm font-medium text-decigo-slate-700">Your group votes with one tap</p>
-            </div>
-          </div>
-        </div>
-
-        {/* 2. What Everyone Will See Preview */}
-        <Card className="p-6 bg-white border-2 border-decigo-green/20">
-          <h3 className="text-lg font-bold text-decigo-deep-teal mb-3">
-            What everyone will see
-          </h3>
-          <p className="text-sm text-decigo-slate-700 mb-4">
-            We'll show everyone {resultMode === 'top3' ? '3' : '~20'} great spots in your chosen area. They tap to vote, and you lock in the winner.
-          </p>
-          
-          {/* Preview Option Rows */}
-          <div className="space-y-2">
-            <div className="p-3 border border-decigo-slate-200 rounded-lg bg-decigo-cream/50">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-decigo-deep-teal">Cozy wine bar</p>
-                  <p className="text-xs text-decigo-slate-600">$$ • Quiet atmosphere</p>
-                </div>
-                <div className="w-6 h-6 rounded-full border-2 border-decigo-green"></div>
-              </div>
-            </div>
-            <div className="p-3 border border-decigo-slate-200 rounded-lg bg-decigo-cream/50">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-decigo-deep-teal">Casual taco spot</p>
-                  <p className="text-xs text-decigo-slate-600">$ • Lively vibes</p>
-                </div>
-                <div className="w-6 h-6 rounded-full border-2 border-decigo-slate-300"></div>
-              </div>
-            </div>
-            {resultMode === 'top3' && (
-              <div className="p-3 border border-decigo-slate-200 rounded-lg bg-decigo-cream/50">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-decigo-deep-teal">Italian bistro</p>
-                    <p className="text-xs text-decigo-slate-600">$$$ • Romantic setting</p>
-                  </div>
-                  <div className="w-6 h-6 rounded-full border-2 border-decigo-slate-300"></div>
-                </div>
-              </div>
-            )}
-          </div>
-        </Card>
-
-        {/* Try Example Button */}
-        <div className="flex justify-center">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={fillExamplePlan}
-            className="border-decigo-green text-decigo-deep-teal hover:bg-decigo-green/10"
-          >
-            Try an example plan
-          </Button>
         </div>
 
         {/* Main Form Card */}
@@ -433,7 +362,7 @@ const NewPlan = () => {
               )}
             </div>
 
-            {/* 5. Advanced Options - Collapsible */}
+            {/* Advanced Options - Collapsible */}
             <Collapsible open={advancedOpen} onOpenChange={setAdvancedOpen}>
               <CollapsibleTrigger className="flex items-center justify-between w-full py-2 text-sm font-semibold text-decigo-slate-600 hover:text-decigo-deep-teal">
                 <span>Advanced options</span>
@@ -441,22 +370,22 @@ const NewPlan = () => {
               </CollapsibleTrigger>
               <CollapsibleContent className="pt-4 space-y-4">
                 <div>
-                  <Label className="text-decigo-deep-teal font-medium">
+                  <Label className="text-decigo-deep-teal font-medium mb-2 block">
                     Result Mode
                   </Label>
                   <RadioGroup
                     value={resultMode}
                     onValueChange={(value: 'top3' | 'full20') => setResultMode(value)}
-                    className="space-y-3 mt-2"
+                    className="space-y-2"
                   >
                     <div className="flex items-start space-x-2 p-3 border rounded-lg">
                       <RadioGroupItem value="top3" id="mode-top3" className="mt-1" />
                       <div className="flex-1">
                         <Label htmlFor="mode-top3" className="font-medium cursor-pointer">
-                          Show only the best 3 picks (recommended)
+                          Best 3 picks (recommended)
                         </Label>
                         <p className="text-xs text-decigo-slate-600 mt-1">
-                          Best for quick decisions
+                          Quick decisions
                         </p>
                       </div>
                     </div>
@@ -464,63 +393,54 @@ const NewPlan = () => {
                       <RadioGroupItem value="full20" id="mode-full20" className="mt-1" />
                       <div className="flex-1">
                         <Label htmlFor="mode-full20" className="font-medium cursor-pointer">
-                          Show the full list of ~20 places
+                          Full list (~20 places)
                         </Label>
                         <p className="text-xs text-decigo-slate-600 mt-1">
-                          Give your group more options to explore
+                          More options
                         </p>
                       </div>
                     </div>
                   </RadioGroup>
+                  
+                  {/* Preview moved here */}
+                  <div className="mt-4 p-4 bg-decigo-cream/50 border border-decigo-slate-200 rounded-lg">
+                    <p className="text-xs font-medium text-decigo-slate-700 mb-2">
+                      Preview: {resultMode === 'top3' ? '3' : '~20'} spots will be shown
+                    </p>
+                    <div className="space-y-1.5">
+                      <div className="flex items-center justify-between text-xs p-2 bg-white rounded border border-decigo-slate-200">
+                        <span className="text-decigo-deep-teal font-medium">Cozy wine bar</span>
+                        <div className="w-4 h-4 rounded-full border-2 border-decigo-green"></div>
+                      </div>
+                      <div className="flex items-center justify-between text-xs p-2 bg-white rounded border border-decigo-slate-200">
+                        <span className="text-decigo-deep-teal font-medium">Casual taco spot</span>
+                        <div className="w-4 h-4 rounded-full border-2 border-decigo-slate-300"></div>
+                      </div>
+                      {resultMode === 'top3' && (
+                        <div className="flex items-center justify-between text-xs p-2 bg-white rounded border border-decigo-slate-200">
+                          <span className="text-decigo-deep-teal font-medium">Italian bistro</span>
+                          <div className="w-4 h-4 rounded-full border-2 border-decigo-slate-300"></div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </CollapsibleContent>
             </Collapsible>
 
-            {/* 6. Benefit Summary above button */}
             <div className="pt-4 border-t">
-              <p className="text-sm text-decigo-slate-600 text-center mb-4">
-                We'll generate the top picks and create a voting link you can share with your group.
-              </p>
-              
               <Button
                 type="submit"
                 disabled={loading}
                 className="w-full h-12 btn-primary text-base"
               >
-                {loading ? "Creating your plan..." : "Create Plan"}
+                {loading ? "Creating your plan..." : "Create Plan & Get Link"}
               </Button>
+              <p className="text-xs text-decigo-slate-500 text-center mt-3">
+                Free • No login • Link copied automatically
+              </p>
             </div>
           </form>
-        </Card>
-
-        {/* 8. What Happens Next Box */}
-        <Card className="p-6 bg-white">
-          <h3 className="text-lg font-bold text-decigo-deep-teal mb-4">
-            What happens next?
-          </h3>
-          <ol className="space-y-3 text-sm text-decigo-slate-700">
-            <li className="flex gap-3">
-              <span className="font-bold text-decigo-green">1.</span>
-              <span>We generate top suggestions in your area.</span>
-            </li>
-            <li className="flex gap-3">
-              <span className="font-bold text-decigo-green">2.</span>
-              <span>You get a link to share with your group.</span>
-            </li>
-            <li className="flex gap-3">
-              <span className="font-bold text-decigo-green">3.</span>
-              <span>They vote with one tap.</span>
-            </li>
-            <li className="flex gap-3">
-              <span className="font-bold text-decigo-green">4.</span>
-              <span>You lock the winner and everyone sees the plan.</span>
-            </li>
-          </ol>
-          
-          {/* 9. Privacy Reassurance */}
-          <p className="text-xs text-decigo-slate-500 text-center mt-6 pt-4 border-t">
-            We don't track anyone. Nothing is shared publicly.
-          </p>
         </Card>
       </div>
       <Footer />
