@@ -363,10 +363,16 @@ const PlanView = () => {
     
     // Use place name for better search results
     const searchQuery = `${option.name}, ${option.address}`;
-    const url = provider === 'apple'
-      ? `maps://maps.apple.com/?q=${encodeURIComponent(searchQuery)}`
-      : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(searchQuery)}`;
-    window.open(url, '_blank');
+    
+    if (provider === 'apple') {
+      // Apple Maps URL scheme – iOS will route this to the native app
+      const url = `maps://maps.apple.com/?q=${encodeURIComponent(searchQuery)}`;
+      window.location.href = url;
+    } else {
+      // Google Maps deep link for native app
+      const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(searchQuery)}`;
+      window.location.href = url;
+    }
   };
 
   const copyShareLink = async () => {
