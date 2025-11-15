@@ -1,7 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 export const Header = () => {
+  const location = useLocation();
+  const isPlanPage = location.pathname.startsWith('/p/');
+  
   const scrollToIntake = () => {
     const intakeSection = document.getElementById('intake-section');
     if (intakeSection) {
@@ -22,9 +25,11 @@ export const Header = () => {
           >
             How it works
           </button>
-          <Button onClick={scrollToIntake} className="btn-primary text-sm h-9 px-4">
-            Start planning
-          </Button>
+          <Link to="/new">
+            <Button className="btn-primary text-sm h-9 px-4">
+              {isPlanPage ? 'Create your own plan' : 'Start planning'}
+            </Button>
+          </Link>
         </div>
       </div>
     </header>

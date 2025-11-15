@@ -143,21 +143,23 @@ const PlanLocked = () => {
     <div className="min-h-screen bg-decigo-cream">
       <Header />
       <div className="p-4 max-w-4xl mx-auto space-y-6 py-8">
+        {/* Celebration Header */}
         <div className="text-center space-y-2">
           <div className="inline-block bg-decigo-green text-white px-4 py-2 rounded-2xl mb-2 font-medium">
             🎉 Locked!
           </div>
           <h1 className="text-4xl font-bold text-decigo-deep-teal">
-            Your plans are set
+            You're going to {option.name}!
           </h1>
-          <p className="text-decigo-slate-700">
-            {new Date(plan.date_start).toLocaleDateString('en-US', {
+          <p className="text-decigo-slate-700 text-lg">
+            On {new Date(plan.date_start).toLocaleDateString('en-US', {
               weekday: 'long',
               month: 'long',
               day: 'numeric',
+            })} at {new Date(plan.date_start).toLocaleTimeString('en-US', {
               hour: 'numeric',
               minute: '2-digit'
-            })}
+            })} in {plan.neighborhood}
           </p>
         </div>
 
@@ -221,9 +223,9 @@ const PlanLocked = () => {
         </div>
 
         <div className="card bg-decigo-green/10">
-          <h3 className="text-lg font-bold text-decigo-deep-teal mb-2">Share with your group</h3>
+          <h3 className="text-lg font-bold text-decigo-deep-teal mb-2">Share the final plan</h3>
           <p className="text-sm text-decigo-slate-700 mb-4">
-            Let everyone know where you're meeting
+            Copy this link to share with anyone who hasn't seen the final plan
           </p>
           <button
             onClick={() => {
@@ -234,6 +236,16 @@ const PlanLocked = () => {
           >
             Copy link
           </button>
+        </div>
+
+        {/* Create Another Plan CTA */}
+        <div className="text-center pt-4">
+          <p className="text-sm text-decigo-slate-600 mb-3">
+            Planning something else soon?
+          </p>
+          <a href="/new" className="btn-primary inline-block px-6 py-2">
+            Create another plan
+          </a>
         </div>
 
         {showInstallPrompt && (
