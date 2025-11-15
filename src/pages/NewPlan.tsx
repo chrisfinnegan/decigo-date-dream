@@ -5,9 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { Badge } from "@/components/ui/badge";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { PlacesAutocomplete } from "@/components/PlacesAutocomplete";
@@ -15,7 +14,7 @@ import { DateTimePicker } from "@/components/DateTimePicker";
 import { analytics } from "@/lib/analytics";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { X, ChevronDown } from "lucide-react";
+import { ChevronDown, Sparkles, Zap, Target, CheckCircle, Info, Loader2 } from "lucide-react";
 
 const NewPlan = () => {
   const navigate = useNavigate();
@@ -47,10 +46,6 @@ const NewPlan = () => {
       const foundChips = words.filter(w => keywords.includes(w));
       setChips(Array.from(new Set([...chips, ...foundChips])));
     }
-  };
-
-  const removeChip = (chip: string) => {
-    setChips(chips.filter(c => c !== chip));
   };
 
   const fillExamplePlan = () => {
@@ -201,330 +196,375 @@ const NewPlan = () => {
   };
 
   return (
-    <div className="min-h-screen bg-decigo-cream">
+    <>
       <Header />
-      <div className="max-w-3xl mx-auto px-4 py-8 space-y-8">
-        
-        {/* 1. Explanation Panel */}
-        <div className="text-center space-y-4">
-          <h1 className="text-4xl md:text-5xl font-bold text-decigo-deep-teal">
-            Create a quick plan for your group
-          </h1>
-          <p className="text-xl text-decigo-slate-700 max-w-2xl mx-auto">
-            Tell us when and where. We'll suggest the best spots and everyone votes to decide.
-          </p>
+      <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
           
-          {/* Benefits Row */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6">
-            <div className="flex flex-col items-center text-center">
-              <div className="text-2xl mb-2">⚡</div>
-              <p className="text-sm font-medium text-decigo-slate-700">Takes under 30 seconds</p>
-            </div>
-            <div className="flex flex-col items-center text-center">
-              <div className="text-2xl mb-2">🤖</div>
-              <p className="text-sm font-medium text-decigo-slate-700">We suggest places automatically</p>
-            </div>
-            <div className="flex flex-col items-center text-center">
-              <div className="text-2xl mb-2">👥</div>
-              <p className="text-sm font-medium text-decigo-slate-700">Your group votes with one tap</p>
-            </div>
-          </div>
-        </div>
-
-        {/* 2. What Everyone Will See Preview */}
-        <Card className="p-6 bg-white border-2 border-decigo-green/20">
-          <h3 className="text-lg font-bold text-decigo-deep-teal mb-3">
-            What everyone will see
-          </h3>
-          <p className="text-sm text-decigo-slate-700 mb-4">
-            We'll show everyone {resultMode === 'top3' ? '3' : '~20'} great spots in your chosen area. They tap to vote, and you lock in the winner.
-          </p>
-          
-          {/* Preview Option Rows */}
-          <div className="space-y-2">
-            <div className="p-3 border border-decigo-slate-200 rounded-lg bg-decigo-cream/50">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-decigo-deep-teal">Cozy wine bar</p>
-                  <p className="text-xs text-decigo-slate-600">$$ • Quiet atmosphere</p>
-                </div>
-                <div className="w-6 h-6 rounded-full border-2 border-decigo-green"></div>
-              </div>
-            </div>
-            <div className="p-3 border border-decigo-slate-200 rounded-lg bg-decigo-cream/50">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-decigo-deep-teal">Casual taco spot</p>
-                  <p className="text-xs text-decigo-slate-600">$ • Lively vibes</p>
-                </div>
-                <div className="w-6 h-6 rounded-full border-2 border-decigo-slate-300"></div>
-              </div>
-            </div>
-            {resultMode === 'top3' && (
-              <div className="p-3 border border-decigo-slate-200 rounded-lg bg-decigo-cream/50">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-decigo-deep-teal">Italian bistro</p>
-                    <p className="text-xs text-decigo-slate-600">$$$ • Romantic setting</p>
-                  </div>
-                  <div className="w-6 h-6 rounded-full border-2 border-decigo-slate-300"></div>
-                </div>
-              </div>
-            )}
-          </div>
-        </Card>
-
-        {/* Try Example Button */}
-        <div className="flex justify-center">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={fillExamplePlan}
-            className="border-decigo-green text-decigo-deep-teal hover:bg-decigo-green/10"
-          >
-            Try an example plan
-          </Button>
-        </div>
-
-        {/* Main Form Card */}
-        <Card className="p-6 md:p-8">
-          {/* 3. Step Label */}
-          <div className="mb-6">
-            <h2 className="text-sm font-semibold text-decigo-slate-600 mb-4">
-              Step 1: Set the basics (15 seconds)
-            </h2>
+          {/* Hero Section - Compact */}
+          <div className="text-center space-y-3 pt-4">
+            <h1 className="text-3xl sm:text-4xl font-bold text-primary">
+              Create your plan
+            </h1>
+            <p className="text-base text-muted-foreground max-w-2xl mx-auto">
+              Set the basics, get smart suggestions, let your group vote
+            </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Daypart */}
-            <div>
-              <Label htmlFor="daypart" className="text-decigo-deep-teal font-medium">
-                Occasion
-              </Label>
-              <RadioGroup
-                value={formData.daypart}
-                onValueChange={(value) => setFormData({ ...formData, daypart: value })}
-                className="grid grid-cols-2 md:grid-cols-5 gap-3 mt-2"
-              >
-                {['breakfast', 'brunch', 'lunch', 'dinner', 'drinks'].map((option) => (
-                  <div key={option} className="flex items-center space-x-2 p-3 border rounded-lg hover:border-decigo-green cursor-pointer">
-                    <RadioGroupItem value={option} id={option} />
-                    <Label htmlFor={option} className="cursor-pointer capitalize flex-1">
-                      {option}
-                    </Label>
-                  </div>
-                ))}
-              </RadioGroup>
-              <p className="text-xs text-decigo-slate-600 mt-1">
-                Helps us find spots that match the time of day.
-              </p>
+          {/* Quick Benefits */}
+          <div className="grid grid-cols-3 gap-3 max-w-2xl mx-auto">
+            <div className="flex flex-col items-center gap-1 text-center">
+              <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
+                <Zap className="h-4 w-4 text-accent" />
+              </div>
+              <span className="text-xs font-medium text-foreground">Under 30s</span>
             </div>
-
-            {/* Date & Time */}
-            <div>
-              <DateTimePicker
-                value={formData.dateStart}
-                onChange={(value) => setFormData({ ...formData, dateStart: value })}
-              />
+            <div className="flex flex-col items-center gap-1 text-center">
+              <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
+                <Target className="h-4 w-4 text-accent" />
+              </div>
+              <span className="text-xs font-medium text-foreground">Auto-suggest</span>
             </div>
-
-            {/* Neighborhood */}
-            <div>
-              <Label htmlFor="neighborhood" className="text-decigo-deep-teal font-medium">
-                Neighborhood
-              </Label>
-              <PlacesAutocomplete
-                value={formData.neighborhood}
-                onChange={(value, placeData) => {
-                  if (placeData) {
-                    setFormData({
-                      ...formData,
-                      neighborhood: value,
-                      neighborhoodPlaceId: placeData.place_id,
-                      neighborhoodLat: placeData.lat,
-                      neighborhoodLng: placeData.lng,
-                    });
-                  } else {
-                    setFormData({
-                      ...formData,
-                      neighborhood: value,
-                    });
-                  }
-                }}
-              />
-              <p className="text-xs text-decigo-slate-600 mt-1">
-                Pick the area where your group is meeting.
-              </p>
+            <div className="flex flex-col items-center gap-1 text-center">
+              <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
+                <CheckCircle className="h-4 w-4 text-accent" />
+              </div>
+              <span className="text-xs font-medium text-foreground">One-tap vote</span>
             </div>
+          </div>
 
-            {/* Headcount */}
-            <div>
-              <Label htmlFor="headcount" className="text-decigo-deep-teal font-medium">
-                Group Size
-              </Label>
-              <Input
-                id="headcount"
-                type="number"
-                min="1"
-                value={formData.headcount}
-                onChange={(e) => setFormData({ ...formData, headcount: e.target.value })}
-                className="mt-1"
-              />
-              <p className="text-xs text-decigo-slate-600 mt-1">
-                We avoid places that can't fit your group size.
-              </p>
-            </div>
+          {/* What Everyone Will See Preview */}
+          <Card className="border-border bg-card max-w-2xl mx-auto">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base font-semibold">What everyone will see</CardTitle>
+              <CardDescription className="text-sm">
+                We'll show them {resultMode === 'top3' ? '3 great spots' : '~20 options'} matching your criteria. They tap to vote, you lock the winner.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <div className="p-2.5 bg-muted/50 rounded-lg flex items-center justify-between border border-border">
+                <span className="text-sm font-medium text-foreground">Cozy wine bar</span>
+                <span className="text-xs text-muted-foreground">$$</span>
+              </div>
+              <div className="p-2.5 bg-muted/50 rounded-lg flex items-center justify-between border border-border">
+                <span className="text-sm font-medium text-foreground">Casual taco spot</span>
+                <span className="text-xs text-muted-foreground">$</span>
+              </div>
+              <div className="p-2.5 bg-muted/50 rounded-lg flex items-center justify-between border border-border">
+                <span className="text-sm font-medium text-foreground">Italian bistro</span>
+                <span className="text-xs text-muted-foreground">$$$</span>
+              </div>
+            </CardContent>
+          </Card>
 
-            {/* Budget */}
-            <div>
-              <Label htmlFor="budget" className="text-decigo-deep-teal font-medium">
-                Budget
-              </Label>
-              <RadioGroup
-                value={formData.budgetBand}
-                onValueChange={(value) => setFormData({ ...formData, budgetBand: value })}
-                className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2"
-              >
-                {['$', '$$', '$$$', '$$$$'].map((budget) => (
-                  <div key={budget} className="flex items-center space-x-2 p-3 border rounded-lg hover:border-decigo-green cursor-pointer">
-                    <RadioGroupItem value={budget} id={`budget-${budget}`} />
-                    <Label htmlFor={`budget-${budget}`} className="cursor-pointer flex-1">
-                      {budget} {budget === '$' && 'Budget'}
-                      {budget === '$$' && 'Moderate'}
-                      {budget === '$$$' && 'Upscale'}
-                      {budget === '$$$$' && 'Luxury'}
-                    </Label>
-                  </div>
-                ))}
-              </RadioGroup>
-              <p className="text-xs text-decigo-slate-600 mt-1">
-                We match places to your price comfort zone.
-              </p>
-            </div>
+          {/* Try Example Button */}
+          <div className="flex justify-center">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={fillExamplePlan}
+              className="text-sm h-9"
+            >
+              <Sparkles className="mr-2 h-4 w-4" />
+              Try an example plan
+            </Button>
+          </div>
 
-            {/* Optional Notes */}
-            <div>
-              <Label htmlFor="notes" className="text-decigo-deep-teal font-medium">
-                Additional Notes (optional)
-              </Label>
-              <Textarea
-                id="notes"
-                placeholder="e.g., Vegetarian options, outdoor seating, quiet atmosphere"
-                value={formData.notesRaw}
-                onChange={(e) => setFormData({ ...formData, notesRaw: e.target.value })}
-                onBlur={generateChips}
-                className="mt-1"
-                rows={3}
-              />
-              {chips.length > 0 && (
-                <div className="flex flex-wrap gap-2 mt-2">
-                  {chips.map((chip) => (
-                    <Badge
-                      key={chip}
-                      variant="secondary"
-                      className="cursor-pointer"
-                      onClick={() => removeChip(chip)}
-                    >
-                      {chip}
-                      <X className="ml-1 h-3 w-3" />
-                    </Badge>
-                  ))}
+          {/* Main Form */}
+          <Card className="border-border bg-card max-w-2xl mx-auto">
+            <CardHeader className="pb-4">
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center text-xs font-bold text-accent">
+                  1
                 </div>
-              )}
-            </div>
-
-            {/* 5. Advanced Options - Collapsible */}
-            <Collapsible open={advancedOpen} onOpenChange={setAdvancedOpen}>
-              <CollapsibleTrigger className="flex items-center justify-between w-full py-2 text-sm font-semibold text-decigo-slate-600 hover:text-decigo-deep-teal">
-                <span>Advanced options</span>
-                <ChevronDown className={`h-4 w-4 transition-transform ${advancedOpen ? 'rotate-180' : ''}`} />
-              </CollapsibleTrigger>
-              <CollapsibleContent className="pt-4 space-y-4">
+                <CardTitle className="text-lg">Set the basics</CardTitle>
+              </div>
+              <CardDescription className="text-sm">Takes about 15 seconds</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleSubmit} className="space-y-5">
+                
+                {/* Occasion */}
                 <div>
-                  <Label className="text-decigo-deep-teal font-medium">
-                    Result Mode
+                  <Label htmlFor="daypart" className="text-sm font-medium text-foreground mb-2 block">
+                    Occasion
                   </Label>
                   <RadioGroup
-                    value={resultMode}
-                    onValueChange={(value: 'top3' | 'full20') => setResultMode(value)}
-                    className="space-y-3 mt-2"
+                    value={formData.daypart}
+                    onValueChange={(value) => setFormData({ ...formData, daypart: value })}
+                    className="grid grid-cols-2 sm:grid-cols-4 gap-2"
                   >
-                    <div className="flex items-start space-x-2 p-3 border rounded-lg">
-                      <RadioGroupItem value="top3" id="mode-top3" className="mt-1" />
-                      <div className="flex-1">
-                        <Label htmlFor="mode-top3" className="font-medium cursor-pointer">
-                          Show only the best 3 picks (recommended)
-                        </Label>
-                        <p className="text-xs text-decigo-slate-600 mt-1">
-                          Best for quick decisions
-                        </p>
-                      </div>
+                    <div>
+                      <RadioGroupItem value="breakfast" id="breakfast" className="peer sr-only" />
+                      <Label
+                        htmlFor="breakfast"
+                        className="flex items-center justify-center rounded-lg border-2 border-border bg-card p-2.5 hover:bg-accent/10 peer-data-[state=checked]:border-accent peer-data-[state=checked]:bg-accent/10 cursor-pointer transition-colors text-sm font-medium"
+                      >
+                        Breakfast
+                      </Label>
                     </div>
-                    <div className="flex items-start space-x-2 p-3 border rounded-lg">
-                      <RadioGroupItem value="full20" id="mode-full20" className="mt-1" />
-                      <div className="flex-1">
-                        <Label htmlFor="mode-full20" className="font-medium cursor-pointer">
-                          Show the full list of ~20 places
-                        </Label>
-                        <p className="text-xs text-decigo-slate-600 mt-1">
-                          Give your group more options to explore
-                        </p>
-                      </div>
+                    <div>
+                      <RadioGroupItem value="brunch" id="brunch" className="peer sr-only" />
+                      <Label
+                        htmlFor="brunch"
+                        className="flex items-center justify-center rounded-lg border-2 border-border bg-card p-2.5 hover:bg-accent/10 peer-data-[state=checked]:border-accent peer-data-[state=checked]:bg-accent/10 cursor-pointer transition-colors text-sm font-medium"
+                      >
+                        Brunch
+                      </Label>
+                    </div>
+                    <div>
+                      <RadioGroupItem value="lunch" id="lunch" className="peer sr-only" />
+                      <Label
+                        htmlFor="lunch"
+                        className="flex items-center justify-center rounded-lg border-2 border-border bg-card p-2.5 hover:bg-accent/10 peer-data-[state=checked]:border-accent peer-data-[state=checked]:bg-accent/10 cursor-pointer transition-colors text-sm font-medium"
+                      >
+                        Lunch
+                      </Label>
+                    </div>
+                    <div>
+                      <RadioGroupItem value="dinner" id="dinner" className="peer sr-only" />
+                      <Label
+                        htmlFor="dinner"
+                        className="flex items-center justify-center rounded-lg border-2 border-border bg-card p-2.5 hover:bg-accent/10 peer-data-[state=checked]:border-accent peer-data-[state=checked]:bg-accent/10 cursor-pointer transition-colors text-sm font-medium"
+                      >
+                        Dinner
+                      </Label>
                     </div>
                   </RadioGroup>
+                  <p className="text-xs text-muted-foreground mt-1.5">
+                    Helps us find spots that match the time of day
+                  </p>
                 </div>
-              </CollapsibleContent>
-            </Collapsible>
 
-            {/* 6. Benefit Summary above button */}
-            <div className="pt-4 border-t">
-              <p className="text-sm text-decigo-slate-600 text-center mb-4">
-                We'll generate the top picks and create a voting link you can share with your group.
+                {/* Date & Time */}
+                <div>
+                  <Label className="text-sm font-medium text-foreground mb-2 block">
+                    Date & Time
+                  </Label>
+                  <DateTimePicker
+                    value={formData.dateStart}
+                    onChange={(value) => setFormData({ ...formData, dateStart: value })}
+                  />
+                  <p className="text-xs text-muted-foreground mt-1.5">
+                    When are you planning to meet?
+                  </p>
+                </div>
+
+                {/* Neighborhood */}
+                <div>
+                  <Label htmlFor="neighborhood" className="text-sm font-medium text-foreground mb-2 block">
+                    Neighborhood
+                  </Label>
+                  <PlacesAutocomplete
+                    onChange={(place: any) => {
+                      if (typeof place === 'string') {
+                        setFormData({ ...formData, neighborhood: place });
+                      } else {
+                        setFormData({
+                          ...formData,
+                          neighborhood: place.description,
+                          neighborhoodPlaceId: place.place_id,
+                        });
+                      }
+                    }}
+                    value={formData.neighborhood}
+                    placeholder="e.g., Downtown Seattle"
+                  />
+                  <p className="text-xs text-muted-foreground mt-1.5">
+                    Pick the area where your group is meeting
+                  </p>
+                </div>
+
+                {/* Group Size */}
+                <div>
+                  <Label htmlFor="headcount" className="text-sm font-medium text-foreground mb-2 block">
+                    Group Size
+                  </Label>
+                  <Input
+                    id="headcount"
+                    type="number"
+                    min="1"
+                    value={formData.headcount}
+                    onChange={(e) => setFormData({ ...formData, headcount: e.target.value })}
+                    className="border-border rounded-lg"
+                  />
+                  <p className="text-xs text-muted-foreground mt-1.5">
+                    We avoid places that can't fit your group
+                  </p>
+                </div>
+
+                {/* Budget */}
+                <div>
+                  <Label htmlFor="budget" className="text-sm font-medium text-foreground mb-2 block">
+                    Budget
+                  </Label>
+                  <RadioGroup
+                    value={formData.budgetBand}
+                    onValueChange={(value) => setFormData({ ...formData, budgetBand: value })}
+                    className="grid grid-cols-4 gap-2"
+                  >
+                    <div>
+                      <RadioGroupItem value="$" id="budget-1" className="peer sr-only" />
+                      <Label
+                        htmlFor="budget-1"
+                        className="flex items-center justify-center rounded-lg border-2 border-border bg-card p-2.5 hover:bg-accent/10 peer-data-[state=checked]:border-accent peer-data-[state=checked]:bg-accent/10 cursor-pointer transition-colors text-sm font-medium"
+                      >
+                        $
+                      </Label>
+                    </div>
+                    <div>
+                      <RadioGroupItem value="$$" id="budget-2" className="peer sr-only" />
+                      <Label
+                        htmlFor="budget-2"
+                        className="flex items-center justify-center rounded-lg border-2 border-border bg-card p-2.5 hover:bg-accent/10 peer-data-[state=checked]:border-accent peer-data-[state=checked]:bg-accent/10 cursor-pointer transition-colors text-sm font-medium"
+                      >
+                        $$
+                      </Label>
+                    </div>
+                    <div>
+                      <RadioGroupItem value="$$$" id="budget-3" className="peer sr-only" />
+                      <Label
+                        htmlFor="budget-3"
+                        className="flex items-center justify-center rounded-lg border-2 border-border bg-card p-2.5 hover:bg-accent/10 peer-data-[state=checked]:border-accent peer-data-[state=checked]:bg-accent/10 cursor-pointer transition-colors text-sm font-medium"
+                      >
+                        $$$
+                      </Label>
+                    </div>
+                    <div>
+                      <RadioGroupItem value="$$$$" id="budget-4" className="peer sr-only" />
+                      <Label
+                        htmlFor="budget-4"
+                        className="flex items-center justify-center rounded-lg border-2 border-border bg-card p-2.5 hover:bg-accent/10 peer-data-[state=checked]:border-accent peer-data-[state=checked]:bg-accent/10 cursor-pointer transition-colors text-sm font-medium"
+                      >
+                        $$$$
+                      </Label>
+                    </div>
+                  </RadioGroup>
+                  <p className="text-xs text-muted-foreground mt-1.5">
+                    We match places to your price comfort zone
+                  </p>
+                </div>
+
+                {/* Notes */}
+                <div>
+                  <Label htmlFor="notes" className="text-sm font-medium text-foreground mb-2 block">
+                    Notes (optional)
+                  </Label>
+                  <Textarea
+                    id="notes"
+                    value={formData.notesRaw}
+                    onChange={(e) => setFormData({ ...formData, notesRaw: e.target.value })}
+                    placeholder="e.g., vegetarian friendly, not too loud, outdoor seating"
+                    className="border-border rounded-lg min-h-[70px]"
+                  />
+                  <p className="text-xs text-muted-foreground mt-1.5">
+                    Any preferences or requirements
+                  </p>
+                </div>
+
+                {/* Advanced Options */}
+                <Collapsible open={advancedOpen} onOpenChange={setAdvancedOpen}>
+                  <CollapsibleTrigger asChild>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      className="w-full flex items-center justify-between p-2.5 hover:bg-accent/10 rounded-lg text-sm"
+                    >
+                      <span className="font-medium text-foreground">Advanced options</span>
+                      <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform ${advancedOpen ? 'transform rotate-180' : ''}`} />
+                    </Button>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="pt-3 space-y-3">
+                    <div>
+                      <Label className="text-sm font-medium text-foreground mb-2 block">
+                        Result mode
+                      </Label>
+                      <RadioGroup
+                        value={resultMode}
+                        onValueChange={(value) => setResultMode(value as 'top3' | 'full20')}
+                        className="space-y-2"
+                      >
+                        <div className="flex items-start space-x-2 p-3 rounded-lg border-2 border-border bg-card hover:bg-accent/5">
+                          <RadioGroupItem value="top3" id="mode-top3" className="mt-0.5" />
+                          <Label htmlFor="mode-top3" className="flex-1 cursor-pointer">
+                            <div className="text-sm font-medium text-foreground">Show only the best 3 picks</div>
+                            <div className="text-xs text-muted-foreground mt-0.5">Recommended – faster decisions</div>
+                          </Label>
+                        </div>
+                        <div className="flex items-start space-x-2 p-3 rounded-lg border-2 border-border bg-card hover:bg-accent/5">
+                          <RadioGroupItem value="full20" id="mode-full20" className="mt-0.5" />
+                          <Label htmlFor="mode-full20" className="flex-1 cursor-pointer">
+                            <div className="text-sm font-medium text-foreground">Show the full list of ~20 places</div>
+                            <div className="text-xs text-muted-foreground mt-0.5">More options to choose from</div>
+                          </Label>
+                        </div>
+                      </RadioGroup>
+                    </div>
+                  </CollapsibleContent>
+                </Collapsible>
+
+                {/* Benefit Summary */}
+                <div className="bg-accent/10 border border-accent/20 rounded-lg p-3">
+                  <p className="text-sm text-foreground flex items-start gap-2">
+                    <Info className="h-4 w-4 mt-0.5 flex-shrink-0 text-accent" />
+                    <span>
+                      We'll generate the top picks and create a voting link you can share with your group.
+                    </span>
+                  </p>
+                </div>
+
+                {/* Submit Button */}
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full btn-primary h-11 text-base"
+                >
+                  {loading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Creating your plan...
+                    </>
+                  ) : (
+                    'Create Plan'
+                  )}
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+
+          {/* What Happens Next */}
+          <Card className="border-border bg-card max-w-2xl mx-auto">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base font-semibold">What happens next</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ol className="space-y-2.5 text-sm text-foreground">
+                <li className="flex gap-2.5">
+                  <span className="font-semibold text-accent flex-shrink-0">1.</span>
+                  <span>We generate top suggestions in your area</span>
+                </li>
+                <li className="flex gap-2.5">
+                  <span className="font-semibold text-accent flex-shrink-0">2.</span>
+                  <span>You get a link to share with your group</span>
+                </li>
+                <li className="flex gap-2.5">
+                  <span className="font-semibold text-accent flex-shrink-0">3.</span>
+                  <span>They vote with one tap</span>
+                </li>
+                <li className="flex gap-2.5">
+                  <span className="font-semibold text-accent flex-shrink-0">4.</span>
+                  <span>You lock the winner and everyone sees the plan</span>
+                </li>
+              </ol>
+              <p className="text-xs text-muted-foreground mt-3 pt-3 border-t border-border">
+                We don't track anyone. Nothing is shared publicly.
               </p>
-              
-              <Button
-                type="submit"
-                disabled={loading}
-                className="w-full h-12 btn-primary text-base"
-              >
-                {loading ? "Creating your plan..." : "Create Plan"}
-              </Button>
-            </div>
-          </form>
-        </Card>
-
-        {/* 8. What Happens Next Box */}
-        <Card className="p-6 bg-white">
-          <h3 className="text-lg font-bold text-decigo-deep-teal mb-4">
-            What happens next?
-          </h3>
-          <ol className="space-y-3 text-sm text-decigo-slate-700">
-            <li className="flex gap-3">
-              <span className="font-bold text-decigo-green">1.</span>
-              <span>We generate top suggestions in your area.</span>
-            </li>
-            <li className="flex gap-3">
-              <span className="font-bold text-decigo-green">2.</span>
-              <span>You get a link to share with your group.</span>
-            </li>
-            <li className="flex gap-3">
-              <span className="font-bold text-decigo-green">3.</span>
-              <span>They vote with one tap.</span>
-            </li>
-            <li className="flex gap-3">
-              <span className="font-bold text-decigo-green">4.</span>
-              <span>You lock the winner and everyone sees the plan.</span>
-            </li>
-          </ol>
-          
-          {/* 9. Privacy Reassurance */}
-          <p className="text-xs text-decigo-slate-500 text-center mt-6 pt-4 border-t">
-            We don't track anyone. Nothing is shared publicly.
-          </p>
-        </Card>
+            </CardContent>
+          </Card>
+        </div>
       </div>
       <Footer />
-    </div>
+    </>
   );
 };
 
