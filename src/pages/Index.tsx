@@ -31,7 +31,7 @@ const Index = () => {
               
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">
                 <span className="text-brand-primary">Plans in minutes,</span>{" "}
-                <span className="text-brand-success">not message storms.</span>
+                <span className="bg-gradient-to-r from-brand-highlight to-brand-success bg-clip-text text-transparent">not message storms.</span>
               </h1>
               
               <p className="text-lg sm:text-xl text-foreground max-w-2xl mx-auto leading-relaxed">
