@@ -227,7 +227,7 @@ const NewPlan = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Daypart */}
             <div>
-              <Label htmlFor="daypart" className="text-brand-primary font-medium">
+              <Label htmlFor="daypart" className="text-brand-primary font-semibold">
                 Occasion
               </Label>
               <RadioGroup
@@ -265,7 +265,7 @@ const NewPlan = () => {
 
             {/* Neighborhood */}
             <div>
-              <Label htmlFor="neighborhood" className="text-brand-primary font-medium">
+              <Label htmlFor="neighborhood" className="text-brand-primary font-semibold">
                 Neighborhood
               </Label>
               <PlacesAutocomplete
@@ -295,7 +295,7 @@ const NewPlan = () => {
 
             {/* Headcount */}
             <div>
-              <Label htmlFor="headcount" className="text-brand-primary font-medium">
+              <Label htmlFor="headcount" className="text-brand-primary font-semibold">
                 Group Size
               </Label>
               <Input
@@ -313,7 +313,7 @@ const NewPlan = () => {
 
             {/* Budget */}
             <div>
-              <Label htmlFor="budget" className="text-brand-primary font-medium">
+              <Label htmlFor="budget" className="text-brand-primary font-semibold">
                 Budget
               </Label>
               <RadioGroup
@@ -333,14 +333,14 @@ const NewPlan = () => {
                   </div>
                 ))}
               </RadioGroup>
-              <p className="text-xs text-decigo-slate-600 mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 We match places to your price comfort zone.
               </p>
             </div>
 
             {/* Optional Notes */}
             <div>
-              <Label htmlFor="notes" className="text-brand-primary font-medium">
+              <Label htmlFor="notes" className="text-brand-primary font-semibold">
                 Additional Notes (optional)
               </Label>
               <Textarea
@@ -377,7 +377,7 @@ const NewPlan = () => {
               </CollapsibleTrigger>
               <CollapsibleContent className="pt-4 space-y-4">
                 <div>
-                  <Label className="text-brand-primary font-medium mb-2 block">
+                  <Label className="text-brand-primary font-semibold mb-2 block">
                     Result Mode
                   </Label>
                   <RadioGroup
@@ -388,10 +388,10 @@ const NewPlan = () => {
                     <div className="flex items-start space-x-2 p-3 border rounded-lg">
                       <RadioGroupItem value="top3" id="mode-top3" className="mt-1" />
                       <div className="flex-1">
-                        <Label htmlFor="mode-top3" className="font-medium cursor-pointer">
+                        <Label htmlFor="mode-top3" className="font-semibold cursor-pointer">
                           Best 3 picks (recommended)
                         </Label>
-                        <p className="text-xs text-decigo-slate-600 mt-1">
+                        <p className="text-xs text-muted-foreground mt-1">
                           Quick decisions
                         </p>
                       </div>
@@ -399,10 +399,10 @@ const NewPlan = () => {
                     <div className="flex items-start space-x-2 p-3 border rounded-lg">
                       <RadioGroupItem value="full20" id="mode-full20" className="mt-1" />
                       <div className="flex-1">
-                        <Label htmlFor="mode-full20" className="font-medium cursor-pointer">
+                        <Label htmlFor="mode-full20" className="font-semibold cursor-pointer">
                           Full list (~20 places)
                         </Label>
-                        <p className="text-xs text-decigo-slate-600 mt-1">
+                        <p className="text-xs text-muted-foreground mt-1">
                           More options
                         </p>
                       </div>
@@ -443,7 +443,7 @@ const NewPlan = () => {
               >
                 {loading ? "Creating your plan..." : "Create Plan & Get Link"}
               </Button>
-              <p className="text-xs text-decigo-slate-500 text-center mt-3">
+              <p className="text-xs text-muted-foreground text-center mt-3">
                 Free • No login • Link copied automatically
               </p>
             </div>

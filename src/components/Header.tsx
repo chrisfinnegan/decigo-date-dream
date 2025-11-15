@@ -21,7 +21,7 @@ export const Header = () => {
         <div className="flex items-center gap-4">
           <button 
             onClick={scrollToIntake}
-            className="hidden md:block text-brand-teal hover:text-brand-accent font-medium text-sm no-underline transition-colors"
+            className="hidden md:block text-brand-cyan hover:text-brand-dark-teal font-semibold text-sm no-underline transition-colors"
           >
             How it works
           </button>
