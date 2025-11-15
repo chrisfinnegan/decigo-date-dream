@@ -223,21 +223,21 @@ export const RankingInterface = ({
                         </div>
                       )}
 
-                      {/* Map Buttons */}
-                      <div className="flex gap-2 flex-wrap pt-2">
+                      {/* Map Buttons - Mobile Optimized */}
+                      <div className="grid grid-cols-2 gap-2 pt-2">
                         <button
                           onClick={() => openInMaps(option, 'apple')}
-                          className="btn-secondary text-xs h-9 px-4 flex items-center min-h-[44px]"
+                          className="btn-secondary text-xs h-10 px-3 flex items-center justify-center gap-1"
                         >
-                          <MapPin className="w-3 h-3 mr-1" />
-                          Apple Maps
+                          <MapPin className="w-3 h-3" />
+                          <span className="hidden sm:inline">Apple</span> Maps
                         </button>
                         <button
                           onClick={() => openInMaps(option, 'google')}
-                          className="btn-secondary text-xs h-9 px-4 flex items-center min-h-[44px]"
+                          className="btn-secondary text-xs h-10 px-3 flex items-center justify-center gap-1"
                         >
-                          <MapPin className="w-3 h-3 mr-1" />
-                          Google Maps
+                          <MapPin className="w-3 h-3" />
+                          <span className="hidden sm:inline">Google</span> Maps
                         </button>
                       </div>
                     </div>
