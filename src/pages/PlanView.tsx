@@ -9,6 +9,7 @@ import { CountdownTimer } from "@/components/CountdownTimer";
 import { analytics } from "@/lib/analytics";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { EmptyPlanState } from "@/components/EmptyPlanState";
 
 interface Option {
   id: string;
@@ -47,6 +48,7 @@ const PlanView = () => {
   const [voting, setVoting] = useState(false);
   const [showAll, setShowAll] = useState(false);
   const [hasManagementAccess, setHasManagementAccess] = useState(false);
+  const [myVotes, setMyVotes] = useState<string[]>([]);
 
   useEffect(() => {
     if (!planId) return;
@@ -311,6 +313,13 @@ const PlanView = () => {
     }
   };
 
+  const toggleShowAll = () => {
+    setShowAll(!showAll);
+    if (planId) {
+      localStorage.setItem(`plan_${planId}_mode`, !showAll ? 'full20' : 'top3');
+    }
+  };
+
   const getMapThumbnail = (option: Option) => {
     if (option.photo_ref) {
       const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
@@ -379,15 +388,7 @@ const PlanView = () => {
   }
 
   if (!plan) {
-    return (
-      <div className="min-h-screen bg-background">
-        <Header />
-        <div className="p-4 flex items-center justify-center min-h-[60vh]">
-          <p className="text-muted-foreground">Plan not found</p>
-        </div>
-        <Footer />
-      </div>
-    );
+    return <EmptyPlanState />;
   }
 
   const totalVotes = Object.values(votesByOption).reduce((a, b) => a + b, 0);
@@ -396,11 +397,19 @@ const PlanView = () => {
     <div className="min-h-screen bg-background">
       <Header />
       <div className="p-4 max-w-4xl mx-auto space-y-6 py-8">
-        <div>
-          <h1 className="text-3xl font-bold text-primary mb-2">
-            {plan.daypart.charAt(0).toUpperCase() + plan.daypart.slice(1)} {plan.neighborhood && `in ${plan.neighborhood}`}
+        {/* Title and Subtitle */}
+        <div className="text-center space-y-2 mb-6">
+          <h1 className="text-3xl font-bold text-primary">
+            Help choose the plan
           </h1>
-          <div className="flex gap-2 flex-wrap">
+          <p className="text-base text-muted-foreground max-w-xl mx-auto">
+            Your friend is deciding on a place in {plan.neighborhood}. Tap your favorites below — this takes under 30 seconds.
+          </p>
+        </div>
+
+        <div>
+          <div className="flex gap-2 flex-wrap mb-4">
+            <span className="chip">{plan.daypart.charAt(0).toUpperCase() + plan.daypart.slice(1)}</span>
             <span className="chip">{plan.budget_band}</span>
             <span className="chip">{plan.headcount} people</span>
             {plan.two_stop && <span className="chip">Two-stop</span>}
@@ -415,20 +424,15 @@ const PlanView = () => {
                   Progress: {totalVotes}/{plan.threshold} votes to lock
                 </p>
                 {totalVotes >= plan.threshold - 1 && totalVotes < plan.threshold && (
-                  <Badge className="bg-error text-white">Almost there!</Badge>
+                  <Badge variant="destructive" className="animate-pulse">
+                    One more vote locks it!
+                  </Badge>
                 )}
               </div>
-              <div className="flex items-center justify-between">
-                <p className="text-sm text-muted-foreground">
-                  Deadline: {new Date(plan.decision_deadline).toLocaleDateString('en-US', { 
-                    month: 'short', 
-                    day: 'numeric',
-                    hour: 'numeric',
-                    minute: '2-digit'
-                  })}
-                </p>
-                <CountdownTimer deadline={plan.decision_deadline} />
+              <div className="text-sm text-muted-foreground">
+                Voting closes when this hits zero or when your organizer locks the plan.
               </div>
+              <CountdownTimer deadline={plan.decision_deadline} />
             </div>
 
             <div className="pt-2 border-t border-border">
@@ -439,7 +443,7 @@ const PlanView = () => {
               <div className="space-y-2">
                 <button
                   onClick={copyShareLink}
-                  className="btn-secondary w-full flex items-center justify-center gap-2"
+                  className="btn-secondary w-full flex items-center justify-center gap-2 min-h-[44px]"
                 >
                   <Copy className="w-4 h-4" />
                   Copy voting link
@@ -447,7 +451,7 @@ const PlanView = () => {
                 {hasManagementAccess && (
                   <button
                     onClick={goToManagement}
-                    className="btn-primary w-full flex items-center justify-center gap-2"
+                    className="btn-primary w-full flex items-center justify-center gap-2 min-h-[44px]"
                   >
                     Manage Plan
                   </button>
@@ -457,11 +461,38 @@ const PlanView = () => {
           </div>
         </div>
 
+        {/* Voting Instructions */}
+        <div className="card bg-primary/5 border-primary/10">
+          <p className="text-sm text-primary font-medium text-center">
+            💡 Select one or more places below to cast your vote
+          </p>
+        </div>
+
+        {/* Options List */}
         <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-semibold text-primary">
+              {showAll ? "All Options" : "Best matches for your group"}
+            </h2>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={toggleShowAll}
+              className="text-xs"
+            >
+              {showAll ? "Back to top picks" : `Show all ~${options.length} options`}
+            </Button>
+          </div>
+
           {options.map((option) => {
             const thumbnail = getMapThumbnail(option);
+            const hasVoted = myVotes.includes(option.id);
+            const voteCount = votesByOption[option.id] || 0;
             return (
-              <div key={option.id} className="card">
+              <div 
+                key={option.id} 
+                className={`card transition-all ${hasVoted ? 'border-primary border-2 bg-primary/5' : ''} ${voting ? 'opacity-50' : ''}`}
+              >
                 <div className="flex flex-col md:flex-row gap-4">
                   {thumbnail ? (
                     <img
@@ -482,12 +513,16 @@ const PlanView = () => {
                   <div className="flex-1 space-y-3">
                     <div>
                       <div className="flex items-start justify-between mb-1">
-                        <h3 className="font-bold text-primary text-lg">
+                        <h3 className="font-bold text-primary text-lg flex items-center gap-2">
                           {option.rank}. {option.name}
+                          {hasVoted && <Badge className="bg-primary text-white text-xs">✓ Your pick</Badge>}
                         </h3>
                         <span className="chip text-xs">{option.price_band}</span>
                       </div>
-                      <p className="text-sm text-muted-foreground">{option.address}</p>
+                      <p className="text-sm text-muted-foreground flex items-center gap-1">
+                        <MapPin className="w-3 h-3" />
+                        {option.address}
+                      </p>
                     </div>
                     
                     <div>
@@ -504,14 +539,14 @@ const PlanView = () => {
                     <div className="flex gap-2 flex-wrap pt-2">
                       <button
                         onClick={() => openInMaps(option, 'apple')}
-                        className="btn-primary text-xs h-9 px-4 flex items-center"
+                        className="btn-secondary text-xs h-9 px-4 flex items-center min-h-[44px]"
                       >
                         <MapPin className="w-3 h-3 mr-1" />
                         Open in Maps
                       </button>
                       <button
                         onClick={() => openInMaps(option, 'google')}
-                        className="btn-secondary text-xs h-9 px-4 flex items-center"
+                        className="btn-secondary text-xs h-9 px-4 flex items-center min-h-[44px]"
                       >
                         <ExternalLink className="w-3 h-3 mr-1" />
                         Google Maps
@@ -519,13 +554,18 @@ const PlanView = () => {
                     </div>
 
                     <Button
-                      className="w-full btn-primary"
+                      className="w-full btn-primary min-h-[44px]"
                       onClick={() => handleVote(option.id)}
                       disabled={voting}
                     >
-                      Vote for {option.name}
-                      {votesByOption[option.id] && ` (${votesByOption[option.id]} votes)`}
+                      {hasVoted ? `✓ Voted for ${option.name}` : `Vote for ${option.name}`}
+                      {voteCount > 0 && ` (${voteCount} ${voteCount === 1 ? 'vote' : 'votes'})`}
                     </Button>
+                    {hasVoted && (
+                      <p className="text-xs text-center text-muted-foreground">
+                        You can change your vote until the plan is locked
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>

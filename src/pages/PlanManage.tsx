@@ -252,7 +252,10 @@ const PlanManage = () => {
         <Card>
           <CardHeader>
             <div className="flex justify-between items-center">
-              <CardTitle>Plan Details</CardTitle>
+              <div>
+                <CardTitle>Plan Details</CardTitle>
+                <CardDescription className="mt-1">Adjust basics if plans change</CardDescription>
+              </div>
               {!plan.locked && !plan.canceled && (
                 <Button 
                   variant={isEditing ? "outline" : "default"}

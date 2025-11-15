@@ -15,14 +15,22 @@ const Index = () => {
         <h1 className="text-5xl font-bold text-decigo-deep-teal mb-4">
           Plan Together, Decide Together
         </h1>
-        <p className="text-xl text-decigo-slate-700">
+        <p className="text-xl text-decigo-slate-700 mb-2">
           Create group plans, share options, and let everyone vote on where to go.
         </p>
-        <Link to="/new">
-          <Button className="btn-primary h-12 px-8 text-base">
-            Create a Plan
-          </Button>
-        </Link>
+        <p className="text-lg text-decigo-slate-600 mb-4">
+          Perfect for picking tonight's dinner spot, team drinks, birthdays, or weekend plans.
+        </p>
+        <p className="text-sm text-decigo-slate-500 mb-6">
+          Set up a plan in under 30 seconds. No login required.
+        </p>
+        <div className="flex flex-col items-center gap-3">
+          <Link to="/new">
+            <Button className="btn-primary h-12 px-8 text-base">
+              Create a Plan
+            </Button>
+          </Link>
+        </div>
       </div>
     </div>
   );

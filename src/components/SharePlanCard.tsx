@@ -81,9 +81,12 @@ export const SharePlanCard = ({ planId, state: initialState }: SharePlanCardProp
 
   const copyShareLink = async () => {
     const shareUrl = getShareUrl();
+    const shareMessage = plan 
+      ? `Help me choose ${plan.daypart === 'dinner' ? 'tonight\'s' : 'a'} spot! Vote here: ${shareUrl}`
+      : shareUrl;
     
     try {
-      await navigator.clipboard.writeText(shareUrl);
+      await navigator.clipboard.writeText(shareMessage);
       
       // Track share
       const { analytics } = await import('@/lib/analytics');
@@ -94,8 +97,8 @@ export const SharePlanCard = ({ planId, state: initialState }: SharePlanCardProp
       });
       
       toast({
-        title: "Link copied!",
-        description: "Share this link to let others vote",
+        title: "Share message copied!",
+        description: "Paste it into your group chat",
       });
     } catch (error) {
       console.error('Failed to copy to clipboard:', error);
@@ -219,6 +222,19 @@ export const SharePlanCard = ({ planId, state: initialState }: SharePlanCardProp
 
   return (
     <div className="card space-y-4">
+      {/* Organizer coaching text */}
+      {state === 'created' && plan && (
+        <div className="bg-decigo-green/10 border border-decigo-green/20 rounded-lg p-3 mb-4">
+          <p className="text-sm text-decigo-deep-teal font-medium mb-1">
+            📣 Share this link with your group and ask them to vote.
+          </p>
+          <p className="text-xs text-decigo-slate-700">
+            Once you have at least {plan.threshold} votes, you can lock the plan.
+            {plan.decision_deadline && ` Locks automatically at ${new Date(plan.decision_deadline).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })} or when you're ready.`}
+          </p>
+        </div>
+      )}
+
       <div className="space-y-2">
         <div className="flex items-start justify-between">
           <h3 className="font-bold text-lg text-primary">{getTitle()}</h3>
@@ -252,7 +268,7 @@ export const SharePlanCard = ({ planId, state: initialState }: SharePlanCardProp
           </Button>
         ) : (
           <Button onClick={() => window.location.href = `/p/${planId}`} className="flex-1 btn-primary">
-            Vote now
+            Open voting page
           </Button>
         )}
         <Button onClick={shareCard} variant="outline" className="btn-secondary">
