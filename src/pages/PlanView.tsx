@@ -516,7 +516,7 @@ const PlanView = () => {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-semibold text-primary">
-              {showAll ? "All Options" : "Best matches for your group"}
+              {showAll ? "All Options" : "Best matches for you"}
             </h2>
             <Button
               variant="ghost"
