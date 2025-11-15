@@ -41,7 +41,7 @@ const Index = () => {
               </p>
 
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-                <Link to="/new">
+                <Link to="/new" onClick={() => window.scrollTo(0, 0)}>
                   <Button className="btn-primary h-12 px-8 text-base shadow-lg hover:shadow-xl transition-shadow">
                     {returningUser ? 'Create your next plan' : 'Create a plan—free'}
                   </Button>
@@ -190,7 +190,7 @@ const Index = () => {
               <p className="text-sm text-muted-foreground mb-5">
                 Create your first plan in under 30 seconds. No signup, no spam.
               </p>
-              <Link to="/new">
+              <Link to="/new" onClick={() => window.scrollTo(0, 0)}>
                 <Button className="btn-primary h-12 px-8 text-base shadow-lg hover:shadow-xl transition-shadow">
                   Create a plan now
                 </Button>
