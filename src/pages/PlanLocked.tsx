@@ -102,9 +102,11 @@ const PlanLocked = () => {
 
   const openInMaps = (provider: 'apple' | 'google') => {
     if (!option) return;
+    // Use place name for better search results
+    const searchQuery = `${option.name}, ${option.address}`;
     const url = provider === 'apple'
-      ? `maps://maps.apple.com/?q=${encodeURIComponent(option.address)}`
-      : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(option.address)}`;
+      ? `maps://maps.apple.com/?q=${encodeURIComponent(searchQuery)}`
+      : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(searchQuery)}`;
     window.open(url, '_blank');
   };
 

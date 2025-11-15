@@ -133,7 +133,7 @@ async function fetchPlaceDetails(apiKey: string, placeId: string) {
   };
 }
 
-// Mock fallback
+// Mock fallback with better why_it_fits generation
 function generateMockOptions(daypart: string, neighborhood: string, budget: string, count: number) {
   const venues = {
     drinks: ['Bar', 'Lounge', 'Wine Bar', 'Cocktail Bar', 'Pub', 'Rooftop Bar'],
@@ -152,6 +152,13 @@ function generateMockOptions(daypart: string, neighborhood: string, budget: stri
     'The outdoor seating is great',
   ];
 
+  const whyItFitsTemplates = [
+    `Perfect for ${daypart} in ${neighborhood}. Popular local spot with ${budget} pricing.`,
+    `Great ${daypart} venue matching your ${budget} budget in ${neighborhood}. Highly rated.`,
+    `Ideal for ${daypart}. Located in ${neighborhood} with ${budget} price range.`,
+    `Top choice for ${daypart} in ${neighborhood}. Matches your ${budget} budget perfectly.`,
+  ];
+
   const baseCoords = { lat: 40.7359, lng: -74.0014 };
   
   return Array.from({ length: count }, (_, i) => ({
@@ -159,7 +166,7 @@ function generateMockOptions(daypart: string, neighborhood: string, budget: stri
     address: `${100 + i * 10} ${neighborhood} St, New York, NY 10014`,
     lat: baseCoords.lat + (Math.random() - 0.5) * 0.01,
     lng: baseCoords.lng + (Math.random() - 0.5) * 0.01,
-    why_it_fits: `Perfect for ${daypart} in ${neighborhood}. Matches your ${budget} budget and group size.`,
+    why_it_fits: whyItFitsTemplates[i % whyItFitsTemplates.length],
     tip: tips[i % tips.length],
   }));
 }
@@ -219,8 +226,8 @@ serve(async (req) => {
     // Calculate decision deadline (default: 24 hours from now)
     const decision_deadline = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
     
-    // Calculate threshold (min of 4 or group size)
-    const threshold = Math.min(4, headcount);
+    // Calculate threshold - ensure it's at least 1 vote
+    const threshold = Math.max(1, Math.min(4, headcount));
 
     // Create the plan
     const { data: plan, error } = await supabaseClient
@@ -323,7 +330,8 @@ serve(async (req) => {
       const candidate = selectedCandidates[i];
       let optionData = { ...candidate };
 
-      if (mode === 'top3' && useGooglePlaces && candidate.place_id) {
+      // Always try to fetch details if we have a place_id (for both top3 and full20)
+      if (useGooglePlaces && candidate.place_id) {
         const apiKey = Deno.env.get('GOOGLE_MAPS_API_KEY');
         if (apiKey) {
           const detailsCacheKey = `details:${candidate.place_id}`;
@@ -343,6 +351,11 @@ serve(async (req) => {
             optionData = { ...optionData, ...details };
           }
         }
+      }
+
+      // Generate fallback why_it_fits if missing
+      if (!optionData.why_it_fits) {
+        optionData.why_it_fits = `Great ${daypart} spot in ${neighborhood} matching your ${budget_band} budget.`;
       }
 
       optionsToInsert.push({

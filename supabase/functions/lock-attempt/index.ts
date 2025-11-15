@@ -77,14 +77,17 @@ serve(async (req) => {
       );
     }
 
-    // Calculate threshold
-    const threshold = plan.threshold || Math.min(4, plan.headcount);
+    // Calculate threshold - ensure it's at least 1
+    const threshold = plan.threshold || Math.max(1, Math.min(4, plan.headcount));
 
-    // Get votes by option
+    // Get votes - count unique voters, not total votes
     const { data: votes } = await supabaseClient
       .from('votes')
-      .select('option_id')
+      .select('option_id, voter_hash')
       .eq('plan_id', planId);
+
+    // Count unique voters
+    const uniqueVoters = new Set(votes?.map(v => v.voter_hash) || []).size;
 
     const votesByOption = votes?.reduce((acc: Record<string, number>, vote) => {
       acc[vote.option_id] = (acc[vote.option_id] || 0) + 1;
@@ -101,10 +104,10 @@ serve(async (req) => {
       }
     }
 
-    // Check if we should lock
+    // Check if we should lock - based on unique voters reaching threshold
     const now = new Date();
     const deadline = new Date(plan.decision_deadline);
-    const shouldLock = (maxVotes >= threshold) || (now >= deadline && winningOptionId);
+    const shouldLock = (uniqueVoters >= threshold) || (now >= deadline && winningOptionId);
 
     if (shouldLock && winningOptionId) {
       // Lock the plan (with idempotency check)
@@ -121,7 +124,7 @@ serve(async (req) => {
         console.error('Error locking plan:', lockError);
       }
 
-      console.log('Plan locked:', planId, 'Option:', winningOptionId, 'Votes:', maxVotes);
+      console.log('Plan locked:', planId, 'Option:', winningOptionId, 'Votes:', maxVotes, 'Unique Voters:', uniqueVoters);
 
       return new Response(
         JSON.stringify({ 
