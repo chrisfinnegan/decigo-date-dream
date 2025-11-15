@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Card } from "@/components/ui/card";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -15,20 +15,21 @@ import { DateTimePicker } from "@/components/DateTimePicker";
 import { analytics } from "@/lib/analytics";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { X, CheckCircle, Zap, Users } from "lucide-react";
+import { X, ChevronDown } from "lucide-react";
 
 const NewPlan = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [resultMode, setResultMode] = useState<'top3' | 'full20'>('top3');
   const [chips, setChips] = useState<string[]>([]);
+  const [advancedOpen, setAdvancedOpen] = useState(false);
   const [formData, setFormData] = useState({
     dateStart: "",
     neighborhood: "",
     neighborhoodPlaceId: "",
     neighborhoodLat: 0,
     neighborhoodLng: 0,
-    headcount: "2",
+    headcount: "4",
     budgetBand: "$$",
     daypart: "dinner",
     twoStop: false,
@@ -50,6 +51,26 @@ const NewPlan = () => {
 
   const removeChip = (chip: string) => {
     setChips(chips.filter(c => c !== chip));
+  };
+
+  const fillExamplePlan = () => {
+    const today = new Date();
+    today.setHours(19, 0, 0, 0);
+    
+    setFormData({
+      ...formData,
+      daypart: "dinner",
+      dateStart: today.toISOString(),
+      neighborhood: "Downtown",
+      headcount: "4",
+      budgetBand: "$$",
+      notesRaw: "Casual spot, vegetarian friendly, not too loud",
+    });
+    
+    toast({
+      title: "Example loaded!",
+      description: "Feel free to adjust any details",
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -122,60 +143,56 @@ const NewPlan = () => {
         },
       });
 
-      if (error) throw error;
-
-      if (!data?.planId) {
-        throw new Error('No plan ID returned from server');
+      if (error) {
+        console.error('Plan creation error:', error);
+        throw error;
       }
 
-      // Track successful plan creation
+      if (!data?.success || !data?.planId) {
+        throw new Error('Invalid response from server');
+      }
+
+      const planId = data.planId;
+      const token = data.token;
+
+      // Store management token
+      localStorage.setItem(`plan_${planId}_token`, token);
+
+      // Track successful creation
       analytics.track('plan_created', {
-        plan_id: data.planId,
+        plan_id: planId,
         daypart: formData.daypart,
         neighborhood: formData.neighborhood,
-        headcount: parseInt(formData.headcount),
-        budget_band: formData.budgetBand,
-        result_mode: resultMode,
-        two_stop: formData.twoStop,
-        has_notes: !!formData.notesRaw,
-        chips_count: chips.length,
-      });
-
-      analytics.trackIntakeComplete({
-        daypart: formData.daypart,
-        neighborhood: formData.neighborhood,
-        headcount: parseInt(formData.headcount),
+        headcount: formData.headcount,
         budget_band: formData.budgetBand,
         result_mode: resultMode,
       });
 
-      if (data.magicToken) {
-        localStorage.setItem(`plan_${data.planId}_token`, data.magicToken);
-      }
-
-      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-      const shareUrl = `${supabaseUrl}/functions/v1/share?id=${data.planId}`;
-
-      toast({
-        title: "Plan created!",
-        description: "Share link copied to clipboard.",
-      });
-
-      // Copy share link to clipboard
+      // Generate share URL
+      const shareUrl = `${window.location.origin}/p/${planId}`;
+      
+      // Copy to clipboard
       try {
         await navigator.clipboard.writeText(shareUrl);
-      } catch (clipboardError) {
-        console.error('Failed to copy to clipboard:', clipboardError);
+        toast({
+          title: "Plan created! Link copied",
+          description: "Share it with your group to start voting",
+        });
+      } catch (clipErr) {
+        console.warn('Clipboard copy failed:', clipErr);
+        toast({
+          title: "Plan created!",
+          description: "Share the link to start voting",
+        });
       }
 
-      localStorage.setItem(`plan_${data.planId}_mode`, resultMode);
-      navigate(`/p/${data.planId}`);
-    } catch (error) {
+      // Navigate to plan view
+      navigate(`/p/${planId}`);
+    } catch (error: any) {
       console.error('Error creating plan:', error);
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
       toast({
-        title: "Something went wrong creating your plan",
-        description: `${errorMessage}. Please check your connection and try again.`,
+        title: "Could not create plan",
+        description: "Something went wrong creating your plan. Try again?",
         variant: "destructive",
       });
     } finally {
@@ -183,213 +200,332 @@ const NewPlan = () => {
     }
   };
 
-  const scrollToIntake = () => {
-    const intakeSection = document.getElementById('intake-section');
-    if (intakeSection) {
-      intakeSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  const handleStartPlanning = () => {
-    analytics.track('hero_start_planning');
-    scrollToIntake();
-  };
-
-  const handleWatchDemo = () => {
-    analytics.track('hero_watch_demo');
-    toast({
-      title: "Coming soon",
-      description: "Demo video will be available shortly",
-    });
-  };
-
   return (
     <div className="min-h-screen bg-decigo-cream">
       <Header />
-      
-      {/* Hero Section */}
-      <section className="bg-decigo-cream py-16 px-4 relative overflow-hidden">
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 opacity-10">
-          <div className="brand-gradient w-full h-full rounded-full blur-3xl" />
-        </div>
+      <div className="max-w-3xl mx-auto px-4 py-8 space-y-8">
         
-        <div className="max-w-4xl mx-auto text-center relative z-10">
-          <h1 className="text-4xl md:text-5xl font-bold text-decigo-deep-teal mb-6 leading-tight">
-            Plans in minutes, not message storms.
+        {/* 1. Explanation Panel */}
+        <div className="text-center space-y-4">
+          <h1 className="text-4xl md:text-5xl font-bold text-decigo-deep-teal">
+            Create a quick plan for your group
           </h1>
-          
-          <p className="text-xl text-decigo-slate-700 mb-8 max-w-2xl mx-auto">
-            AI-powered shortlists tailored to your time, place, budget, and vibe.
+          <p className="text-xl text-decigo-slate-700 max-w-2xl mx-auto">
+            Tell us when and where. We'll suggest the best spots and your group votes to decide.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <button onClick={handleStartPlanning} className="btn-primary">
-              Start planning
-            </button>
-            <button onClick={handleWatchDemo} className="btn-secondary">
-              See a 30-sec demo
-            </button>
-          </div>
-          
           {/* Benefits Row */}
-          <div className="grid md:grid-cols-3 gap-6 mt-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6">
             <div className="flex flex-col items-center text-center">
-              <CheckCircle className="w-10 h-10 text-decigo-teal mb-3" />
-              <h3 className="font-bold text-decigo-deep-teal mb-2">Three great options</h3>
-              <p className="text-sm text-decigo-slate-700">Curated picks that match your vibe</p>
+              <div className="text-2xl mb-2">⚡</div>
+              <p className="text-sm font-medium text-decigo-slate-700">Takes under 30 seconds</p>
             </div>
             <div className="flex flex-col items-center text-center">
-              <Zap className="w-10 h-10 text-decigo-green mb-3" />
-              <h3 className="font-bold text-decigo-deep-teal mb-2">Tap to vote & lock</h3>
-              <p className="text-sm text-decigo-slate-700">Quick consensus without the back-and-forth</p>
+              <div className="text-2xl mb-2">🤖</div>
+              <p className="text-sm font-medium text-decigo-slate-700">We suggest places automatically</p>
             </div>
             <div className="flex flex-col items-center text-center">
-              <Users className="w-10 h-10 text-decigo-lime mb-3" />
-              <h3 className="font-bold text-decigo-deep-teal mb-2">Out of the thread, still connected</h3>
-              <p className="text-sm text-decigo-slate-700">Everyone votes on their own time</p>
+              <div className="text-2xl mb-2">👥</div>
+              <p className="text-sm font-medium text-decigo-slate-700">Your group votes with one tap</p>
             </div>
           </div>
         </div>
-      </section>
-      
-      {/* Intake Section */}
-      <section id="intake-section" className="py-12 px-4 relative z-20">
-        <div className="max-w-md mx-auto card">
-          <h2 className="text-2xl font-bold text-decigo-deep-teal mb-6 text-center">Create Your Plan</h2>
+
+        {/* 2. What Your Friends Will See Preview */}
+        <Card className="p-6 bg-white border-2 border-decigo-green/20">
+          <h3 className="text-lg font-bold text-decigo-deep-teal mb-3">
+            What your friends will see
+          </h3>
+          <p className="text-sm text-decigo-slate-700 mb-4">
+            We'll show them {resultMode === 'top3' ? '3' : '~20'} great spots in your chosen area. They tap to vote, and you lock in the winner.
+          </p>
           
+          {/* Preview Option Rows */}
+          <div className="space-y-2">
+            <div className="p-3 border border-decigo-slate-200 rounded-lg bg-decigo-cream/50">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-decigo-deep-teal">Cozy wine bar</p>
+                  <p className="text-xs text-decigo-slate-600">$$ • Quiet atmosphere</p>
+                </div>
+                <div className="w-6 h-6 rounded-full border-2 border-decigo-green"></div>
+              </div>
+            </div>
+            <div className="p-3 border border-decigo-slate-200 rounded-lg bg-decigo-cream/50">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-decigo-deep-teal">Casual taco spot</p>
+                  <p className="text-xs text-decigo-slate-600">$ • Lively vibes</p>
+                </div>
+                <div className="w-6 h-6 rounded-full border-2 border-decigo-slate-300"></div>
+              </div>
+            </div>
+            {resultMode === 'top3' && (
+              <div className="p-3 border border-decigo-slate-200 rounded-lg bg-decigo-cream/50">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-decigo-deep-teal">Italian bistro</p>
+                    <p className="text-xs text-decigo-slate-600">$$$ • Romantic setting</p>
+                  </div>
+                  <div className="w-6 h-6 rounded-full border-2 border-decigo-slate-300"></div>
+                </div>
+              </div>
+            )}
+          </div>
+        </Card>
+
+        {/* Try Example Button */}
+        <div className="flex justify-center">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={fillExamplePlan}
+            className="border-decigo-green text-decigo-deep-teal hover:bg-decigo-green/10"
+          >
+            Try an example plan
+          </Button>
+        </div>
+
+        {/* Main Form Card */}
+        <Card className="p-6 md:p-8">
+          {/* 3. Step Label */}
+          <div className="mb-6">
+            <h2 className="text-sm font-semibold text-decigo-slate-600 mb-4">
+              Step 1: Set the basics (15 seconds)
+            </h2>
+          </div>
+
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="daypart" className="text-decigo-deep-teal font-medium">Occasion</Label>
-              <Select
+            {/* Daypart */}
+            <div>
+              <Label htmlFor="daypart" className="text-decigo-deep-teal font-medium">
+                Occasion
+              </Label>
+              <RadioGroup
                 value={formData.daypart}
                 onValueChange={(value) => setFormData({ ...formData, daypart: value })}
+                className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2"
               >
-                <SelectTrigger className="rounded-xl border-decigo-slate-300">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="breakfast">Breakfast</SelectItem>
-                  <SelectItem value="brunch">Brunch</SelectItem>
-                  <SelectItem value="lunch">Lunch</SelectItem>
-                  <SelectItem value="dinner">Dinner</SelectItem>
-                  <SelectItem value="drinks">Drinks</SelectItem>
-                </SelectContent>
-              </Select>
+                {['breakfast', 'lunch', 'dinner', 'drinks'].map((option) => (
+                  <div key={option} className="flex items-center space-x-2 p-3 border rounded-lg hover:border-decigo-green cursor-pointer">
+                    <RadioGroupItem value={option} id={option} />
+                    <Label htmlFor={option} className="cursor-pointer capitalize flex-1">
+                      {option}
+                    </Label>
+                  </div>
+                ))}
+              </RadioGroup>
+              <p className="text-xs text-decigo-slate-600 mt-1">
+                Helps us find spots that match the time of day.
+              </p>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="neighborhood" className="text-decigo-deep-teal font-medium">Neighborhood</Label>
+            {/* Date & Time */}
+            <div>
+              <Label htmlFor="dateStart" className="text-decigo-deep-teal font-medium">
+                Date & Time
+              </Label>
+              <DateTimePicker
+                value={formData.dateStart}
+                onChange={(value) => setFormData({ ...formData, dateStart: value })}
+              />
+            </div>
+
+            {/* Neighborhood */}
+            <div>
+              <Label htmlFor="neighborhood" className="text-decigo-deep-teal font-medium">
+                Neighborhood
+              </Label>
               <PlacesAutocomplete
                 value={formData.neighborhood}
-                onChange={(value, placeData) => setFormData({ 
-                  ...formData, 
-                  neighborhood: value,
-                  neighborhoodPlaceId: placeData?.place_id || '',
-                  neighborhoodLat: placeData?.lat || 0,
-                  neighborhoodLng: placeData?.lng || 0,
-                })}
-                placeholder="e.g., SoHo, Brooklyn"
+                onChange={(value, placeData) => {
+                  if (placeData) {
+                    setFormData({
+                      ...formData,
+                      neighborhood: value,
+                      neighborhoodPlaceId: placeData.place_id,
+                      neighborhoodLat: placeData.lat,
+                      neighborhoodLng: placeData.lng,
+                    });
+                  } else {
+                    setFormData({
+                      ...formData,
+                      neighborhood: value,
+                    });
+                  }
+                }}
               />
+              <p className="text-xs text-decigo-slate-600 mt-1">
+                Pick the area where your group is meeting.
+              </p>
             </div>
 
-            <DateTimePicker
-              value={formData.dateStart}
-              onChange={(value) => setFormData({ ...formData, dateStart: value })}
-            />
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="headcount" className="text-decigo-deep-teal font-medium">Headcount</Label>
-                <Select
-                  value={formData.headcount}
-                  onValueChange={(value) => setFormData({ ...formData, headcount: value })}
-                >
-                  <SelectTrigger className="rounded-xl border-decigo-slate-300">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {[2, 3, 4, 5, 6, 7, 8].map(n => (
-                      <SelectItem key={n} value={n.toString()}>{n} people</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="budgetBand" className="text-decigo-deep-teal font-medium">Budget</Label>
-                <Select
-                  value={formData.budgetBand}
-                  onValueChange={(value) => setFormData({ ...formData, budgetBand: value })}
-                >
-                  <SelectTrigger className="rounded-xl border-decigo-slate-300">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="$">$ (Budget-friendly)</SelectItem>
-                    <SelectItem value="$$">$$ (Moderate)</SelectItem>
-                    <SelectItem value="$$$">$$$ (Upscale)</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between py-2">
-              <Label htmlFor="twoStop" className="text-decigo-deep-teal font-medium">Two-stop itinerary</Label>
-              <Switch
-                id="twoStop"
-                checked={formData.twoStop}
-                onCheckedChange={(checked) => setFormData({ ...formData, twoStop: checked })}
+            {/* Headcount */}
+            <div>
+              <Label htmlFor="headcount" className="text-decigo-deep-teal font-medium">
+                Group Size
+              </Label>
+              <Input
+                id="headcount"
+                type="number"
+                min="1"
+                value={formData.headcount}
+                onChange={(e) => setFormData({ ...formData, headcount: e.target.value })}
+                className="mt-1"
               />
+              <p className="text-xs text-decigo-slate-600 mt-1">
+                We avoid places that can't fit your group size.
+              </p>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="notesRaw" className="text-decigo-deep-teal font-medium">Anything else?</Label>
+            {/* Budget */}
+            <div>
+              <Label htmlFor="budget" className="text-decigo-deep-teal font-medium">
+                Budget
+              </Label>
+              <RadioGroup
+                value={formData.budgetBand}
+                onValueChange={(value) => setFormData({ ...formData, budgetBand: value })}
+                className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2"
+              >
+                {['$', '$$', '$$$', '$$$$'].map((budget) => (
+                  <div key={budget} className="flex items-center space-x-2 p-3 border rounded-lg hover:border-decigo-green cursor-pointer">
+                    <RadioGroupItem value={budget} id={`budget-${budget}`} />
+                    <Label htmlFor={`budget-${budget}`} className="cursor-pointer flex-1">
+                      {budget} {budget === '$' && 'Budget'}
+                      {budget === '$$' && 'Moderate'}
+                      {budget === '$$$' && 'Upscale'}
+                      {budget === '$$$$' && 'Luxury'}
+                    </Label>
+                  </div>
+                ))}
+              </RadioGroup>
+              <p className="text-xs text-decigo-slate-600 mt-1">
+                We match places to your price comfort zone.
+              </p>
+            </div>
+
+            {/* Optional Notes */}
+            <div>
+              <Label htmlFor="notes" className="text-decigo-deep-teal font-medium">
+                Additional Notes (optional)
+              </Label>
               <Textarea
-                id="notesRaw"
-                placeholder="Any preferences, dietary restrictions, or special requests..."
+                id="notes"
+                placeholder="e.g., Vegetarian options, outdoor seating, quiet atmosphere"
                 value={formData.notesRaw}
                 onChange={(e) => setFormData({ ...formData, notesRaw: e.target.value })}
                 onBlur={generateChips}
-                rows={4}
-                className="rounded-xl border-decigo-slate-300 focus:ring-decigo-green"
+                className="mt-1"
+                rows={3}
               />
               {chips.length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-2">
-                  {chips.map((chip, i) => (
-                    <Badge key={i} className="chip gap-1">
+                  {chips.map((chip) => (
+                    <Badge
+                      key={chip}
+                      variant="secondary"
+                      className="cursor-pointer"
+                      onClick={() => removeChip(chip)}
+                    >
                       {chip}
-                      <X className="w-3 h-3 cursor-pointer" onClick={() => removeChip(chip)} />
+                      <X className="ml-1 h-3 w-3" />
                     </Badge>
                   ))}
                 </div>
               )}
             </div>
 
-            <div className="space-y-2">
-              <Label className="text-decigo-deep-teal font-medium">Result Mode</Label>
-              <RadioGroup value={resultMode} onValueChange={(v) => setResultMode(v as 'top3' | 'full20')}>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="top3" id="top3" />
-                  <Label htmlFor="top3" className="font-normal cursor-pointer text-decigo-slate-700">
-                    Top 3 (Recommended) - Quick decision
+            {/* 5. Advanced Options - Collapsible */}
+            <Collapsible open={advancedOpen} onOpenChange={setAdvancedOpen}>
+              <CollapsibleTrigger className="flex items-center justify-between w-full py-2 text-sm font-semibold text-decigo-slate-600 hover:text-decigo-deep-teal">
+                <span>Advanced options</span>
+                <ChevronDown className={`h-4 w-4 transition-transform ${advancedOpen ? 'rotate-180' : ''}`} />
+              </CollapsibleTrigger>
+              <CollapsibleContent className="pt-4 space-y-4">
+                <div>
+                  <Label className="text-decigo-deep-teal font-medium">
+                    Result Mode
                   </Label>
+                  <RadioGroup
+                    value={resultMode}
+                    onValueChange={(value: 'top3' | 'full20') => setResultMode(value)}
+                    className="space-y-3 mt-2"
+                  >
+                    <div className="flex items-start space-x-2 p-3 border rounded-lg">
+                      <RadioGroupItem value="top3" id="mode-top3" className="mt-1" />
+                      <div className="flex-1">
+                        <Label htmlFor="mode-top3" className="font-medium cursor-pointer">
+                          Show only the best 3 picks (recommended)
+                        </Label>
+                        <p className="text-xs text-decigo-slate-600 mt-1">
+                          Best for quick decisions
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-start space-x-2 p-3 border rounded-lg">
+                      <RadioGroupItem value="full20" id="mode-full20" className="mt-1" />
+                      <div className="flex-1">
+                        <Label htmlFor="mode-full20" className="font-medium cursor-pointer">
+                          Show the full list of ~20 places
+                        </Label>
+                        <p className="text-xs text-decigo-slate-600 mt-1">
+                          Give your group more options to explore
+                        </p>
+                      </div>
+                    </div>
+                  </RadioGroup>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="full20" id="full20" />
-                  <Label htmlFor="full20" className="font-normal cursor-pointer text-decigo-slate-700">
-                    Full List (~20) - More options
-                  </Label>
-                </div>
-              </RadioGroup>
-            </div>
+              </CollapsibleContent>
+            </Collapsible>
 
-            <Button type="submit" className="btn-primary w-full h-12 text-base" disabled={loading}>
-              {loading ? "Creating..." : "Create Plan"}
-            </Button>
+            {/* 6. Benefit Summary above button */}
+            <div className="pt-4 border-t">
+              <p className="text-sm text-decigo-slate-600 text-center mb-4">
+                We'll generate the top picks and create a voting link you can share with your group.
+              </p>
+              
+              <Button
+                type="submit"
+                disabled={loading}
+                className="w-full h-12 btn-primary text-base"
+              >
+                {loading ? "Creating your plan..." : "Create Plan"}
+              </Button>
+            </div>
           </form>
-        </div>
-      </section>
-      
+        </Card>
+
+        {/* 8. What Happens Next Box */}
+        <Card className="p-6 bg-white">
+          <h3 className="text-lg font-bold text-decigo-deep-teal mb-4">
+            What happens next?
+          </h3>
+          <ol className="space-y-3 text-sm text-decigo-slate-700">
+            <li className="flex gap-3">
+              <span className="font-bold text-decigo-green">1.</span>
+              <span>We generate top suggestions in your area.</span>
+            </li>
+            <li className="flex gap-3">
+              <span className="font-bold text-decigo-green">2.</span>
+              <span>You get a link to share with your group.</span>
+            </li>
+            <li className="flex gap-3">
+              <span className="font-bold text-decigo-green">3.</span>
+              <span>They vote with one tap.</span>
+            </li>
+            <li className="flex gap-3">
+              <span className="font-bold text-decigo-green">4.</span>
+              <span>You lock the winner and everyone sees the plan.</span>
+            </li>
+          </ol>
+          
+          {/* 9. Privacy Reassurance */}
+          <p className="text-xs text-decigo-slate-500 text-center mt-6 pt-4 border-t">
+            We don't track your friends. Nothing is shared publicly.
+          </p>
+        </Card>
+      </div>
       <Footer />
     </div>
   );
