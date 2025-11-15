@@ -188,7 +188,7 @@ const PlanLocked = () => {
       <div className="p-4 max-w-4xl mx-auto space-y-6 py-8">
         {/* Celebration Header */}
         <div className="text-center space-y-2">
-          <div className="inline-block bg-brand-success text-white px-4 py-2 rounded-2xl mb-2 font-semibold">
+          <div className="inline-block bg-brand-success text-white px-4 py-2 rounded-2xl mb-2 font-semibold border border-brand-success shadow-sm">
             🎉 Locked!
           </div>
           <h1 className="text-4xl font-bold text-brand-primary">
@@ -277,7 +277,7 @@ const PlanLocked = () => {
           </div>
         </div>
 
-        <div className="card bg-brand-success/10">
+        <div className="card border-2 border-brand-success bg-card">
           <h3 className="text-lg font-bold text-brand-primary mb-2">Share the final plan</h3>
           <p className="text-sm text-foreground mb-4">
             Copy this link to share with anyone who hasn't seen the final plan

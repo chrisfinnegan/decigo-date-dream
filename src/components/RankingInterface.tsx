@@ -127,8 +127,7 @@ export const RankingInterface = ({
         </div>
       </div>
 
-      {/* Instructions */}
-      <div className="card bg-accent/10 border-accent/20">
+      <div className="card bg-card border-2 border-brand-teal/30 shadow-sm">
         <div className="space-y-2">
           <p className="text-sm font-medium text-primary">How it works:</p>
           <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">

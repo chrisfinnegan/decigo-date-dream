@@ -17,11 +17,10 @@ const Index = () => {
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted">
-        {/* Hero Section - Compact */}
+      <div className="min-h-screen bg-background">{/* Hero Section - Compact */}
         <section className="relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-accent/10 rounded-full blur-3xl -z-10" />
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl -z-10" />
+          <div className="absolute top-0 right-0 w-96 h-96 bg-brand-teal/5 rounded-full blur-3xl -z-10" />
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-brand-cyan/5 rounded-full blur-3xl -z-10" />
           
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-10">
             <div className="text-center space-y-5 max-w-3xl mx-auto">
@@ -182,7 +181,7 @@ const Index = () => {
         {/* Final CTA - Compact */}
         <section className="py-10 px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto">
-            <Card className="p-6 sm:p-8 text-center border-accent/20 bg-gradient-to-br from-card to-muted">
+            <Card className="p-6 sm:p-8 text-center border-2 border-primary/20 bg-card shadow-md">{/* Rest stays the same */}
               <div className="text-3xl mb-3">😫 → 😎</div>
               <h2 className="text-2xl sm:text-3xl font-bold text-primary mb-2">
                 Skip the 32-message debate
