@@ -142,7 +142,14 @@ export const SharePlanCard = ({ planId, state: initialState }: SharePlanCardProp
   const downloadICS = () => {
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
     const icsUrl = `${supabaseUrl}/functions/v1/ics?planId=${planId}`;
-    window.open(icsUrl, '_blank');
+    
+    // Create a temporary link and trigger download
+    const link = document.createElement('a');
+    link.href = icsUrl;
+    link.download = 'decigo-plan.ics';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const getTitle = () => {

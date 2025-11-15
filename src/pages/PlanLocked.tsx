@@ -97,7 +97,15 @@ const PlanLocked = () => {
       optionId: option?.id,
     });
     const baseUrl = import.meta.env.VITE_SUPABASE_URL || '';
-    window.open(`${baseUrl}/functions/v1/ics?planId=${planId}`, '_blank');
+    const icsUrl = `${baseUrl}/functions/v1/ics?planId=${planId}`;
+    
+    // Create a temporary link and trigger download
+    const link = document.createElement('a');
+    link.href = icsUrl;
+    link.download = 'decigo-plan.ics';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const openInMaps = (provider: 'apple' | 'google') => {
