@@ -211,7 +211,7 @@ const NewPlan = () => {
             Create your plan
           </h1>
           <p className="text-base text-decigo-slate-600 max-w-xl mx-auto">
-            Fill in the basics below and we'll generate top spots for your group to vote on.
+            Fill in the basics below and we'll generate top spots for everyone to vote on.
           </p>
         </div>
 
@@ -282,7 +282,7 @@ const NewPlan = () => {
                 }}
               />
               <p className="text-xs text-decigo-slate-600 mt-1">
-                Pick the area where your group is meeting.
+                Pick the area where you're meeting.
               </p>
             </div>
 
@@ -300,7 +300,7 @@ const NewPlan = () => {
                 className="mt-1"
               />
               <p className="text-xs text-decigo-slate-600 mt-1">
-                We avoid places that can't fit your group size.
+                We avoid places that can't fit your party size.
               </p>
             </div>
 

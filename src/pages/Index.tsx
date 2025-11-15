@@ -132,7 +132,7 @@ const Index = () => {
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-6">
               <h2 className="text-2xl sm:text-3xl font-bold text-primary mb-1">
-                Built for any group
+                Built for any occasion
               </h2>
               <p className="text-sm text-muted-foreground">
                 Friends, dates, coworkers, or family
