@@ -8,10 +8,10 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%; /* Pure white */
+    --background: 240 4% 97%; /* #F5F5F7 */
     --foreground: 215 16% 41%; /* #334155 */
 
-    --card: 0 0% 100%;
+    --card: 0 0% 100%; /* White cards on subtle background */
     --card-foreground: 215 16% 41%;
 
     --popover: 0 0% 100%;
@@ -20,10 +20,10 @@ All colors MUST be HSL.
     --primary: 195 75% 20%; /* #0C4A5A */
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 0 0% 98%;
+    --secondary: 240 4% 95%; /* Slightly darker than background */
     --secondary-foreground: 195 75% 20%;
 
-    --muted: 0 0% 96%;
+    --muted: 240 4% 94%; /* Subtle muted tone */
     --muted-foreground: 215 16% 41%;
 
     --accent: 184 80% 36%; /* #119DA4 */
@@ -32,8 +32,8 @@ All colors MUST be HSL.
     --destructive: 3 82% 57%; /* #E53935 */
     --destructive-foreground: 0 0% 100%;
 
-    --border: 214 32% 83%; /* #CBD5E1 */
-    --input: 214 32% 83%;
+    --border: 214 32% 88%; /* Softer border for subtle background */
+    --input: 214 32% 88%;
     --ring: 148 74% 71%; /* #6EE28E */
 
     --radius: 1rem;
