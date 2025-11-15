@@ -37,13 +37,13 @@ const Index = () => {
               </h1>
               
               <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
-                No more endless back-and-forth. We suggest spots, everyone votes, winner locked—under a minute.
+                No more endless back-and-forth. We suggest spots, everyone votes, winner locked in under a minute.
               </p>
 
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
                 <Link to="/new" onClick={() => window.scrollTo(0, 0)}>
                   <Button className="btn-primary h-12 px-8 text-base shadow-lg hover:shadow-xl transition-shadow">
-                    {returningUser ? 'Create your next plan' : 'Create a plan—free'}
+                    {returningUser ? 'Create your next plan' : 'Create a plan for free'}
                   </Button>
                 </Link>
               </div>

@@ -132,7 +132,7 @@ export const RankingInterface = ({
         <div className="space-y-2">
           <p className="text-sm font-medium text-primary">How it works:</p>
           <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
-            <li>Drag options to reorder them (or use the arrow buttons)</li>
+            <li>Use the arrow buttons to reorder your choices</li>
             <li>Your #1 choice gets the most weight</li>
             <li>Everyone's rankings are combined to pick the winner</li>
           </ul>

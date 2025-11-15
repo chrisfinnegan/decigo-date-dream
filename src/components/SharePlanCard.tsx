@@ -160,9 +160,9 @@ export const SharePlanCard = ({ planId, state: initialState }: SharePlanCardProp
 
     switch (state) {
       case 'locked':
-        return lockedOption ? `${lockedOption.name} — ${startTime}` : 'Plan Locked';
+        return lockedOption ? `${lockedOption.name} at ${startTime}` : 'Plan Locked';
       case 'nearlock':
-        return `${voteCount}/${plan.threshold} voted — one more to lock`;
+        return `${voteCount}/${plan.threshold} voted, one more to lock`;
       case 'scheduled':
         const weekday = dateStart.toLocaleDateString('en-US', { weekday: 'long' });
         return `Vote for ${weekday} night`;
