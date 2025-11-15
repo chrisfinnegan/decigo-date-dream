@@ -13,7 +13,7 @@ export const Header = () => {
   };
 
   return (
-    <header className="bg-background border-b border-border px-4 h-[69px] overflow-visible">
+    <header className="bg-background px-4 h-[69px] overflow-visible shadow-sm">
       <div className="max-w-7xl mx-auto flex items-center justify-between h-full">
         <Link to="/" className="flex items-center">
           <img src="/brand/logo-name.png" alt="Decigo" className="h-9 w-auto" />
