@@ -151,7 +151,7 @@ const PlanLocked = () => {
             🎉 Locked!
           </div>
           <h1 className="text-4xl font-bold text-decigo-deep-teal">
-            You're going to {option.name}!
+            You're going to <span className="brand-gradient bg-clip-text text-transparent">{option.name}</span>!
           </h1>
           <p className="text-decigo-slate-700 text-lg">
             On {new Date(plan.date_start).toLocaleDateString('en-US', {
