@@ -16,7 +16,7 @@ export const InstallPrompt = ({ onInstall, onDismiss }: InstallPromptProps) => {
             <div>
               <CardTitle className="text-lg flex items-center gap-2">
                 <Download className="w-5 h-5" />
-                Install Decigo
+                Install Clusive
               </CardTitle>
               <CardDescription className="mt-1">
                 Add to your home screen for quick access

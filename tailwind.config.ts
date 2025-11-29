@@ -14,29 +14,15 @@ export default {
     },
     extend: {
       fontFamily: {
-        poppins: ['Poppins', 'Inter', 'sans-serif'],
-        inter: ['Inter', 'sans-serif'],
+        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'SF Pro Text', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'],
+        inter: ['Inter', 'system-ui', 'sans-serif'],
       },
       colors: {
-        // Brand colors from logo (bolder, darker system)
-        'brand-primary': '#015F76', // Primary headings, app name
-        'brand-body': '#0D4659', // Default body text (darker)
-        'brand-muted': '#586679', // Helper text only
-        'brand-teal': '#17C3AF', // Accent highlights
-        'brand-cyan': '#0896A8', // Focus rings, accents
-        'brand-dark-teal': '#056079', // Hover states
-        'brand-success': '#69CC7F', // Success states
-        'brand-highlight': '#B3E340', // Special badges
-        
-        // Legacy colors (keeping for gradual migration)
-        'decigo-deep-teal': '#0C4A5A',
-        'decigo-teal': '#119DA4',
-        'decigo-green': '#6EE28E',
-        'decigo-lime': '#B7F464',
-        'decigo-cream': '#FFF8F2',
-        'decigo-slate-700': '#334155',
-        'decigo-slate-300': '#CBD5E1',
-        'decigo-error': '#E53935',
+        // Clusive Brand Colors - AI Social Infrastructure
+        'clusive-black': '#111111',      // Primary text & mark
+        'clusive-aqua': '#0096A0',       // Accent (primary buttons, links)
+        'clusive-border': '#E4E4E4',     // Subtle borders
+        'clusive-muted': '#717171',      // Muted/secondary text
         
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

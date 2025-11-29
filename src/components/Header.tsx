@@ -16,7 +16,7 @@ export const Header = () => {
     <header className="bg-background px-4 h-[69px] overflow-visible">
       <div className="max-w-7xl mx-auto flex items-center justify-between h-full">
         <Link to="/" className="flex items-center">
-          <img src="/brand/logo-name.png" alt="decigo" className="h-8 w-auto" />
+          <img src="/brand/logo-name.png" alt="Clusive" className="h-8 w-auto" />
         </Link>
         <div className="flex items-center gap-4">
           <Link to="/new">

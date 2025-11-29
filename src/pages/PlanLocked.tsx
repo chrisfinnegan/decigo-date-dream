@@ -121,7 +121,7 @@ const PlanLocked = () => {
     const text = encodeURIComponent(option.name);
     const location = encodeURIComponent(option.address || '');
     const details = encodeURIComponent(
-      option.why_it_fits || 'Planned with Decigo'
+      option.why_it_fits || 'Planned with Clusive'
     );
 
     const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${text}&dates=${dates}&details=${details}&location=${location}`;
@@ -326,12 +326,12 @@ const PlanLocked = () => {
 
         {/* Feedback Section */}
         <div className="card bg-muted/30">
-          <h3 className="text-lg font-bold text-brand-primary mb-2">How did it go?</h3>
+          <h3 className="text-lg font-semibold text-foreground mb-2">How did it go?</h3>
           <p className="text-sm text-muted-foreground mb-3">
-            We'd love to hear about your experience to help improve Decigo
+            We'd love to hear about your experience to help improve Clusive
           </p>
           <a 
-            href={`mailto:feedback@decigo.app?subject=Plan Feedback - ${planId}`}
+            href={`mailto:feedback@clusive.ai?subject=Plan Feedback - ${planId}`}
             className="btn-secondary w-full inline-block text-center"
           >
             Share Feedback

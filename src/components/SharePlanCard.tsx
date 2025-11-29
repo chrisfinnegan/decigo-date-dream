@@ -146,7 +146,7 @@ export const SharePlanCard = ({ planId, state: initialState }: SharePlanCardProp
     // Create a temporary link and trigger download
     const link = document.createElement('a');
     link.href = icsUrl;
-    link.download = 'decigo-plan.ics';
+    link.download = 'clusive-plan.ics';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -263,8 +263,8 @@ export const SharePlanCard = ({ planId, state: initialState }: SharePlanCardProp
         ))}
       </div>
 
-      <div className="text-xs text-muted-foreground">
-        decigo.ai
+      <div className="text-xs text-muted-foreground uppercase tracking-wider">
+        clusive.ai
       </div>
 
       <div className="flex gap-2">
