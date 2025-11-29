@@ -6,6 +6,7 @@ import { analytics } from "@/lib/analytics";
 import { Zap, Target, CheckCircle, Users, Clock, Shield } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { HeroWaveBackground } from "@/components/HeroWaveBackground";
 
 const Index = () => {
   useEffect(() => {
@@ -20,7 +21,8 @@ const Index = () => {
       <div className="min-h-screen bg-background">
         {/* Hero Section */}
         <section className="relative overflow-hidden bg-background">
-          <div className="max-w-[840px] mx-auto px-6 lg:px-10 pt-24 pb-20">
+          <HeroWaveBackground />
+          <div className="relative max-w-[840px] mx-auto px-6 lg:px-10 pt-24 pb-20">
             <div className="text-center space-y-8">
               {returningUser && (
                 <div className="inline-flex items-center gap-2 bg-secondary text-foreground px-3 py-1.5 rounded-full text-xs font-medium uppercase tracking-wider">
