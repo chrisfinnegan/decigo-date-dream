@@ -207,11 +207,14 @@ const NewPlan = () => {
         
         {/* Quick intro */}
         <div className="text-center space-y-3">
-          <h1 className="text-3xl md:text-4xl font-bold text-brand-primary">
+          <div className="uppercase text-xs tracking-[0.15em] text-muted-foreground font-medium mb-2">
+            AI Social Infrastructure
+          </div>
+          <h1 className="text-3xl md:text-4xl font-semibold text-foreground">
             Create your plan
           </h1>
           <p className="text-base text-muted-foreground max-w-xl mx-auto">
-            Fill in the basics below and we'll generate top spots for everyone to vote on.
+            Set the context. Clusive generates three curated options for your group to coordinate on.
           </p>
         </div>
 
@@ -227,7 +230,7 @@ const NewPlan = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Daypart */}
             <div>
-              <Label htmlFor="daypart" className="text-brand-primary font-semibold">
+              <Label htmlFor="daypart" className="text-foreground font-semibold">
                 Occasion
               </Label>
               <RadioGroup
@@ -265,7 +268,7 @@ const NewPlan = () => {
 
             {/* Neighborhood */}
             <div>
-              <Label htmlFor="neighborhood" className="text-brand-primary font-semibold">
+              <Label htmlFor="neighborhood" className="text-foreground font-semibold">
                 Neighborhood
               </Label>
               <PlacesAutocomplete
@@ -295,7 +298,7 @@ const NewPlan = () => {
 
             {/* Headcount */}
             <div>
-              <Label htmlFor="headcount" className="text-brand-primary font-semibold">
+              <Label htmlFor="headcount" className="text-foreground font-semibold">
                 Group Size
               </Label>
               <Input
@@ -313,7 +316,7 @@ const NewPlan = () => {
 
             {/* Budget */}
             <div>
-              <Label htmlFor="budget" className="text-brand-primary font-semibold">
+              <Label htmlFor="budget" className="text-foreground font-semibold">
                 Budget
               </Label>
               <RadioGroup
@@ -340,7 +343,7 @@ const NewPlan = () => {
 
             {/* Optional Notes */}
             <div>
-              <Label htmlFor="notes" className="text-brand-primary font-semibold">
+              <Label htmlFor="notes" className="text-foreground font-semibold">
                 Additional Notes (optional)
               </Label>
               <Textarea
@@ -371,13 +374,13 @@ const NewPlan = () => {
 
             {/* Advanced Options - Collapsible */}
             <Collapsible open={advancedOpen} onOpenChange={setAdvancedOpen}>
-              <CollapsibleTrigger className="flex items-center justify-between w-full py-2 text-sm font-semibold text-muted-foreground hover:text-brand-primary">
+              <CollapsibleTrigger className="flex items-center justify-between w-full py-2 text-sm font-semibold text-muted-foreground hover:text-primary">
                 <span>Advanced options</span>
                 <ChevronDown className={`h-4 w-4 transition-transform ${advancedOpen ? 'rotate-180' : ''}`} />
               </CollapsibleTrigger>
               <CollapsibleContent className="pt-4 space-y-4">
                 <div>
-                  <Label className="text-brand-primary font-semibold mb-2 block">
+                  <Label className="text-foreground font-semibold mb-2 block">
                     Result Mode
                   </Label>
                   <RadioGroup
