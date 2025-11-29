@@ -13,14 +13,14 @@ export const Header = () => {
   };
 
   return (
-    <header className="bg-background px-4 h-[69px] overflow-visible">
-      <div className="max-w-7xl mx-auto flex items-center justify-between h-full">
+    <header className="bg-background border-b border-border px-6 h-[72px] overflow-visible">
+      <div className="max-w-[840px] mx-auto flex items-center justify-between h-full">
         <Link to="/" className="flex items-center">
           <img src="/brand/logo-name.png" alt="Clusive" className="h-8 w-auto" />
         </Link>
         <div className="flex items-center gap-4">
           <Link to="/new">
-            <Button className="btn-primary text-sm h-9 px-4">
+            <Button className="h-10 px-6 text-[0.88rem]">
               {isPlanPage ? 'Create your own plan' : 'Start planning'}
             </Button>
           </Link>
