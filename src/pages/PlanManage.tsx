@@ -237,7 +237,7 @@ const PlanManage = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <div className="max-w-[840px] mx-auto px-6 py-12 space-y-8">
+      <div className="max-w-[960px] mx-auto px-6 py-12 space-y-8">
         <div>
           <h1 className="text-3xl font-semibold text-foreground mb-2">Manage Plan</h1>
           <div className="flex gap-2 flex-wrap">

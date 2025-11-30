@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useEffect } from "react";
 import { analytics } from "@/lib/analytics";
-import { Zap, Target, CheckCircle, Users, Clock, Shield } from "lucide-react";
+
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { HeroWaveBackground } from "@/components/HeroWaveBackground";
@@ -22,11 +22,10 @@ const Index = () => {
         {/* Hero Section - Full-width with centered content */}
         <section className="relative overflow-hidden bg-background">
           <HeroWaveBackground />
-          <div className="relative max-w-[840px] mx-auto px-6 pt-24 pb-20">
+          <div className="relative max-w-[960px] mx-auto px-6 pt-24 pb-20">
             <div className="text-center space-y-8">
               {returningUser && (
-                <div className="inline-flex items-center gap-2 bg-secondary text-foreground px-3 py-1.5 rounded-full text-xs font-medium uppercase tracking-wider">
-                  <span>👋</span>
+                <div className="inline-flex items-center bg-secondary text-foreground px-3 py-1.5 rounded-full text-xs font-medium uppercase tracking-wider">
                   Welcome back
                 </div>
               )}
@@ -66,7 +65,7 @@ const Index = () => {
 
         {/* How it Works - Full-width with centered content */}
         <section id="how-it-works" className="py-24 px-6 border-t border-border bg-background">
-          <div className="max-w-[840px] mx-auto">
+          <div className="max-w-[960px] mx-auto">
             <div className="text-center mb-20">
               <div className="uppercase text-[0.78rem] tracking-[0.15em] text-muted-foreground font-medium mb-4">
                 How Clusive Works
@@ -76,13 +75,10 @@ const Index = () => {
               </h2>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="space-y-5">
-                <div className="w-10 h-10 rounded-full bg-background border border-border flex items-center justify-center">
-                  <Zap className="h-4 w-4 text-primary" />
-                </div>
-                <div className="chip text-[0.7rem]">
-                  Step 1
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+              <div className="space-y-4">
+                <div className="text-[0.75rem] font-medium text-muted-foreground uppercase tracking-[0.12em]">
+                  1
                 </div>
                 <h3 className="text-[1rem] font-semibold text-foreground">Set the context</h3>
                 <p className="text-[0.88rem] text-muted-foreground leading-[1.7]">
@@ -90,12 +86,9 @@ const Index = () => {
                 </p>
               </div>
 
-              <div className="space-y-5">
-                <div className="w-10 h-10 rounded-full bg-background border border-border flex items-center justify-center">
-                  <Target className="h-4 w-4 text-primary" />
-                </div>
-                <div className="chip text-[0.7rem]">
-                  Step 2
+              <div className="space-y-4">
+                <div className="text-[0.75rem] font-medium text-muted-foreground uppercase tracking-[0.12em]">
+                  2
                 </div>
                 <h3 className="text-[1rem] font-semibold text-foreground">Get three options</h3>
                 <p className="text-[0.88rem] text-muted-foreground leading-[1.7]">
@@ -103,12 +96,9 @@ const Index = () => {
                 </p>
               </div>
 
-              <div className="space-y-5">
-                <div className="w-10 h-10 rounded-full bg-background border border-border flex items-center justify-center">
-                  <CheckCircle className="h-4 w-4 text-primary" />
-                </div>
-                <div className="chip text-[0.7rem]">
-                  Step 3
+              <div className="space-y-4">
+                <div className="text-[0.75rem] font-medium text-muted-foreground uppercase tracking-[0.12em]">
+                  3
                 </div>
                 <h3 className="text-[1rem] font-semibold text-foreground">Share and lock</h3>
                 <p className="text-[0.88rem] text-muted-foreground leading-[1.7]">
@@ -121,7 +111,7 @@ const Index = () => {
 
         {/* System Overview - 3 Column Grid */}
         <section className="py-24 px-6 border-t border-border bg-background">
-          <div className="max-w-[840px] mx-auto">
+          <div className="max-w-[960px] mx-auto">
             <div className="text-center mb-20">
               <div className="uppercase text-[0.78rem] tracking-[0.15em] text-muted-foreground font-medium mb-4">
                 System Overview
@@ -158,7 +148,7 @@ const Index = () => {
 
         {/* Share Card Section */}
         <section className="py-24 px-6 border-t border-border bg-background">
-          <div className="max-w-[840px] mx-auto">
+          <div className="max-w-[960px] mx-auto">
             <div className="text-center mb-20">
               <div className="uppercase text-[0.78rem] tracking-[0.15em] text-muted-foreground font-medium mb-4">
                 Chat Integration
@@ -172,28 +162,19 @@ const Index = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-[680px] mx-auto">
-              <div className="p-8 border border-border bg-card rounded-xl flex flex-col items-center justify-center min-h-[160px]">
-                <div className="text-center space-y-3">
-                  <div className="text-3xl">📋</div>
-                  <h3 className="text-[0.92rem] font-semibold text-foreground">Created</h3>
-                  <p className="text-[0.75rem] text-muted-foreground uppercase tracking-[0.12em]">Vote open</p>
-                </div>
+              <div className="p-8 border border-border bg-card rounded-xl space-y-2">
+                <h3 className="text-[0.92rem] font-semibold text-foreground">Created</h3>
+                <p className="text-[0.75rem] text-muted-foreground uppercase tracking-[0.12em]">Vote open</p>
               </div>
 
-              <div className="p-8 border border-border bg-card rounded-xl flex flex-col items-center justify-center min-h-[160px]">
-                <div className="text-center space-y-3">
-                  <div className="text-3xl">⏰</div>
-                  <h3 className="text-[0.92rem] font-semibold text-foreground">Almost locked</h3>
-                  <p className="text-[0.75rem] text-muted-foreground uppercase tracking-[0.12em]">Few more taps</p>
-                </div>
+              <div className="p-8 border border-border bg-card rounded-xl space-y-2">
+                <h3 className="text-[0.92rem] font-semibold text-foreground">Almost locked</h3>
+                <p className="text-[0.75rem] text-muted-foreground uppercase tracking-[0.12em]">Few more taps</p>
               </div>
 
-              <div className="p-8 border border-border bg-card rounded-xl flex flex-col items-center justify-center min-h-[160px]">
-                <div className="text-center space-y-3">
-                  <div className="text-3xl">🎉</div>
-                  <h3 className="text-[0.92rem] font-semibold text-foreground">Locked</h3>
-                  <p className="text-[0.75rem] text-muted-foreground uppercase tracking-[0.12em]">Calendar sent</p>
-                </div>
+              <div className="p-8 border border-border bg-card rounded-xl space-y-2">
+                <h3 className="text-[0.92rem] font-semibold text-foreground">Locked</h3>
+                <p className="text-[0.75rem] text-muted-foreground uppercase tracking-[0.12em]">Calendar sent</p>
               </div>
             </div>
           </div>
@@ -201,7 +182,7 @@ const Index = () => {
 
         {/* Use Cases */}
         <section className="py-24 px-6 border-t border-border bg-background">
-          <div className="max-w-[840px] mx-auto">
+          <div className="max-w-[960px] mx-auto">
             <div className="text-center mb-20">
               <div className="uppercase text-[0.78rem] tracking-[0.15em] text-muted-foreground font-medium mb-4">
                 Use Cases
@@ -249,7 +230,6 @@ const Index = () => {
         <section className="py-24 px-6 border-t border-border bg-background">
           <div className="max-w-[560px] mx-auto">
             <div className="p-12 rounded-xl border border-border bg-card text-center">
-              <div className="text-4xl mb-6">💬</div>
               <p className="text-[1.05rem] font-medium text-foreground italic">
                 "Agreed in 6 minutes instead of 2 days."
               </p>
@@ -261,7 +241,6 @@ const Index = () => {
         <section className="py-24 px-6 bg-background">
           <div className="max-w-[560px] mx-auto">
             <div className="p-14 text-center border border-border bg-card rounded-xl">
-              <div className="text-4xl mb-6">😫 → 😎</div>
               <h2 className="text-foreground text-[1.1rem] mb-5">
                 Skip the 147-message spiral.
               </h2>
