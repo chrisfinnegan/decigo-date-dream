@@ -627,13 +627,13 @@ const PlanView = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <div className="max-w-[960px] mx-auto px-6 py-12 space-y-8">
+      <div className="max-w-[1040px] mx-auto px-6 py-10 space-y-6">
         {/* Title and Subtitle */}
-        <div className="text-center space-y-3 mb-8">
+        <div className="text-center space-y-2 mb-6">
           <h1 className="text-3xl font-semibold text-foreground">
             Help choose the plan
           </h1>
-          <p className="text-base text-muted-foreground max-w-xl mx-auto">
+          <p className="text-sm text-muted-foreground max-w-xl mx-auto">
             The organizer is deciding on a place in {plan.neighborhood}. Tap your favorites below. This takes under 30 seconds.
           </p>
         </div>

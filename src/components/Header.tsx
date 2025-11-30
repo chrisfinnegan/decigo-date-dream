@@ -4,23 +4,16 @@ import { Button } from "@/components/ui/button";
 export const Header = () => {
   const location = useLocation();
   const isPlanPage = location.pathname.startsWith('/p/');
-  
-  const scrollToIntake = () => {
-    const intakeSection = document.getElementById('intake-section');
-    if (intakeSection) {
-      intakeSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
 
   return (
-    <header className="w-full bg-background px-6 h-[72px] overflow-visible">
-      <div className="max-w-[960px] mx-auto flex items-center justify-between h-full">
+    <header className="w-full bg-background border-b border-border/50">
+      <div className="max-w-[1040px] mx-auto px-6 h-[64px] flex items-center justify-between">
         <Link to="/" className="flex items-center">
-          <img src="/brand/logo-name.png" alt="Clusive" className="h-8 w-auto" />
+          <img src="/brand/logo-name.png" alt="Clusive" className="h-7 w-auto" />
         </Link>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           <Link to="/new">
-            <Button className="h-10 px-6 text-[0.88rem]">
+            <Button size="sm">
               {isPlanPage ? 'Create your own plan' : 'Start planning'}
             </Button>
           </Link>
