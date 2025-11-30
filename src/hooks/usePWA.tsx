@@ -16,10 +16,10 @@ export const usePWA = () => {
       const appleTouchIcon = document.querySelector('link[rel="apple-touch-icon"]') as HTMLLinkElement;
       
       if (favicon) {
-        favicon.href = isDark ? '/icon-192-dark.png' : '/icon-192.png';
+        favicon.href = '/icon-pwa.png';
       }
       if (appleTouchIcon) {
-        appleTouchIcon.href = isDark ? '/icon-192-dark.png' : '/icon-192.png';
+        appleTouchIcon.href = '/icon-pwa.png';
       }
     };
 
