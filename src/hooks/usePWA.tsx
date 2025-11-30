@@ -12,12 +12,18 @@ export const usePWA = () => {
   useEffect(() => {
     // Update icons based on color scheme
     const updateIcons = (isDark: boolean) => {
-      const favicon = document.querySelector('link[rel="icon"]') as HTMLLinkElement;
+      const favicons = document.querySelectorAll('link[rel="icon"]');
       const appleTouchIcon = document.querySelector('link[rel="apple-touch-icon"]') as HTMLLinkElement;
       
-      if (favicon) {
-        favicon.href = '/icon-pwa.png';
-      }
+      favicons.forEach((favicon) => {
+        const link = favicon as HTMLLinkElement;
+        if (isDark && link.media === '(prefers-color-scheme: dark)') {
+          link.href = '/favicon-dark.png';
+        } else if (!isDark && link.media === '(prefers-color-scheme: light)') {
+          link.href = '/favicon-light.png';
+        }
+      });
+      
       if (appleTouchIcon) {
         appleTouchIcon.href = '/icon-pwa.png';
       }
