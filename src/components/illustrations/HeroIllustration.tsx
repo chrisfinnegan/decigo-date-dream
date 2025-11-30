@@ -28,7 +28,7 @@ export const HeroIllustration = () => {
         const { data, error } = await supabase.functions.invoke('generate-illustration', {
           body: {
             section: 'hero',
-            prompt: 'A warm, abstract illustration showing interconnected people or circles representing group connection and belonging. Use soft gradients with warm purple, pink, and coral tones. Minimalist style with flowing organic shapes. No text. Modern, clean, inviting aesthetic. 16:9 aspect ratio.'
+            prompt: 'A welcoming scene of diverse friends gathering around a table at a cozy cafe or restaurant, viewed from above. Warm lighting, soft purple and coral color palette. People are smiling, phones on table showing shared plans. Modern, clean illustration style with depth and warmth. 16:9 aspect ratio. Photorealistic but stylized.'
           }
         });
 
