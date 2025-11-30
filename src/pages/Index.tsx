@@ -6,6 +6,9 @@ import { analytics } from "@/lib/analytics";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { HeroWaveBackground } from "@/components/HeroWaveBackground";
+import { HeroIllustration } from "@/components/illustrations/HeroIllustration";
+import { FeatureIcon } from "@/components/illustrations/FeatureIcon";
+import { SectionIllustration } from "@/components/illustrations/SectionIllustration";
 
 const Index = () => {
   useEffect(() => {
@@ -49,6 +52,8 @@ const Index = () => {
                   See how it works →
                 </button>
               </div>
+              
+              <HeroIllustration />
             </div>
           </div>
         </section>
@@ -87,32 +92,60 @@ const Index = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-[900px] mx-auto">
-              <div>
-                <h3 className="text-2xl font-semibold text-foreground mb-3">Smart suggestions</h3>
-                <p className="text-base text-muted-foreground leading-[1.7]">
-                  Clusive proposes times, places, and ideas that actually fit your group.
-                </p>
+              <div className="flex gap-4">
+                <FeatureIcon 
+                  section="feature-smart-suggestions"
+                  prompt="A light bulb with connections radiating outward, representing smart AI suggestions"
+                  alt="Smart suggestions icon"
+                />
+                <div>
+                  <h3 className="text-2xl font-semibold text-foreground mb-3">Smart suggestions</h3>
+                  <p className="text-base text-muted-foreground leading-[1.7]">
+                    Clusive proposes times, places, and ideas that actually fit your group.
+                  </p>
+                </div>
               </div>
 
-              <div>
-                <h3 className="text-2xl font-semibold text-foreground mb-3">One-tap plans</h3>
-                <p className="text-base text-muted-foreground leading-[1.7]">
-                  No 40-message threads. Just "yes," "no," or "next time."
-                </p>
+              <div className="flex gap-4">
+                <FeatureIcon 
+                  section="feature-one-tap-plans"
+                  prompt="A simple tap gesture with a checkmark, representing easy plan creation"
+                  alt="One-tap plans icon"
+                />
+                <div>
+                  <h3 className="text-2xl font-semibold text-foreground mb-3">One-tap plans</h3>
+                  <p className="text-base text-muted-foreground leading-[1.7]">
+                    No 40-message threads. Just "yes," "no," or "next time."
+                  </p>
+                </div>
               </div>
 
-              <div>
-                <h3 className="text-2xl font-semibold text-foreground mb-3">Routines that stick</h3>
-                <p className="text-base text-muted-foreground leading-[1.7]">
-                  Weekly dinners, monthly game nights, Sunday walks. Clusive helps you keep them going.
-                </p>
+              <div className="flex gap-4">
+                <FeatureIcon 
+                  section="feature-routines"
+                  prompt="A calendar with repeating pattern, representing recurring routines"
+                  alt="Routines icon"
+                />
+                <div>
+                  <h3 className="text-2xl font-semibold text-foreground mb-3">Routines that stick</h3>
+                  <p className="text-base text-muted-foreground leading-[1.7]">
+                    Weekly dinners, monthly game nights, Sunday walks. Clusive helps you keep them going.
+                  </p>
+                </div>
               </div>
 
-              <div>
-                <h3 className="text-2xl font-semibold text-foreground mb-3">Shared memory</h3>
-                <p className="text-base text-muted-foreground leading-[1.7]">
-                  Your group's history, vibes, and favorite spots, all in one place.
-                </p>
+              <div className="flex gap-4">
+                <FeatureIcon 
+                  section="feature-shared-memory"
+                  prompt="Connected nodes or hearts forming a network, representing shared memories"
+                  alt="Shared memory icon"
+                />
+                <div>
+                  <h3 className="text-2xl font-semibold text-foreground mb-3">Shared memory</h3>
+                  <p className="text-base text-muted-foreground leading-[1.7]">
+                    Your group's history, vibes, and favorite spots, all in one place.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -120,7 +153,7 @@ const Index = () => {
 
         {/* Section 3 - For Small Groups */}
         <section className="py-20 md:py-32 px-6 bg-background">
-          <div className="max-w-[800px] mx-auto text-center">
+          <div className="max-w-[800px] mx-auto text-center space-y-12">
             <h2 className="text-4xl md:text-5xl font-semibold text-foreground mb-12 leading-[1.2]">
               Built for circles of 2 to 8, where life actually happens.
             </h2>
@@ -136,6 +169,13 @@ const Index = () => {
               </div>
               <p className="pt-10 text-xl italic text-foreground/80">If it's a group you'd be sad to lose, it belongs on Clusive.</p>
             </div>
+            
+            <SectionIllustration 
+              section="small-groups"
+              prompt="A cozy illustration showing a small intimate group (2-8 people in abstract form) coming together. Warm, inviting, human-centric design."
+              alt="Small groups illustration"
+              className="max-w-[600px] mx-auto shadow-lg"
+            />
           </div>
         </section>
 
@@ -177,6 +217,13 @@ const Index = () => {
                 <p className="text-foreground font-medium">Just an intelligent layer that makes it easier to show up for the people who matter.</p>
               </div>
             </div>
+            
+            <SectionIllustration 
+              section="future-connected"
+              prompt="An uplifting abstract illustration representing connection without digital noise. Clean, hopeful, forward-looking aesthetic with flowing connections and organic shapes."
+              alt="Future of connection illustration"
+              className="max-w-[600px] mx-auto shadow-lg"
+            />
 
             <div className="pt-8">
               <Link to="/new" onClick={() => { analytics.track('cta_join_waitlist', { location: 'future_section' }); window.scrollTo(0, 0); }}>

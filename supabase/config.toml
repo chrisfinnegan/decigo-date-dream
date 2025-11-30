@@ -1,5 +1,8 @@
 project_id = "gomkcwfxbwtnxlgmvjjp"
 
+[functions.generate-illustration]
+verify_jwt = false
+
 [functions.plans-create]
 verify_jwt = false
 
