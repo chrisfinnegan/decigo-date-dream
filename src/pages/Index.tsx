@@ -18,7 +18,7 @@ const Index = () => {
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background pt-[64px]">
         {/* Hero Section - Full-width with centered content */}
         <section className="relative overflow-hidden bg-background">
           <HeroWaveBackground />
