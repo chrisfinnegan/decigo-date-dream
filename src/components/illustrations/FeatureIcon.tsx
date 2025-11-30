@@ -34,7 +34,7 @@ export const FeatureIcon = ({ section, prompt, alt }: FeatureIconProps) => {
         const { data, error } = await supabase.functions.invoke('generate-illustration', {
           body: {
             section,
-            prompt: `${prompt} Use soft gradients with warm purple, pink, and coral tones. Simple icon style, clean lines, minimal abstract shapes. No text. Modern aesthetic. Square format.`
+            prompt: `${prompt} Illustrated icon style with recognizable objects and scenes. Soft purple and coral color palette. Clean, modern, slightly 3D appearance with gentle shadows. No text. Square format, centered composition.`
           }
         });
 

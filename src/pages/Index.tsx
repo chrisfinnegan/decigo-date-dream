@@ -95,7 +95,7 @@ const Index = () => {
               <div className="flex gap-4">
                 <FeatureIcon 
                   section="feature-smart-suggestions"
-                  prompt="A light bulb with connections radiating outward, representing smart AI suggestions"
+                  prompt="A smartphone screen showing a map with restaurant pins and a glowing AI sparkle suggesting the perfect spot"
                   alt="Smart suggestions icon"
                 />
                 <div>
@@ -109,7 +109,7 @@ const Index = () => {
               <div className="flex gap-4">
                 <FeatureIcon 
                   section="feature-one-tap-plans"
-                  prompt="A simple tap gesture with a checkmark, representing easy plan creation"
+                  prompt="A hand tapping a phone with a green checkmark appearing, simple and clear action"
                   alt="One-tap plans icon"
                 />
                 <div>
@@ -123,7 +123,7 @@ const Index = () => {
               <div className="flex gap-4">
                 <FeatureIcon 
                   section="feature-routines"
-                  prompt="A calendar with repeating pattern, representing recurring routines"
+                  prompt="A calendar showing multiple highlighted dates with small food and activity icons recurring weekly"
                   alt="Routines icon"
                 />
                 <div>
@@ -137,7 +137,7 @@ const Index = () => {
               <div className="flex gap-4">
                 <FeatureIcon 
                   section="feature-shared-memory"
-                  prompt="Connected nodes or hearts forming a network, representing shared memories"
+                  prompt="A collection of polaroid photos and memories arranged in a scrapbook style, warm and nostalgic"
                   alt="Shared memory icon"
                 />
                 <div>
@@ -172,7 +172,7 @@ const Index = () => {
             
             <SectionIllustration 
               section="small-groups"
-              prompt="A cozy illustration showing a small intimate group (2-8 people in abstract form) coming together. Warm, inviting, human-centric design."
+              prompt="A warm scene of 5-6 diverse friends sitting in a casual circle, laughing together in a cozy living room or cafe. Natural lighting, purple and coral accents. Realistic but stylized illustration."
               alt="Small groups illustration"
               className="max-w-[600px] mx-auto shadow-lg"
             />
@@ -220,7 +220,7 @@ const Index = () => {
             
             <SectionIllustration 
               section="future-connected"
-              prompt="An uplifting abstract illustration representing connection without digital noise. Clean, hopeful, forward-looking aesthetic with flowing connections and organic shapes."
+              prompt="A hopeful scene of people in the real world connecting authentically - having coffee, walking together, sharing moments. Phones in pockets. Sunlight streaming through. Purple and coral color palette, modern clean style."
               alt="Future of connection illustration"
               className="max-w-[600px] mx-auto shadow-lg"
             />
