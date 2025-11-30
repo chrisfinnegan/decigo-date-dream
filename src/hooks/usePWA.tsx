@@ -16,7 +16,7 @@ export const usePWA = () => {
       const appleTouchIcon = document.querySelector('link[rel="apple-touch-icon"]') as HTMLLinkElement;
       
       if (favicon) {
-        favicon.href = isDark ? '/favicon-dark.png' : '/favicon.png';
+        favicon.href = isDark ? '/icon-192-dark.png' : '/icon-192.png';
       }
       if (appleTouchIcon) {
         appleTouchIcon.href = isDark ? '/icon-192-dark.png' : '/icon-192.png';
