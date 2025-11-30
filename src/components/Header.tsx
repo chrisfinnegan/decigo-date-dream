@@ -6,7 +6,7 @@ export const Header = () => {
   const isPlanPage = location.pathname.startsWith('/p/');
 
   return (
-    <header className="w-full bg-background border-b border-border/50">
+    <header className="w-full bg-background">
       <div className="max-w-[1040px] mx-auto px-6 h-[64px] flex items-center justify-between">
         <Link to="/" className="flex items-center">
           <img src="/brand/logo-name.png" alt="Clusive" className="h-7 w-auto" />
