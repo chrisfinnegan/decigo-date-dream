@@ -33,7 +33,7 @@ const Index = () => {
 
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6">
                 <Link to="/new" onClick={() => { analytics.track('cta_get_early_access', { location: 'hero' }); window.scrollTo(0, 0); }}>
-                  <Button size="lg" className="text-base px-10 py-6 h-auto rounded-full">
+                  <Button size="lg" className="text-base px-8">
                     Get early access
                   </Button>
                 </Link>
@@ -42,7 +42,7 @@ const Index = () => {
                     analytics.track('see_how_it_works_click', { location: 'hero' });
                     document.getElementById('what-clusive-does')?.scrollIntoView({ behavior: 'smooth' });
                   }}
-                  className="text-base font-medium text-muted-foreground hover:text-foreground transition-colors px-6"
+                  className="text-base font-medium text-muted-foreground hover:text-foreground transition-colors"
                 >
                   See how it works →
                 </button>
@@ -84,30 +84,30 @@ const Index = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-[1000px] mx-auto">
-              <div className="p-10 rounded-2xl bg-secondary/30 backdrop-blur-sm border border-border/50 hover:border-border transition-all">
-                <h3 className="text-2xl font-semibold text-foreground mb-4">Smart suggestions</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-[900px] mx-auto">
+              <div>
+                <h3 className="text-2xl font-semibold text-foreground mb-3">Smart suggestions</h3>
                 <p className="text-base text-muted-foreground leading-[1.7]">
                   Clusive proposes times, places, and ideas that actually fit your group.
                 </p>
               </div>
 
-              <div className="p-10 rounded-2xl bg-secondary/30 backdrop-blur-sm border border-border/50 hover:border-border transition-all">
-                <h3 className="text-2xl font-semibold text-foreground mb-4">One-tap plans</h3>
+              <div>
+                <h3 className="text-2xl font-semibold text-foreground mb-3">One-tap plans</h3>
                 <p className="text-base text-muted-foreground leading-[1.7]">
                   No 40-message threads. Just "yes," "no," or "next time."
                 </p>
               </div>
 
-              <div className="p-10 rounded-2xl bg-secondary/30 backdrop-blur-sm border border-border/50 hover:border-border transition-all">
-                <h3 className="text-2xl font-semibold text-foreground mb-4">Routines that stick</h3>
+              <div>
+                <h3 className="text-2xl font-semibold text-foreground mb-3">Routines that stick</h3>
                 <p className="text-base text-muted-foreground leading-[1.7]">
                   Weekly dinners, monthly game nights, Sunday walks. Clusive helps you keep them going.
                 </p>
               </div>
 
-              <div className="p-10 rounded-2xl bg-secondary/30 backdrop-blur-sm border border-border/50 hover:border-border transition-all">
-                <h3 className="text-2xl font-semibold text-foreground mb-4">Shared memory</h3>
+              <div>
+                <h3 className="text-2xl font-semibold text-foreground mb-3">Shared memory</h3>
                 <p className="text-base text-muted-foreground leading-[1.7]">
                   Your group's history, vibes, and favorite spots, all in one place.
                 </p>
@@ -150,18 +150,10 @@ const Index = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-[800px] mx-auto text-center">
-              <div className="p-8 rounded-xl bg-secondary/20">
-                <p className="text-base text-muted-foreground">Learns when your group can actually meet.</p>
-              </div>
-              <div className="p-8 rounded-xl bg-secondary/20">
-                <p className="text-base text-muted-foreground">Understands what you like (and what you don't).</p>
-              </div>
-              <div className="p-8 rounded-xl bg-secondary/20">
-                <p className="text-base text-muted-foreground">Spots emerging rituals and helps them stick.</p>
-              </div>
-              <div className="p-8 rounded-xl bg-secondary/20">
-                <p className="text-base text-foreground font-medium">It's infrastructure, not a personality.</p>
-              </div>
+              <p className="text-base text-muted-foreground">Learns when your group can actually meet.</p>
+              <p className="text-base text-muted-foreground">Understands what you like (and what you don't).</p>
+              <p className="text-base text-muted-foreground">Spots emerging rituals and helps them stick.</p>
+              <p className="text-base text-foreground font-medium">It's infrastructure, not a personality.</p>
             </div>
             
             <p className="text-center text-lg text-muted-foreground mt-12">Quietly powerful in the background.</p>
@@ -186,7 +178,7 @@ const Index = () => {
 
             <div className="pt-8">
               <Link to="/new" onClick={() => { analytics.track('cta_join_waitlist', { location: 'future_section' }); window.scrollTo(0, 0); }}>
-                <Button size="lg" className="text-base px-10 py-6 h-auto rounded-full">
+                <Button size="lg" className="text-base px-8">
                   Join the waitlist for Clusive
                 </Button>
               </Link>
