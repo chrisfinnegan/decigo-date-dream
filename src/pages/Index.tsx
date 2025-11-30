@@ -62,7 +62,7 @@ const Index = () => {
             </h2>
             
             <div className="space-y-3 text-lg text-muted-foreground leading-[1.7]">
-              <p>Group chats, DMs, endless "we should hang" messages — but nothing actually happens.</p>
+              <p>Group chats, DMs, endless "we should hang" messages, but nothing actually happens.</p>
               <p>It's not that people don't care. It's that coordination is work.</p>
               <div className="pt-2 space-y-1">
                 <p>Too many preferences.</p>
@@ -112,7 +112,7 @@ const Index = () => {
                 </div>
                 <h3 className="text-xl font-semibold text-foreground">Routines that stick</h3>
                 <p className="text-base text-muted-foreground leading-[1.7]">
-                  Weekly dinners, monthly game nights, Sunday walks — Clusive helps you keep them going.
+                  Weekly dinners, monthly game nights, Sunday walks. Clusive helps you keep them going.
                 </p>
               </div>
 
@@ -133,7 +133,7 @@ const Index = () => {
         <section className="py-24 px-6 border-t border-border bg-background">
           <div className="max-w-[880px] mx-auto">
             <h2 className="text-3xl md:text-4xl font-semibold text-foreground mb-6">
-              Built for circles of 2–8, where life actually happens.
+              Built for circles of 2 to 8, where life actually happens.
             </h2>
             
             <div className="space-y-4 text-lg text-muted-foreground leading-[1.7]">
