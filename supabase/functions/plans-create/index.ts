@@ -1,10 +1,27 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { z } from "https://deno.land/x/zod@v3.23.8/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
+
+const PlanCreateSchema = z.object({
+  daypart: z.enum(['breakfast', 'brunch', 'lunch', 'dinner', 'drinks']),
+  date_start: z.string(),
+  date_end: z.string().optional(),
+  neighborhood: z.string().min(1).max(200),
+  neighborhood_place_id: z.string().max(500).optional(),
+  neighborhood_lat: z.number().optional(),
+  neighborhood_lng: z.number().optional(),
+  headcount: z.number().int().min(1).max(50),
+  budget_band: z.enum(['$', '$$', '$$$', '$$$$']),
+  two_stop: z.boolean().optional(),
+  notes_raw: z.string().max(1000).optional(),
+  notes_chips: z.array(z.string().max(100)).max(20).optional(),
+  mode: z.enum(['top3', 'full20']).optional(),
+});
 
 // Helper: Get or set cache
 async function getCache(supabase: any, key: string) {
@@ -182,9 +199,20 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
+    // Validate input
     const body = await req.json();
+    const validationResult = PlanCreateSchema.safeParse(body);
     
-    // Validate required fields
+    if (!validationResult.success) {
+      return new Response(
+        JSON.stringify({ 
+          error: 'Invalid request data',
+          details: validationResult.error.errors
+        }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    
     const {
       daypart,
       date_start,
@@ -199,17 +227,7 @@ serve(async (req) => {
       notes_raw,
       notes_chips = [],
       mode = 'top3',
-    } = body;
-
-    if (!daypart || !date_start || !neighborhood || !headcount || !budget_band) {
-      return new Response(
-        JSON.stringify({ 
-          error: 'Missing required fields',
-          details: 'daypart, date_start, neighborhood, headcount, and budget_band are required'
-        }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
+    } = validationResult.data;
 
     // Check feature flag
     const { data: flagData } = await supabaseClient
@@ -393,7 +411,9 @@ serve(async (req) => {
     );
   } catch (error) {
     console.error('Error in plans-create:', error);
-    const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+    const errorMessage = error instanceof z.ZodError
+      ? 'Invalid request data'
+      : 'An unexpected error occurred. Please try again.';
     return new Response(
       JSON.stringify({ 
         success: false,

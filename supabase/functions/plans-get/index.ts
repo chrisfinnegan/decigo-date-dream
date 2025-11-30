@@ -35,10 +35,10 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_ANON_KEY') ?? ''
     );
 
-    // Get plan details
+    // Get plan details - exclude magic_token for security
     const { data: plan, error: planError } = await supabaseClient
       .from('plans')
-      .select('*')
+      .select('id, created_at, daypart, date_start, date_end, neighborhood, neighborhood_place_id, neighborhood_lat, neighborhood_lng, headcount, budget_band, two_stop, notes_raw, notes_chips, mode, decision_deadline, threshold, locked, locked_at, canceled, winner_option_id, computed_scores, tie_breaker_used')
       .eq('id', planId)
       .eq('canceled', false)
       .single();
