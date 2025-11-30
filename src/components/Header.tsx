@@ -7,7 +7,7 @@ export const Header = () => {
 
   return (
     <header className="bg-background z-50">
-      <div className="max-w-[1040px] mx-auto px-6 h-[64px] flex items-center justify-between">
+      <div className="w-full px-6 h-[64px] flex items-center justify-between">
         <Link to="/" className="flex items-center">
           <img src="/brand/logo-name.png" alt="Clusive" className="h-7 w-auto" />
         </Link>
