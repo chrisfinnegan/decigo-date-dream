@@ -10,6 +10,30 @@ export const usePWA = () => {
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
 
   useEffect(() => {
+    // Update icons based on color scheme
+    const updateIcons = (isDark: boolean) => {
+      const favicon = document.querySelector('link[rel="icon"]') as HTMLLinkElement;
+      const appleTouchIcon = document.querySelector('link[rel="apple-touch-icon"]') as HTMLLinkElement;
+      
+      if (favicon) {
+        favicon.href = isDark ? '/favicon-dark.png' : '/favicon.png';
+      }
+      if (appleTouchIcon) {
+        appleTouchIcon.href = isDark ? '/icon-192-dark.png' : '/icon-192.png';
+      }
+    };
+
+    // Check initial color scheme
+    const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    updateIcons(darkModeQuery.matches);
+
+    // Listen for changes in color scheme
+    const handleColorSchemeChange = (e: MediaQueryListEvent) => {
+      updateIcons(e.matches);
+    };
+    
+    darkModeQuery.addEventListener('change', handleColorSchemeChange);
+
     // Register service worker
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker
@@ -44,6 +68,7 @@ export const usePWA = () => {
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      darkModeQuery.removeEventListener('change', handleColorSchemeChange);
     };
   }, []);
 
