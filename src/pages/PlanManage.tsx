@@ -11,6 +11,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SharePlanCard } from "@/components/SharePlanCard";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 
 interface Plan {
   id: string;
@@ -233,10 +235,11 @@ const PlanManage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background p-4">
-      <div className="max-w-4xl mx-auto space-y-6">
+    <div className="min-h-screen bg-background">
+      <Header />
+      <div className="max-w-[840px] mx-auto px-6 py-12 space-y-8">
         <div>
-          <h1 className="text-3xl font-bold text-foreground mb-2">Manage Plan</h1>
+          <h1 className="text-3xl font-semibold text-foreground mb-2">Manage Plan</h1>
           <div className="flex gap-2 flex-wrap">
             {plan.locked && <Badge variant="default">Locked</Badge>}
             {plan.canceled && <Badge variant="destructive">Canceled</Badge>}
@@ -462,6 +465,7 @@ const PlanManage = () => {
           </Card>
         )}
       </div>
+      <Footer />
     </div>
   );
 };

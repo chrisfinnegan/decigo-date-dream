@@ -185,16 +185,16 @@ const PlanLocked = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <div className="p-4 max-w-4xl mx-auto space-y-6 py-8">
+      <div className="max-w-[840px] mx-auto px-6 py-12 space-y-8">
         {/* Celebration Header */}
-        <div className="text-center space-y-2">
-          <div className="inline-block bg-brand-success text-white px-4 py-2 rounded-2xl mb-2 font-semibold border border-brand-success shadow-sm">
+        <div className="text-center space-y-4">
+          <div className="inline-block bg-primary text-primary-foreground px-4 py-2 rounded-full mb-2 font-medium text-sm">
             🎉 Locked!
           </div>
-          <h1 className="text-4xl font-bold text-brand-primary">
+          <h1 className="text-4xl font-semibold text-foreground">
             You're going to {option.name}!
           </h1>
-          <p className="text-foreground text-lg">
+          <p className="text-muted-foreground text-base">
             On {new Date(plan.date_start).toLocaleDateString('en-US', {
               weekday: 'long',
               month: 'long',
@@ -207,8 +207,8 @@ const PlanLocked = () => {
         </div>
 
         <div className="card">
-          <h2 className="text-2xl font-bold text-brand-primary mb-2">{option.name}</h2>
-          <p className="text-foreground mb-4">{option.address}</p>
+          <h2 className="text-2xl font-semibold text-foreground mb-2">{option.name}</h2>
+          <p className="text-muted-foreground mb-4">{option.address}</p>
           
           <div className="flex gap-2 mb-4">
             <span className="chip">{plan.budget_band}</span>
@@ -217,14 +217,14 @@ const PlanLocked = () => {
           </div>
 
           <div className="mb-4">
-            <p className="text-sm font-semibold text-brand-primary mb-1">Why this place:</p>
-            <p className="text-sm text-foreground">{option.why_it_fits}</p>
+            <p className="text-sm font-semibold text-foreground mb-1">Why this place:</p>
+            <p className="text-sm text-muted-foreground">{option.why_it_fits}</p>
           </div>
 
           {option.tip && (
             <div className="mb-4">
-              <p className="text-sm font-semibold text-brand-primary mb-1">Insider tip:</p>
-              <p className="text-sm text-foreground">{option.tip}</p>
+              <p className="text-sm font-semibold text-foreground mb-1">Insider tip:</p>
+              <p className="text-sm text-muted-foreground">{option.tip}</p>
             </div>
           )}
 
@@ -277,9 +277,9 @@ const PlanLocked = () => {
           </div>
         </div>
 
-        <div className="card border-2 border-brand-success bg-card">
-          <h3 className="text-lg font-bold text-brand-primary mb-2">Share the final plan</h3>
-          <p className="text-sm text-foreground mb-4">
+        <div className="card border-primary">
+          <h3 className="text-lg font-semibold text-foreground mb-2">Share the final plan</h3>
+          <p className="text-sm text-muted-foreground mb-4">
             Copy this link to share with anyone who hasn't seen the final plan
           </p>
           <button
@@ -295,7 +295,7 @@ const PlanLocked = () => {
 
         {/* Recap Section */}
         <div className="card">
-          <h3 className="text-lg font-bold text-brand-primary mb-3">Quick Recap</h3>
+          <h3 className="text-lg font-semibold text-foreground mb-3">Quick Recap</h3>
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
               <span className="text-muted-foreground">When:</span>
