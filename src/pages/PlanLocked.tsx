@@ -185,16 +185,16 @@ const PlanLocked = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <div className="max-w-[960px] mx-auto px-6 py-12 space-y-8">
+      <div className="max-w-[1040px] mx-auto px-6 py-10 space-y-6">
         {/* Celebration Header */}
-        <div className="text-center space-y-4">
-          <div className="inline-block bg-primary text-primary-foreground px-4 py-2 rounded-full mb-2 font-medium text-sm">
+        <div className="text-center space-y-3">
+          <div className="inline-block bg-primary text-primary-foreground px-3 py-1.5 rounded-full mb-1 font-medium text-xs">
             Locked!
           </div>
           <h1 className="text-4xl font-semibold text-foreground">
             You're going to {option.name}!
           </h1>
-          <p className="text-muted-foreground text-base">
+          <p className="text-muted-foreground text-sm">
             On {new Date(plan.date_start).toLocaleDateString('en-US', {
               weekday: 'long',
               month: 'long',
@@ -228,21 +228,21 @@ const PlanLocked = () => {
             </div>
           )}
 
-          <div className="space-y-2 pt-4">
+          <div className="space-y-2 pt-3">
             <p className="text-xs text-muted-foreground mb-2">
               Add this plan to your calendar so everyone knows where and when you're meeting
             </p>
             <button
               onClick={handleAddToCalendar}
-              className="btn-primary w-full h-12 flex items-center justify-center gap-2"
+              className="btn-primary w-full flex items-center justify-center gap-2"
             >
-              <Calendar className="w-5 h-5" />
+              <Calendar className="w-4 h-4" />
               Add to Calendar
             </button>
             
             <Button
               variant="outline"
-              className="w-full h-10 flex items-center justify-center gap-2"
+              className="w-full flex items-center justify-center gap-2"
               onClick={openInGoogleCalendar}
             >
               <Calendar className="w-4 h-4" />
@@ -252,14 +252,14 @@ const PlanLocked = () => {
             <div className="flex gap-2">
               <button
                 onClick={() => openInMaps('apple')}
-                className="btn-secondary flex-1 h-10 flex items-center justify-center gap-2"
+                className="btn-secondary flex-1 flex items-center justify-center gap-2"
               >
                 <MapPin className="w-4 h-4" />
                 Open in Maps
               </button>
               <button
                 onClick={() => openInMaps('google')}
-                className="btn-secondary flex-1 h-10 flex items-center justify-center gap-2"
+                className="btn-secondary flex-1 flex items-center justify-center gap-2"
               >
                 <ExternalLink className="w-4 h-4" />
                 Google Maps
@@ -269,7 +269,7 @@ const PlanLocked = () => {
             {hasManagementAccess && (
               <button
                 onClick={goToManagement}
-                className="btn-primary w-full h-10 flex items-center justify-center gap-2"
+                className="btn-primary w-full flex items-center justify-center gap-2"
               >
                 Manage Plan
               </button>

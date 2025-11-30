@@ -5,7 +5,7 @@ const Terms = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <div className="max-w-4xl mx-auto p-4 py-8">
+      <div className="max-w-[1040px] mx-auto px-6 py-10">
         <div className="card">
           <div className="uppercase text-xs tracking-[0.15em] text-muted-foreground font-medium mb-4">
             Legal

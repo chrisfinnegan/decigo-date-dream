@@ -203,23 +203,23 @@ const NewPlan = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <div className="max-w-[960px] mx-auto px-6 py-12 space-y-8">
+      <div className="max-w-[1040px] mx-auto px-6 py-10 space-y-6">
         
         {/* Quick intro */}
-        <div className="text-center space-y-3">
-          <div className="uppercase text-xs tracking-[0.15em] text-muted-foreground font-medium mb-2">
+        <div className="text-center space-y-2">
+          <div className="uppercase text-xs tracking-[0.15em] text-muted-foreground font-medium">
             AI Social Infrastructure
           </div>
           <h1 className="text-3xl md:text-4xl font-semibold text-foreground">
             Create your plan
           </h1>
-          <p className="text-base text-muted-foreground max-w-xl mx-auto">
+          <p className="text-sm text-muted-foreground max-w-xl mx-auto">
             Set the context. Clusive generates three curated options for your group to coordinate on.
           </p>
         </div>
 
         {/* Main Form Card */}
-        <Card className="p-6 md:p-8">
+        <Card className="p-6 md:p-7">
           {/* 3. Step Label */}
           <div className="mb-6">
             <h2 className="text-sm font-semibold text-muted-foreground mb-4">
@@ -438,15 +438,15 @@ const NewPlan = () => {
               </CollapsibleContent>
             </Collapsible>
 
-            <div className="pt-4 border-t">
+            <div className="pt-3 border-t">
               <Button
                 type="submit"
                 disabled={loading}
-                className="w-full h-12 btn-primary text-base"
+                className="w-full"
               >
                 {loading ? "Creating your plan..." : "Create Plan & Get Link"}
               </Button>
-              <p className="text-xs text-muted-foreground text-center mt-3">
+              <p className="text-xs text-muted-foreground text-center mt-2.5">
                 Free • No login • Link copied automatically
               </p>
             </div>
