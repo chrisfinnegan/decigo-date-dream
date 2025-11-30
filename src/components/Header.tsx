@@ -13,8 +13,8 @@ export const Header = () => {
   };
 
   return (
-    <header className="bg-background px-6 h-[72px] overflow-visible">
-      <div className="max-w-[840px] mx-auto flex items-center justify-between h-full">
+    <header className="w-full bg-background px-6 h-[72px] overflow-visible">
+      <div className="max-w-[960px] mx-auto flex items-center justify-between h-full">
         <Link to="/" className="flex items-center">
           <img src="/brand/logo-name.png" alt="Clusive" className="h-8 w-auto" />
         </Link>

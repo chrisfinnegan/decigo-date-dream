@@ -627,7 +627,7 @@ const PlanView = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <div className="max-w-[840px] mx-auto px-6 py-12 space-y-8">
+      <div className="max-w-[960px] mx-auto px-6 py-12 space-y-8">
         {/* Title and Subtitle */}
         <div className="text-center space-y-3 mb-8">
           <h1 className="text-3xl font-semibold text-foreground">
@@ -698,7 +698,7 @@ const PlanView = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-semibold text-foreground">
-                  ✓ You voted for {myVotes.length} {myVotes.length === 1 ? 'option' : 'options'}
+                  You voted for {myVotes.length} {myVotes.length === 1 ? 'option' : 'options'}
                 </p>
                 <p className="text-xs text-muted-foreground">
                   You can change your votes until the plan is locked
@@ -724,7 +724,7 @@ const PlanView = () => {
             {/* Voting Instructions for larger groups */}
             <div className="card border-primary/20 bg-primary/5">
               <p className="text-sm text-foreground font-medium text-center">
-                💡 Select one or more places below to cast your vote
+                Select one or more places below to cast your vote
               </p>
             </div>
 
@@ -775,7 +775,7 @@ const PlanView = () => {
                       <div className="flex items-start justify-between mb-1">
                         <h3 className="font-semibold text-foreground text-lg flex items-center gap-2">
                           {option.rank}. {option.name}
-                          {hasVoted && <Badge className="bg-primary text-white text-xs">✓ Your pick</Badge>}
+                          {hasVoted && <Badge className="bg-primary text-white text-xs">Your pick</Badge>}
                         </h3>
                         <span className="chip text-xs">{option.price_band}</span>
                       </div>
@@ -792,7 +792,7 @@ const PlanView = () => {
 
                     {option.tip && (
                       <div className="chip inline-block text-xs">
-                        💡 {option.tip}
+                        Tip: {option.tip}
                       </div>
                     )}
 
@@ -818,7 +818,7 @@ const PlanView = () => {
                       onClick={() => handleVote(option.id)}
                       disabled={voting}
                     >
-                      {hasVoted ? `✓ Voted for ${option.name}` : `Vote for ${option.name}`}
+                      {hasVoted ? `Voted for ${option.name}` : `Vote for ${option.name}`}
                       {voteCount > 0 && ` (${voteCount} ${voteCount === 1 ? 'vote' : 'votes'})`}
                     </Button>
                     {hasVoted && (

@@ -203,7 +203,7 @@ const NewPlan = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <div className="max-w-[840px] mx-auto px-6 py-12 space-y-8">
+      <div className="max-w-[960px] mx-auto px-6 py-12 space-y-8">
         
         {/* Quick intro */}
         <div className="text-center space-y-3">
@@ -413,23 +413,23 @@ const NewPlan = () => {
                   </RadioGroup>
                   
                   {/* Preview moved here */}
-                  <div className="mt-4 p-4 bg-muted/30 rounded-lg shadow-sm">
+                  <div className="mt-4 p-4 bg-muted/30 rounded-lg">
                     <p className="text-xs font-medium text-foreground mb-2">
                       Preview: {resultMode === 'top3' ? '3' : '~20'} spots will be shown
                     </p>
-                    <div className="space-y-1.5">
-                      <div className="flex items-center justify-between text-xs p-2 bg-card rounded shadow-sm">
-                        <span className="text-primary font-medium">Cozy wine bar</span>
-                        <div className="w-4 h-4 rounded-full border-2 border-accent"></div>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between text-xs p-2 bg-card rounded border border-border">
+                        <span className="text-foreground font-medium">Cozy wine bar</span>
+                        <span className="text-xs text-muted-foreground">Top pick</span>
                       </div>
-                      <div className="flex items-center justify-between text-xs p-2 bg-card rounded shadow-sm">
-                        <span className="text-primary font-medium">Casual taco spot</span>
-                        <div className="w-4 h-4 rounded-full border-2 border-muted-foreground"></div>
+                      <div className="flex items-center justify-between text-xs p-2 bg-card rounded border border-border">
+                        <span className="text-foreground font-medium">Casual taco spot</span>
+                        <span className="text-xs text-muted-foreground">Second</span>
                       </div>
                       {resultMode === 'top3' && (
-                        <div className="flex items-center justify-between text-xs p-2 bg-card rounded shadow-sm">
-                          <span className="text-primary font-medium">Italian bistro</span>
-                          <div className="w-4 h-4 rounded-full border-2 border-muted-foreground"></div>
+                        <div className="flex items-center justify-between text-xs p-2 bg-card rounded border border-border">
+                          <span className="text-foreground font-medium">Italian bistro</span>
+                          <span className="text-xs text-muted-foreground">Third</span>
                         </div>
                       )}
                     </div>

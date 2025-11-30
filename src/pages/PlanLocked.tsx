@@ -185,11 +185,11 @@ const PlanLocked = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <div className="max-w-[840px] mx-auto px-6 py-12 space-y-8">
+      <div className="max-w-[960px] mx-auto px-6 py-12 space-y-8">
         {/* Celebration Header */}
         <div className="text-center space-y-4">
           <div className="inline-block bg-primary text-primary-foreground px-4 py-2 rounded-full mb-2 font-medium text-sm">
-            🎉 Locked!
+            Locked!
           </div>
           <h1 className="text-4xl font-semibold text-foreground">
             You're going to {option.name}!
