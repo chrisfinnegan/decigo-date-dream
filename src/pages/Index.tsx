@@ -5,6 +5,7 @@ import { analytics } from "@/lib/analytics";
 
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { HeroWaveBackground } from "@/components/HeroWaveBackground";
 
 const Index = () => {
   useEffect(() => {
@@ -16,8 +17,9 @@ const Index = () => {
       <Header />
       <div className="min-h-screen bg-background pt-[64px]">
         {/* Hero Section */}
-        <section className="bg-background">
-          <div className="max-w-[1200px] mx-auto px-6 pt-24 md:pt-32 pb-20 md:pb-32 text-center">
+        <section className="bg-background relative">
+          <HeroWaveBackground />
+          <div className="max-w-[1200px] mx-auto px-6 pt-24 md:pt-32 pb-20 md:pb-32 text-center relative z-10">
             <div className="space-y-8 max-w-[900px] mx-auto">
               <div className="text-xs font-medium text-muted-foreground uppercase tracking-[0.2em]">
                 AI Social Infrastructure for groups
