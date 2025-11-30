@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { useEffect } from "react";
 import { analytics } from "@/lib/analytics";
+import { Sparkles, CalendarCheck, RotateCcw, Archive } from "lucide-react";
 
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -10,251 +10,192 @@ import { HeroWaveBackground } from "@/components/HeroWaveBackground";
 
 const Index = () => {
   useEffect(() => {
-    analytics.track('lp_view', { lp_version: 'clusive_v1' });
+    analytics.track('lp_view', { lp_version: 'clusive_v2' });
   }, []);
-
-  const returningUser = localStorage.getItem('decigo_returning_user');
 
   return (
     <>
       <Header />
       <div className="min-h-screen bg-background pt-[64px]">
-        {/* Hero Section - Full-width with centered content */}
+        {/* Hero Section */}
         <section className="relative overflow-hidden bg-background">
           <HeroWaveBackground />
-          <div className="relative max-w-[1040px] mx-auto px-6 pt-28 pb-24">
-            <div className="text-center space-y-6">
-              {returningUser && (
-                <div className="inline-flex items-center bg-secondary text-foreground px-3 py-1 rounded-full text-xs font-medium uppercase tracking-wider">
-                  Welcome back
-                </div>
-              )}
-              
+          <div className="relative max-w-[880px] mx-auto px-6 pt-32 pb-28">
+            <div className="space-y-6">
               <div className="uppercase text-[0.75rem] tracking-[0.15em] text-muted-foreground font-medium">
-                AI Social Infrastructure
+                AI Social Infrastructure for groups
               </div>
               
               <h1 className="text-5xl md:text-6xl font-semibold leading-[1.1] text-foreground">
-                The invisible fabric<br />
-                between people.
+                Belong together.
               </h1>
               
-              <p className="text-base text-muted-foreground max-w-[580px] mx-auto leading-[1.6]">
-                Clusive keeps your group's rituals alive with gentle, well-timed prompts. Coordinate effortlessly. Build rhythms that last.
+              <p className="text-lg text-muted-foreground max-w-[640px] leading-[1.7]">
+                Clusive is an AI-powered space where your groups can form, plan, and keep showing up for each other — without the coordination chaos.
               </p>
 
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-                <Link to="/new" onClick={() => { analytics.track('cta_try_click', { location: 'hero', lp_version: 'clusive_v1' }); window.scrollTo(0, 0); }}>
-                  <Button>
-                    Try Clusive
+              <div className="flex flex-col sm:flex-row items-start gap-4 pt-4">
+                <Link to="/new" onClick={() => { analytics.track('cta_get_early_access', { location: 'hero' }); window.scrollTo(0, 0); }}>
+                  <Button size="lg" className="text-base px-8">
+                    Get early access
                   </Button>
                 </Link>
                 <button 
                   onClick={() => {
-                    analytics.track('demo_click', { location: 'hero' });
-                    document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' });
+                    analytics.track('see_how_it_works_click', { location: 'hero' });
+                    document.getElementById('what-clusive-does')?.scrollIntoView({ behavior: 'smooth' });
                   }}
-                  className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                  className="text-base font-medium text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  Read the 2030+ vision →
+                  See how it works →
                 </button>
               </div>
             </div>
           </div>
         </section>
 
-        {/* How it Works - Full-width with centered content */}
-        <section id="how-it-works" className="py-20 px-6 border-t border-border bg-background">
-          <div className="max-w-[1040px] mx-auto">
-            <div className="text-center mb-16">
-              <div className="uppercase text-[0.75rem] tracking-[0.15em] text-muted-foreground font-medium mb-3">
-                How Clusive Works
+        {/* Section 1 - The Problem */}
+        <section className="py-24 px-6 border-t border-border bg-background">
+          <div className="max-w-[880px] mx-auto">
+            <h2 className="text-3xl md:text-4xl font-semibold text-foreground mb-8">
+              Connection shouldn't feel this hard.
+            </h2>
+            
+            <div className="space-y-3 text-lg text-muted-foreground leading-[1.7]">
+              <p>Group chats, DMs, endless "we should hang" messages — but nothing actually happens.</p>
+              <p>It's not that people don't care. It's that coordination is work.</p>
+              <div className="pt-2 space-y-1">
+                <p>Too many preferences.</p>
+                <p>Too many schedules.</p>
+                <p>Too many tools that weren't built for real life.</p>
               </div>
-              <h2 className="text-2xl font-semibold text-foreground">
-                One link. Three options. One locked plan.
-              </h2>
+              <p className="pt-4 font-medium text-foreground">Clusive changes that.</p>
             </div>
+          </div>
+        </section>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-              <div className="space-y-3">
-                <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                  1
+        {/* Section 2 - What Clusive Does */}
+        <section id="what-clusive-does" className="py-24 px-6 border-t border-border bg-background">
+          <div className="max-w-[880px] mx-auto">
+            <h2 className="text-3xl md:text-4xl font-semibold text-foreground mb-6">
+              Clusive makes it easy to stay close.
+            </h2>
+            
+            <p className="text-lg text-muted-foreground leading-[1.7] mb-16 max-w-[700px]">
+              Clusive learns your group's rhythms, preferences, and patterns — and quietly handles the logistics so you don't have to.
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-4">
+                <div className="w-10 h-10 flex items-center justify-center rounded-lg border border-border">
+                  <Sparkles className="w-5 h-5 text-foreground" />
                 </div>
-                <h3 className="text-base font-semibold text-foreground">Set the context</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  Tell Clusive the time, general area, and occasion.
+                <h3 className="text-xl font-semibold text-foreground">Smart suggestions</h3>
+                <p className="text-base text-muted-foreground leading-[1.7]">
+                  Clusive proposes times, places, and ideas that actually fit your group.
                 </p>
               </div>
 
-              <div className="space-y-3">
-                <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                  2
+              <div className="space-y-4">
+                <div className="w-10 h-10 flex items-center justify-center rounded-lg border border-border">
+                  <CalendarCheck className="w-5 h-5 text-foreground" />
                 </div>
-                <h3 className="text-base font-semibold text-foreground">Get three options</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  AI generates three curated picks with context on why each fits.
+                <h3 className="text-xl font-semibold text-foreground">One-tap plans</h3>
+                <p className="text-base text-muted-foreground leading-[1.7]">
+                  No 40-message threads. Just "yes," "no," or "next time."
                 </p>
               </div>
 
-              <div className="space-y-3">
-                <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                  3
+              <div className="space-y-4">
+                <div className="w-10 h-10 flex items-center justify-center rounded-lg border border-border">
+                  <RotateCcw className="w-5 h-5 text-foreground" />
                 </div>
-                <h3 className="text-base font-semibold text-foreground">Share and lock</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  Everyone taps once. Clusive auto-locks and sends Add to Calendar.
+                <h3 className="text-xl font-semibold text-foreground">Routines that stick</h3>
+                <p className="text-base text-muted-foreground leading-[1.7]">
+                  Weekly dinners, monthly game nights, Sunday walks — Clusive helps you keep them going.
+                </p>
+              </div>
+
+              <div className="space-y-4">
+                <div className="w-10 h-10 flex items-center justify-center rounded-lg border border-border">
+                  <Archive className="w-5 h-5 text-foreground" />
+                </div>
+                <h3 className="text-xl font-semibold text-foreground">Shared memory</h3>
+                <p className="text-base text-muted-foreground leading-[1.7]">
+                  Your group's history, vibes, and favorite spots, all in one place.
                 </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* System Overview - 3 Column Grid */}
-        <section className="py-20 px-6 border-t border-border bg-background">
-          <div className="max-w-[1040px] mx-auto">
-            <div className="text-center mb-16">
-              <div className="uppercase text-[0.75rem] tracking-[0.15em] text-muted-foreground font-medium mb-3">
-                System Overview
-              </div>
-              <h2 className="text-2xl font-semibold text-foreground">
-                Designed to be felt, not seen.
-              </h2>
+        {/* Section 3 - For Small Groups */}
+        <section className="py-24 px-6 border-t border-border bg-background">
+          <div className="max-w-[880px] mx-auto">
+            <h2 className="text-3xl md:text-4xl font-semibold text-foreground mb-6">
+              Built for circles of 2–8 — where life actually happens.
+            </h2>
+            
+            <div className="space-y-4 text-lg text-muted-foreground leading-[1.7]">
+              <p>Most tools are built for feeds, followers, and scale.</p>
+              <p className="font-medium text-foreground">Clusive is built for:</p>
+              <ul className="space-y-2 pl-6">
+                <li className="list-disc">couples and best friends</li>
+                <li className="list-disc">group chats that actually want to meet</li>
+                <li className="list-disc">teams and side-project crews</li>
+                <li className="list-disc">housemates, squads, and micro-communities</li>
+              </ul>
+              <p className="pt-6 italic">If it's a group you'd be sad to lose, it belongs on Clusive.</p>
             </div>
+          </div>
+        </section>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-              <div className="space-y-2.5">
-                <h3 className="text-base font-semibold text-foreground">Group OS</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  Three tailored picks, not a directory. Lives where conversations already happen.
+        {/* Section 4 - The AI Behind Clusive */}
+        <section className="py-24 px-6 border-t border-border bg-background">
+          <div className="max-w-[880px] mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+              <div>
+                <h2 className="text-3xl md:text-4xl font-semibold text-foreground mb-6">
+                  AI that supports connection — not replaces it.
+                </h2>
+                <p className="text-lg text-muted-foreground leading-[1.7]">
+                  Clusive uses AI to understand your group's preferences, suggest plans, and detect routines — not to replace human contact.
                 </p>
               </div>
 
-              <div className="space-y-2.5">
-                <h3 className="text-base font-semibold text-foreground">Ritual memory</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  Clear thresholds. One-tap decisions. Only essential updates.
-                </p>
-              </div>
-
-              <div className="space-y-2.5">
-                <h3 className="text-base font-semibold text-foreground">Belonging layer</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  Calm infrastructure. No noise. Frictionless consensus.
-                </p>
+              <div className="space-y-3 text-base text-muted-foreground leading-[1.7]">
+                <p>Learns when your group can actually meet.</p>
+                <p>Understands what you like (and what you don't).</p>
+                <p>Spots emerging rituals and helps them stick.</p>
+                <p className="pt-4 font-medium text-foreground">It's infrastructure, not a personality.</p>
+                <p className="text-muted-foreground">Quietly powerful in the background.</p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Share Card Section */}
-        <section className="py-20 px-6 border-t border-border bg-background">
-          <div className="max-w-[1040px] mx-auto">
-            <div className="text-center mb-16">
-              <div className="uppercase text-[0.75rem] tracking-[0.15em] text-muted-foreground font-medium mb-3">
-                Chat Integration
-              </div>
-              <h2 className="text-2xl font-semibold text-foreground mb-4">
-                Your plan, right in the chat
-              </h2>
-              <p className="text-sm text-muted-foreground max-w-[580px] mx-auto leading-relaxed">
-                Paste a Clusive link and a clean card unfurls. Everyone taps. When consensus is reached, Clusive locks the plan and sends Add to Calendar.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-[720px] mx-auto">
-              <div className="p-6 border border-border bg-card rounded-lg space-y-1.5">
-                <h3 className="text-sm font-semibold text-foreground">Created</h3>
-                <p className="text-xs text-muted-foreground uppercase tracking-wider">Vote open</p>
-              </div>
-
-              <div className="p-6 border border-border bg-card rounded-lg space-y-1.5">
-                <h3 className="text-sm font-semibold text-foreground">Almost locked</h3>
-                <p className="text-xs text-muted-foreground uppercase tracking-wider">Few more taps</p>
-              </div>
-
-              <div className="p-6 border border-border bg-card rounded-lg space-y-1.5">
-                <h3 className="text-sm font-semibold text-foreground">Locked</h3>
-                <p className="text-xs text-muted-foreground uppercase tracking-wider">Calendar sent</p>
+        {/* Section 5 - Social Proof / Future */}
+        <section className="py-24 px-6 border-t border-border bg-background">
+          <div className="max-w-[700px] mx-auto text-center space-y-8">
+            <h2 className="text-3xl md:text-4xl font-semibold text-foreground">
+              The future of staying close.
+            </h2>
+            
+            <div className="space-y-3 text-lg text-muted-foreground leading-[1.7]">
+              <p>We're building Clusive for a world where your closest relationships don't get lost in feeds and calendars.</p>
+              <div className="pt-2 space-y-1">
+                <p>No endless scrolling.</p>
+                <p>No engagement traps.</p>
+                <p>Just an intelligent layer that makes it easier to show up for the people who matter.</p>
               </div>
             </div>
-          </div>
-        </section>
 
-        {/* Use Cases */}
-        <section className="py-20 px-6 border-t border-border bg-background">
-          <div className="max-w-[1040px] mx-auto">
-            <div className="text-center mb-16">
-              <div className="uppercase text-[0.75rem] tracking-[0.15em] text-muted-foreground font-medium mb-3">
-                Use Cases
-              </div>
-              <h2 className="text-2xl font-semibold text-foreground">
-                Built for the plans you actually make
-              </h2>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              <div className="p-6 rounded-lg border border-border bg-card hover:border-foreground/20 transition-colors">
-                <h3 className="text-sm font-semibold text-foreground mb-1.5">After-work drinks</h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">Quick decisions with the whole crew.</p>
-              </div>
-
-              <div className="p-6 rounded-lg border border-border bg-card hover:border-foreground/20 transition-colors">
-                <h3 className="text-sm font-semibold text-foreground mb-1.5">Saturday dinner + bar</h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">Two stops in one coordinated plan.</p>
-              </div>
-
-              <div className="p-6 rounded-lg border border-border bg-card hover:border-foreground/20 transition-colors">
-                <h3 className="text-sm font-semibold text-foreground mb-1.5">Sunday brunch</h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">Conversation-friendly spots, agreed fast.</p>
-              </div>
-
-              <div className="p-6 rounded-lg border border-border bg-card hover:border-foreground/20 transition-colors">
-                <h3 className="text-sm font-semibold text-foreground mb-1.5">First-date plans</h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">Three options. Both tap. Plan locks.</p>
-              </div>
-
-              <div className="p-6 rounded-lg border border-border bg-card hover:border-foreground/20 transition-colors">
-                <h3 className="text-sm font-semibold text-foreground mb-1.5">Dating app matches</h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">Share a Clusive link to coordinate place and time.</p>
-              </div>
-
-              <div className="p-6 rounded-lg border border-border bg-card hover:border-foreground/20 transition-colors">
-                <h3 className="text-sm font-semibold text-foreground mb-1.5">Group rituals</h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">Rec leagues, parent nights, recurring hangouts.</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Social Proof */}
-        <section className="py-20 px-6 border-t border-border bg-background">
-          <div className="max-w-[600px] mx-auto">
-            <div className="p-10 rounded-lg border border-border bg-card text-center">
-              <p className="text-lg font-medium text-foreground italic">
-                "Agreed in 6 minutes instead of 2 days."
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Final CTA */}
-        <section className="py-20 px-6 bg-background">
-          <div className="max-w-[600px] mx-auto">
-            <div className="p-12 text-center border border-border bg-card rounded-lg">
-              <h2 className="text-2xl font-semibold text-foreground mb-4">
-                Skip the 147-message spiral.
-              </h2>
-              <p className="text-base text-muted-foreground mb-8 leading-relaxed">
-                One link. Three options. One tap each.
-              </p>
-              <Link to="/new" onClick={() => { analytics.track('cta_try_click', { location: 'final', lp_version: 'clusive_v1' }); window.scrollTo(0, 0); }}>
-                <Button>
-                  Create a plan
+            <div className="pt-6">
+              <Link to="/new" onClick={() => { analytics.track('cta_join_waitlist', { location: 'future_section' }); window.scrollTo(0, 0); }}>
+                <Button size="lg" className="text-base px-8">
+                  Join the waitlist for Clusive
                 </Button>
               </Link>
-              <p className="text-xs text-muted-foreground mt-5 uppercase tracking-wider">
-                No login. Free during early access.
-              </p>
             </div>
           </div>
         </section>

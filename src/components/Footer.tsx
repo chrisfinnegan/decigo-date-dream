@@ -2,18 +2,30 @@ import { Link } from "react-router-dom";
 
 export const Footer = () => {
   return (
-    <footer className="bg-background border-t border-border py-8 px-6">
-      <div className="max-w-[840px] mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-        <p className="text-[0.75rem] text-muted-foreground uppercase tracking-[0.12em]">
-          Privacy-light by design. Your data, your control.
-        </p>
-        <div className="flex gap-8">
-          <Link to="/legal/privacy" className="text-[0.75rem] text-muted-foreground hover:text-foreground no-underline uppercase tracking-[0.12em] transition-colors">
-            Privacy
-          </Link>
-          <Link to="/legal/terms" className="text-[0.75rem] text-muted-foreground hover:text-foreground no-underline uppercase tracking-[0.12em] transition-colors">
-            Terms
-          </Link>
+    <footer className="bg-background border-t border-border py-12 px-6">
+      <div className="max-w-[880px] mx-auto">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-6">
+          <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+            <a href="#about" className="hover:text-foreground transition-colors">About</a>
+            <span>·</span>
+            <span>AI Social Infrastructure</span>
+            <span>·</span>
+            <Link to="/legal/privacy" className="hover:text-foreground transition-colors">
+              Privacy
+            </Link>
+            <span>·</span>
+            <Link to="/legal/terms" className="hover:text-foreground transition-colors">
+              Terms
+            </Link>
+          </div>
+          <div className="flex gap-4 text-sm text-muted-foreground">
+            <a href="https://x.com/clusive" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
+              @clusive
+            </a>
+          </div>
+        </div>
+        <div className="text-sm text-muted-foreground">
+          Clusive, Inc. © 2025
         </div>
       </div>
     </footer>
