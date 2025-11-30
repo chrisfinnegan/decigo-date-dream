@@ -31,7 +31,7 @@ const Index = () => {
               </h1>
               
               <p className="text-lg text-muted-foreground max-w-[640px] leading-[1.7]">
-                Clusive is an AI-powered space where your groups can form, plan, and keep showing up for each other — without the coordination chaos.
+                Clusive is an AI-powered space where your groups can form, plan, and keep showing up for each other, without the coordination chaos.
               </p>
 
               <div className="flex flex-col sm:flex-row items-start gap-4 pt-4">
@@ -82,7 +82,7 @@ const Index = () => {
             </h2>
             
             <p className="text-lg text-muted-foreground leading-[1.7] mb-16 max-w-[700px]">
-              Clusive learns your group's rhythms, preferences, and patterns — and quietly handles the logistics so you don't have to.
+              Clusive learns your group's rhythms, preferences, and patterns and quietly handles the logistics so you don't have to.
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -133,7 +133,7 @@ const Index = () => {
         <section className="py-24 px-6 border-t border-border bg-background">
           <div className="max-w-[880px] mx-auto">
             <h2 className="text-3xl md:text-4xl font-semibold text-foreground mb-6">
-              Built for circles of 2–8 — where life actually happens.
+              Built for circles of 2–8, where life actually happens.
             </h2>
             
             <div className="space-y-4 text-lg text-muted-foreground leading-[1.7]">
@@ -156,10 +156,10 @@ const Index = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
               <div>
                 <h2 className="text-3xl md:text-4xl font-semibold text-foreground mb-6">
-                  AI that supports connection — not replaces it.
+                  AI that supports connection, not replaces it.
                 </h2>
                 <p className="text-lg text-muted-foreground leading-[1.7]">
-                  Clusive uses AI to understand your group's preferences, suggest plans, and detect routines — not to replace human contact.
+                  Clusive uses AI to understand your group's preferences, suggest plans, and detect routines, not to replace human contact.
                 </p>
               </div>
 
