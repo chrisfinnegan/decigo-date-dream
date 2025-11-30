@@ -627,10 +627,10 @@ const PlanView = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <div className="p-4 max-w-4xl mx-auto space-y-6 py-8">
+      <div className="max-w-[840px] mx-auto px-6 py-12 space-y-8">
         {/* Title and Subtitle */}
-        <div className="text-center space-y-2 mb-6">
-          <h1 className="text-3xl font-bold text-primary">
+        <div className="text-center space-y-3 mb-8">
+          <h1 className="text-3xl font-semibold text-foreground">
             Help choose the plan
           </h1>
           <p className="text-base text-muted-foreground max-w-xl mx-auto">
@@ -647,11 +647,11 @@ const PlanView = () => {
           </div>
         </div>
 
-        <div className="card bg-accent/10 border-accent/20">
+        <div className="card border-primary/20 bg-primary/5">
           <div className="space-y-4">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <p className="text-sm font-medium text-primary">
+                <p className="text-sm font-medium text-foreground">
                   Progress: {totalVotes}/{plan.threshold} votes to lock
                 </p>
                 {totalVotes >= plan.threshold - 1 && totalVotes < plan.threshold && (
@@ -667,7 +667,7 @@ const PlanView = () => {
             </div>
 
             <div className="pt-2">
-              <p className="text-sm font-medium mb-2 flex items-center gap-2 text-primary">
+              <p className="text-sm font-medium mb-2 flex items-center gap-2 text-foreground">
                 <Share2 className="w-4 h-4" />
                 Share with everyone
               </p>
@@ -694,10 +694,10 @@ const PlanView = () => {
 
         {/* Sticky Vote Recap */}
         {myVotes.length > 0 && plan.headcount >= 4 && (
-          <div className="card bg-primary/10 border-primary/20 sticky top-4 z-10">
+          <div className="card border-primary/20 bg-primary/5 sticky top-4 z-10">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-semibold text-primary">
+                <p className="text-sm font-semibold text-foreground">
                   ✓ You voted for {myVotes.length} {myVotes.length === 1 ? 'option' : 'options'}
                 </p>
                 <p className="text-xs text-muted-foreground">
@@ -722,8 +722,8 @@ const PlanView = () => {
         ) : (
           <>
             {/* Voting Instructions for larger groups */}
-            <div className="card bg-primary/5 border-primary/10">
-              <p className="text-sm text-primary font-medium text-center">
+            <div className="card border-primary/20 bg-primary/5">
+              <p className="text-sm text-foreground font-medium text-center">
                 💡 Select one or more places below to cast your vote
               </p>
             </div>
@@ -731,7 +731,7 @@ const PlanView = () => {
             {/* Options List */}
             <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-primary">
+            <h2 className="text-xl font-semibold text-foreground">
               {showAll ? "All Options" : "Best matches for you"}
             </h2>
             <Button
@@ -773,7 +773,7 @@ const PlanView = () => {
                   <div className="flex-1 space-y-3">
                     <div>
                       <div className="flex items-start justify-between mb-1">
-                        <h3 className="font-bold text-primary text-lg flex items-center gap-2">
+                        <h3 className="font-semibold text-foreground text-lg flex items-center gap-2">
                           {option.rank}. {option.name}
                           {hasVoted && <Badge className="bg-primary text-white text-xs">✓ Your pick</Badge>}
                         </h3>
@@ -786,7 +786,7 @@ const PlanView = () => {
                     </div>
                     
                     <div>
-                      <p className="text-xs font-medium text-primary mb-1">Why it fits:</p>
+                      <p className="text-xs font-medium text-foreground mb-1">Why it fits:</p>
                       <p className="text-sm text-muted-foreground">{option.why_it_fits}</p>
                     </div>
 

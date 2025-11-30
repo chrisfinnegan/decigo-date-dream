@@ -18,11 +18,12 @@ export default {
         inter: ['Inter', 'system-ui', 'sans-serif'],
       },
       colors: {
-        // Clusive Brand Colors - AI Social Infrastructure
-        'clusive-black': '#111111',      // Primary text & mark
-        'clusive-aqua': '#0096A0',       // Accent (primary buttons, links)
-        'clusive-border': '#E4E4E4',     // Subtle borders
-        'clusive-muted': '#717171',      // Muted/secondary text
+        // Clusive Brand Colors - Direct hex values for reference only
+        // Use semantic tokens (foreground, primary, etc.) in components
+        'clusive-black': '#111111',      // Primary text (use: text-foreground)
+        'clusive-aqua': '#0096A0',       // Accent (use: text-primary, bg-primary)
+        'clusive-border': '#E4E4E4',     // Borders (use: border-border)
+        'clusive-muted': '#717171',      // Secondary text (use: text-muted-foreground)
         
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

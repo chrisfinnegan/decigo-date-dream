@@ -8,46 +8,38 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Clusive Brand System - AI Social Infrastructure */
+    /* === ROOT (LIGHT MODE) === */
+    /* Core Brand Colors - Clusive Brand Book v1.0 */
+    --background: 0 0% 100%;           /* #FFFFFF - primary background */
+    --foreground: 0 0% 7%;             /* #111111 - primary text, headings */
     
-    /* Backgrounds - Pure white infrastructure */
-    --background: 0 0% 100%; /* #FFFFFF */
-    --foreground: 0 0% 7%; /* #111111 - Clusive Black */
-
-    /* Card surfaces */
-    --card: 0 0% 100%; /* #FFFFFF - White cards */
-    --card-foreground: 0 0% 7%; /* #111111 - Clusive Black */
-
-    /* Popovers */
+    --card: 0 0% 100%;                 /* #FFFFFF - card backgrounds */
+    --card-foreground: 0 0% 7%;        /* #111111 - text on cards */
+    
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 7%;
-
-    /* Primary - Clusive Aqua accent */
-    --primary: 184 100% 31%; /* #0096A0 - Clusive Aqua */
-    --primary-foreground: 0 0% 100%; /* White text on primary */
-
-    /* Secondary surfaces */
-    --secondary: 0 0% 98%; /* Subtle off-white */
-    --secondary-foreground: 0 0% 7%; /* Clusive Black text */
-
-    /* Muted elements */
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 44%; /* #717171 - Clusive muted text */
-
-    /* Accent - hover state (slightly darker aqua) */
-    --accent: 184 100% 28%; /* Darker aqua for hover */
+    
+    /* Aqua accent - use SPARINGLY (buttons, links, small highlights only) */
+    --primary: 184 100% 31%;           /* #0096A0 - Clusive Aqua */
+    --primary-foreground: 0 0% 100%;   /* White text on Aqua */
+    
+    --secondary: 0 0% 96%;             /* Very light grey for subtle surfaces */
+    --secondary-foreground: 0 0% 7%;   /* #111111 text */
+    
+    --muted: 0 0% 96%;                 /* Subtle background tints */
+    --muted-foreground: 0 0% 44%;      /* #717171 - body copy, helper text */
+    
+    --accent: 184 100% 31%;            /* Aqua for interactive elements */
     --accent-foreground: 0 0% 100%;
-
-    /* Destructive states */
-    --destructive: 3 82% 57%;
+    
+    --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
-
-    /* Borders - Subtle infrastructure */
-    --border: 0 0% 89%; /* #E4E4E4 - Clusive subtle border */
+    
+    --border: 0 0% 89%;                /* #E4E4E4 - subtle borders */
     --input: 0 0% 89%;
-    --ring: 184 100% 31%; /* #0096A0 - Clusive Aqua for focus */
-
-    --radius: 0.625rem; /* 10px - clean, minimal */
+    --ring: 184 100% 31%;              /* Aqua focus rings */
+    
+    --radius: 0.75rem;                 /* 12px - modern rounded corners */
 
     --sidebar-background: 0 0% 98%;
 
@@ -119,6 +111,7 @@ All colors MUST be HSL.
     -moz-osx-font-smoothing: grayscale;
   }
 
+  /* Headings - ALWAYS use foreground color (#111111), never Aqua */
   h1, h2, h3, h4, h5, h6 {
     @apply text-foreground font-inter;
     font-weight: 600;
@@ -146,22 +139,25 @@ All colors MUST be HSL.
 }
 
 @layer components {
+  /* Button styles - pill-shaped, Aqua for primary only */
   .btn-primary {
     @apply bg-primary text-primary-foreground rounded-full px-7 py-3 font-medium hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 transition-all;
   }
 
   .btn-secondary {
-    @apply bg-transparent text-muted-foreground border-0 rounded-full px-7 py-3 font-medium hover:text-foreground focus:outline-none transition-colors;
+    @apply bg-background text-foreground border border-border rounded-full px-7 py-3 font-medium hover:bg-secondary focus:outline-none transition-all;
   }
 
+  /* Card styles - minimal, clean surfaces */
   .card {
-    @apply bg-card rounded-2xl border border-border p-4;
+    @apply bg-card rounded-xl border border-border p-6;
   }
   
   .card-elevated {
-    @apply bg-card rounded-2xl border border-border p-6;
+    @apply bg-card rounded-xl border border-border p-6;
   }
 
+  /* Chip/Badge styles - subtle, minimal */
   .chip {
     @apply bg-background border border-border text-foreground rounded-full px-3 py-1 text-xs font-medium uppercase tracking-wide;
   }

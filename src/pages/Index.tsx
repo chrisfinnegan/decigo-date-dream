@@ -19,10 +19,10 @@ const Index = () => {
     <>
       <Header />
       <div className="min-h-screen bg-background">
-        {/* Hero Section */}
+        {/* Hero Section - Full-width with centered content */}
         <section className="relative overflow-hidden bg-background">
           <HeroWaveBackground />
-          <div className="relative max-w-[840px] mx-auto px-6 lg:px-10 pt-24 pb-20">
+          <div className="relative max-w-[840px] mx-auto px-6 pt-24 pb-20">
             <div className="text-center space-y-8">
               {returningUser && (
                 <div className="inline-flex items-center gap-2 bg-secondary text-foreground px-3 py-1.5 rounded-full text-xs font-medium uppercase tracking-wider">
@@ -64,8 +64,8 @@ const Index = () => {
           </div>
         </section>
 
-        {/* How it Works */}
-        <section id="how-it-works" className="py-24 px-6 lg:px-10 border-t border-border bg-background">
+        {/* How it Works - Full-width with centered content */}
+        <section id="how-it-works" className="py-24 px-6 border-t border-border bg-background">
           <div className="max-w-[840px] mx-auto">
             <div className="text-center mb-20">
               <div className="uppercase text-[0.78rem] tracking-[0.15em] text-muted-foreground font-medium mb-4">
@@ -120,7 +120,7 @@ const Index = () => {
         </section>
 
         {/* System Overview - 3 Column Grid */}
-        <section className="py-24 px-6 lg:px-10 border-t border-border bg-background">
+        <section className="py-24 px-6 border-t border-border bg-background">
           <div className="max-w-[840px] mx-auto">
             <div className="text-center mb-20">
               <div className="uppercase text-[0.78rem] tracking-[0.15em] text-muted-foreground font-medium mb-4">
@@ -157,7 +157,7 @@ const Index = () => {
         </section>
 
         {/* Share Card Section */}
-        <section className="py-24 px-6 lg:px-10 border-t border-border bg-background">
+        <section className="py-24 px-6 border-t border-border bg-background">
           <div className="max-w-[840px] mx-auto">
             <div className="text-center mb-20">
               <div className="uppercase text-[0.78rem] tracking-[0.15em] text-muted-foreground font-medium mb-4">
@@ -200,7 +200,7 @@ const Index = () => {
         </section>
 
         {/* Use Cases */}
-        <section className="py-24 px-6 lg:px-10 border-t border-border bg-background">
+        <section className="py-24 px-6 border-t border-border bg-background">
           <div className="max-w-[840px] mx-auto">
             <div className="text-center mb-20">
               <div className="uppercase text-[0.78rem] tracking-[0.15em] text-muted-foreground font-medium mb-4">
@@ -246,7 +246,7 @@ const Index = () => {
         </section>
 
         {/* Social Proof */}
-        <section className="py-24 px-6 lg:px-10 border-t border-border bg-background">
+        <section className="py-24 px-6 border-t border-border bg-background">
           <div className="max-w-[560px] mx-auto">
             <div className="p-12 rounded-xl border border-border bg-card text-center">
               <div className="text-4xl mb-6">💬</div>
@@ -258,7 +258,7 @@ const Index = () => {
         </section>
 
         {/* Final CTA */}
-        <section className="py-24 px-6 lg:px-10 bg-background">
+        <section className="py-24 px-6 bg-background">
           <div className="max-w-[560px] mx-auto">
             <div className="p-14 text-center border border-border bg-card rounded-xl">
               <div className="text-4xl mb-6">😫 → 😎</div>
