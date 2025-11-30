@@ -203,7 +203,7 @@ const NewPlan = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <div className="px-4 py-8 space-y-8">
+      <div className="max-w-3xl mx-auto px-4 py-8 space-y-8">
         
         {/* Quick intro */}
         <div className="text-center space-y-3">
