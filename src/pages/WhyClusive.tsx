@@ -42,10 +42,10 @@ const WhyClusive = () => {
 
         {/* Opening Statement */}
         <section className="py-16 md:py-24 px-6">
-          <div className="max-w-[800px] mx-auto">
-            <p className="text-2xl md:text-3xl text-foreground leading-[1.5] font-light">
+          <div className="max-w-[700px] mx-auto">
+            <p className="text-lg md:text-xl text-muted-foreground leading-[1.7]">
               Most technology pulls attention away from the people you care about. 
-              <span className="font-medium"> Clusive is built for the opposite</span>: helping your small groups form, grow, and thrive with just enough intelligence in the background to keep you showing up for each other.
+              <span className="text-foreground font-medium"> Clusive is built for the opposite</span>: helping your small groups form, grow, and thrive with just enough intelligence in the background to keep you showing up for each other.
             </p>
           </div>
         </section>
@@ -53,9 +53,9 @@ const WhyClusive = () => {
         {/* The Problem - Split layout */}
         <section className="py-16 md:py-32 px-6 bg-secondary/20">
           <div className="max-w-[1100px] mx-auto">
-            <div className="grid md:grid-cols-2 gap-16 items-start">
-              <div>
-                <h2 className="text-4xl md:text-5xl font-semibold text-foreground leading-[1.15] mb-12">
+            <div className="grid md:grid-cols-2 gap-16 items-center">
+              <div className="md:sticky md:top-32">
+                <h2 className="text-4xl md:text-5xl font-semibold text-foreground leading-[1.15]">
                   Connection is breaking on two fronts
                 </h2>
               </div>
@@ -224,23 +224,23 @@ const WhyClusive = () => {
 
         {/* Design Principles - Pullquote style */}
         <section className="py-24 md:py-32 px-6 bg-gradient-to-b from-secondary/30 to-background">
-          <div className="max-w-[900px] mx-auto text-center space-y-12">
+          <div className="max-w-[900px] mx-auto text-center space-y-16">
             <h2 className="text-4xl md:text-5xl font-semibold text-foreground leading-[1.15]">
               Calm, intelligent, and warmly human
             </h2>
             
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-6 pt-8">
-              {['Calm', 'Intelligent', 'Invisible', 'Warmly human', 'Trustworthy', 'Privacy-first'].map((principle, i) => (
-                <div 
+            <div className="flex flex-wrap justify-center gap-4 pt-4">
+              {['Calm', 'Intelligent', 'Invisible', 'Warmly human', 'Trustworthy', 'Privacy-first'].map((principle) => (
+                <span 
                   key={principle}
-                  className="p-6 rounded-2xl bg-background/50 backdrop-blur-sm border border-border/50"
+                  className="text-xl md:text-2xl font-light text-foreground/70 px-4 py-2"
                 >
-                  <p className="text-lg font-medium text-foreground">{principle}</p>
-                </div>
+                  {principle}
+                </span>
               ))}
             </div>
 
-            <p className="text-2xl md:text-3xl font-light text-foreground/90 italic pt-12 leading-[1.4]">
+            <p className="text-2xl md:text-3xl font-light text-foreground/90 italic pt-8 leading-[1.4]">
               "We're designing something to be felt, not seen: <br className="hidden md:block" />
               the invisible fabric between people."
             </p>
