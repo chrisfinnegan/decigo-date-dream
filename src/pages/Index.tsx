@@ -33,7 +33,7 @@ const Index = () => {
               </h1>
               
               <p className="text-xl md:text-2xl text-muted-foreground max-w-[720px] mx-auto leading-[1.5]">
-                Clusive is an AI-powered home for your small groups. It remembers what you like, finds times that work, and turns "we should hang" into real plans — without the group-chat chaos.
+                Clusive is an AI-powered home for your small groups. It remembers what you like, finds times that work, and turns "we should hang" into real plans without the group-chat chaos.
               </p>
 
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6">
@@ -79,7 +79,7 @@ const Index = () => {
         <section id="what-clusive-does" className="py-20 md:py-32 px-6 bg-background">
           <div className="max-w-[800px] mx-auto text-center space-y-12">
             <h2 className="text-4xl md:text-5xl font-semibold text-foreground mb-12 leading-[1.2]">
-              Built for 2–8 people you'd be sad to lose.
+              Built for 2 to 8 people you'd be sad to lose.
             </h2>
             
             <p className="text-lg md:text-xl text-muted-foreground leading-[1.7]">
