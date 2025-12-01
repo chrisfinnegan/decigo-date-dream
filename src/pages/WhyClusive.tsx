@@ -222,40 +222,26 @@ const WhyClusive = () => {
           </div>
         </section>
 
-        {/* Design Principles - Editorial style */}
-        <section className="py-24 md:py-32 px-6 bg-gradient-to-b from-secondary/30 to-background">
-          <div className="max-w-[1000px] mx-auto space-y-20">
-            <h2 className="text-4xl md:text-5xl font-semibold text-foreground leading-[1.15] text-center">
-              Calm, intelligent, and warmly human
-            </h2>
-            
-            <div className="space-y-8 max-w-[600px] mx-auto">
-              {[
-                { word: 'Calm', desc: 'No noise, no feeds, no endless scroll' },
-                { word: 'Intelligent', desc: 'AI that works in the background' },
-                { word: 'Invisible', desc: 'Felt, not seen' },
-                { word: 'Warmly human', desc: 'Designed for real relationships' },
-                { word: 'Trustworthy', desc: 'Your data, your groups, your control' },
-                { word: 'Privacy-first', desc: 'Built on respect' }
-              ].map((principle, i) => (
-                <div 
-                  key={principle.word}
-                  className="flex items-baseline gap-6 border-l-2 border-primary/30 pl-6 py-2"
-                >
-                  <span className="text-2xl md:text-3xl font-semibold text-foreground min-w-[140px] md:min-w-[200px]">
-                    {principle.word}
-                  </span>
-                  <span className="text-lg md:text-xl text-muted-foreground font-light">
-                    {principle.desc}
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            <p className="text-2xl md:text-3xl font-light text-foreground/90 italic pt-12 leading-[1.4] text-center max-w-[700px] mx-auto">
-              "We're designing something to be felt, not seen: <br className="hidden md:block" />
-              the invisible fabric between people."
+        {/* Design Principles - Minimal */}
+        <section className="py-20 md:py-24 px-6">
+          <div className="max-w-[800px] mx-auto text-center space-y-12">
+            <p className="text-2xl md:text-3xl font-light text-foreground/90 italic leading-[1.4]">
+              "We're designing something to be felt, not seen: the invisible fabric between people."
             </p>
+            
+            <div className="text-sm md:text-base text-muted-foreground/60 font-light tracking-wider uppercase space-x-3 md:space-x-6">
+              <span>Calm</span>
+              <span>·</span>
+              <span>Intelligent</span>
+              <span>·</span>
+              <span>Invisible</span>
+              <span>·</span>
+              <span>Human</span>
+              <span>·</span>
+              <span>Trustworthy</span>
+              <span>·</span>
+              <span>Private</span>
+            </div>
           </div>
         </section>
 
