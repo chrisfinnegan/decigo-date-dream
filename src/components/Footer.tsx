@@ -8,7 +8,9 @@ export const Footer = () => {
           <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
             <a href="#about" className="hover:text-foreground transition-colors">About</a>
             <span>·</span>
-            <span>AI Social Infrastructure</span>
+            <Link to="/why-clusive" className="hover:text-foreground transition-colors">
+              Why Clusive
+            </Link>
             <span>·</span>
             <Link to="/legal/privacy" className="hover:text-foreground transition-colors">
               Privacy
