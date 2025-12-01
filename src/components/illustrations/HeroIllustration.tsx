@@ -28,7 +28,7 @@ export const HeroIllustration = () => {
         const { data, error } = await supabase.functions.invoke('generate-illustration', {
           body: {
             section: 'hero-v3',
-            prompt: 'A bold, modern photo of 4-5 real diverse friends genuinely laughing and collaborating around a phone in an urban coffee shop. Natural daylight streaming through large windows. Candid, authentic moment captured documentary-style. Sharp focus on faces showing real joy and connection. Warm, cinematic color grading with rich purples and corals in the environment. Shot on professional camera with shallow depth of field. Photorealistic, NOT illustrated or animated. 16:9 aspect ratio. Magazine editorial photography style.'
+            prompt: 'Abstract, stylized illustration of diverse friends connecting and planning together. Flowing shapes and overlapping forms suggesting movement and collaboration. Warm purple and coral color palette with soft gradients. Geometric elements mixed with organic human silhouettes. Modern, clean vector style with depth through layering. Sense of joy and connection without literal faces. 16:9 aspect ratio. Contemporary digital illustration with artistic abstraction.'
           }
         });
 
