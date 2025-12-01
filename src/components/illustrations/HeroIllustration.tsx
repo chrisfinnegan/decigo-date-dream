@@ -13,7 +13,7 @@ export const HeroIllustration = () => {
         const { data: existing } = await supabase
           .from('illustrations')
           .select('image_url')
-          .eq('section', 'hero-v4')
+          .eq('section', 'hero-v5')
           .order('created_at', { ascending: false })
           .limit(1)
           .maybeSingle();
@@ -27,8 +27,8 @@ export const HeroIllustration = () => {
         // Generate new illustration
         const { data, error } = await supabase.functions.invoke('generate-illustration', {
           body: {
-            section: 'hero-v4',
-            prompt: 'Abstract, stylized illustration of diverse friends connecting and planning together. Flowing shapes and overlapping forms suggesting movement and collaboration. Warm purple and coral color palette with soft gradients. Geometric elements mixed with organic human silhouettes. Modern, clean vector style with depth through layering. Sense of joy and connection without literal faces. 16:9 aspect ratio. Contemporary digital illustration with artistic abstraction.'
+            section: 'hero-v5',
+            prompt: 'Stylized illustration of connected people using minimalist geometric shapes. Multiple colorful overlapping circles and rounded forms representing diverse individuals coming together. Warm gradient colors flowing from coral to purple to soft pink. Clean, modern vector art with depth through transparency and layering. Sense of unity and collaboration through intersecting shapes. Smooth curves and flowing lines. 16:9 aspect ratio. Contemporary flat design with subtle dimensional effects.'
           }
         });
 
