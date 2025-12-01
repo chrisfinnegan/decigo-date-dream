@@ -12,6 +12,12 @@ export const Header = () => {
           <img src="/brand/logo-name.png" alt="Clusive" className="h-7 w-auto" />
         </Link>
         <div className="flex items-center gap-6">
+          <Link 
+            to="/why-clusive" 
+            className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Why Clusive
+          </Link>
           <Link to="/new">
             <Button size="sm">
               {isPlanPage ? 'Create your own plan' : 'Get early access'}

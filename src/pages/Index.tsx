@@ -25,15 +25,15 @@ const Index = () => {
           <div className="max-w-[1200px] mx-auto px-6 pt-24 md:pt-32 pb-20 md:pb-32 text-center relative z-10">
             <div className="space-y-8 max-w-[900px] mx-auto">
               <div className="text-xs font-medium text-muted-foreground uppercase tracking-[0.2em]">
-                AI Social Infrastructure for groups
+                For your closest groups
               </div>
               
               <h1 className="text-5xl md:text-7xl font-semibold leading-[1.1] text-foreground tracking-tight">
-                Belong together.
+                Belong together, more often.
               </h1>
               
               <p className="text-xl md:text-2xl text-muted-foreground max-w-[720px] mx-auto leading-[1.5]">
-                Clusive is an AI-powered space where your groups can form, plan, and keep showing up for each other, without the coordination chaos.
+                Clusive is an AI-powered home for your small groups. It remembers what you like, finds times that work, and turns "we should hang" into real plans — without the group-chat chaos.
               </p>
 
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6">
@@ -58,117 +58,33 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Section 1 - The Problem */}
+        {/* Section 1 - What Clusive Does */}
         <section className="py-20 md:py-32 px-6 bg-background">
           <div className="max-w-[800px] mx-auto text-center">
             <h2 className="text-4xl md:text-5xl font-semibold text-foreground mb-12 leading-[1.2]">
-              Connection shouldn't feel this hard.
+              Less planning. More showing up.
             </h2>
             
-            <div className="space-y-6 text-lg md:text-xl text-muted-foreground leading-[1.7]">
-              <p>Group chats, DMs, endless "we should hang" messages, but nothing actually happens.</p>
-              <p>It's not that people don't care. It's that coordination is work.</p>
-              <div className="pt-4 space-y-4">
-                <p>Too many preferences.</p>
-                <p>Too many schedules.</p>
-                <p>Too many tools that weren't built for real life.</p>
+            <div className="space-y-8 text-lg md:text-xl text-muted-foreground leading-[1.7]">
+              <div className="space-y-3">
+                <p><span className="font-medium text-foreground">Smart suggestions</span> – Times and ideas that fit everyone.</p>
+                <p><span className="font-medium text-foreground">One-tap plans</span> – Say yes, pass, or suggest another time in a tap.</p>
+                <p><span className="font-medium text-foreground">Routines that stick</span> – Keep your dinners, walks, and game nights going.</p>
               </div>
-              <p className="pt-8 text-xl md:text-2xl font-medium text-foreground">Clusive changes that.</p>
             </div>
           </div>
         </section>
 
-        {/* Section 2 - What Clusive Does */}
+        {/* Section 2 - Who It's For */}
         <section id="what-clusive-does" className="py-20 md:py-32 px-6 bg-background">
-          <div className="max-w-[1200px] mx-auto">
-            <div className="text-center mb-20">
-              <h2 className="text-4xl md:text-5xl font-semibold text-foreground mb-8 leading-[1.2]">
-                Clusive makes it easy to stay close.
-              </h2>
-              
-              <p className="text-lg md:text-xl text-muted-foreground leading-[1.7] max-w-[720px] mx-auto">
-                Clusive learns your group's rhythms, preferences, and patterns and quietly handles the logistics so you don't have to.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-[900px] mx-auto">
-              <div className="flex gap-4">
-                <FeatureIcon 
-                  section="feature-smart-suggestions"
-                  prompt="A smartphone screen showing a map with restaurant pins and a glowing AI sparkle suggesting the perfect spot"
-                  alt="Smart suggestions icon"
-                />
-                <div>
-                  <h3 className="text-2xl font-semibold text-foreground mb-3">Smart suggestions</h3>
-                  <p className="text-base text-muted-foreground leading-[1.7]">
-                    Clusive proposes times, places, and ideas that actually fit your group.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex gap-4">
-                <FeatureIcon 
-                  section="feature-one-tap-plans"
-                  prompt="A hand tapping a phone with a green checkmark appearing, simple and clear action"
-                  alt="One-tap plans icon"
-                />
-                <div>
-                  <h3 className="text-2xl font-semibold text-foreground mb-3">One-tap plans</h3>
-                  <p className="text-base text-muted-foreground leading-[1.7]">
-                    No 40-message threads. Just "yes," "no," or "next time."
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex gap-4">
-                <FeatureIcon 
-                  section="feature-routines"
-                  prompt="A calendar showing multiple highlighted dates with small food and activity icons recurring weekly"
-                  alt="Routines icon"
-                />
-                <div>
-                  <h3 className="text-2xl font-semibold text-foreground mb-3">Routines that stick</h3>
-                  <p className="text-base text-muted-foreground leading-[1.7]">
-                    Weekly dinners, monthly game nights, Sunday walks. Clusive helps you keep them going.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex gap-4">
-                <FeatureIcon 
-                  section="feature-shared-memory"
-                  prompt="A collection of polaroid photos and memories arranged in a scrapbook style, warm and nostalgic"
-                  alt="Shared memory icon"
-                />
-                <div>
-                  <h3 className="text-2xl font-semibold text-foreground mb-3">Shared memory</h3>
-                  <p className="text-base text-muted-foreground leading-[1.7]">
-                    Your group's history, vibes, and favorite spots, all in one place.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Section 3 - For Small Groups */}
-        <section className="py-20 md:py-32 px-6 bg-background">
           <div className="max-w-[800px] mx-auto text-center space-y-12">
             <h2 className="text-4xl md:text-5xl font-semibold text-foreground mb-12 leading-[1.2]">
-              Built for circles of 2 to 8, where life actually happens.
+              Built for 2–8 people you'd be sad to lose.
             </h2>
             
-            <div className="space-y-6 text-lg md:text-xl text-muted-foreground leading-[1.7]">
-              <p>Most tools are built for feeds, followers, and scale.</p>
-              <p className="font-medium text-foreground text-xl">Clusive is built for:</p>
-              <div className="pt-4 space-y-3">
-                <p>couples and best friends</p>
-                <p>group chats that actually want to meet</p>
-                <p>teams and side-project crews</p>
-                <p>housemates, squads, and micro-communities</p>
-              </div>
-              <p className="pt-10 text-xl italic text-foreground/80">If it's a group you'd be sad to lose, it belongs on Clusive.</p>
-            </div>
+            <p className="text-lg md:text-xl text-muted-foreground leading-[1.7]">
+              Couples, best friends, group chats that actually want to meet, side-project crews, housemates, and small circles that want to keep showing up for each other.
+            </p>
             
             <SectionIllustration 
               section="small-groups"
@@ -179,54 +95,32 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Section 4 - The AI Behind Clusive */}
+        {/* Section 3 - AI in the Background */}
         <section className="py-20 md:py-32 px-6 bg-background">
-          <div className="max-w-[1000px] mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-semibold text-foreground mb-8 leading-[1.2]">
-                AI that supports connection, not replaces it.
-              </h2>
-              <p className="text-lg md:text-xl text-muted-foreground leading-[1.7] max-w-[720px] mx-auto">
-                Clusive uses AI to understand your group's preferences, suggest plans, and detect routines, not to replace human contact.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-[800px] mx-auto text-center">
-              <p className="text-base text-muted-foreground">Learns when your group can actually meet.</p>
-              <p className="text-base text-muted-foreground">Understands what you like (and what you don't).</p>
-              <p className="text-base text-muted-foreground">Spots emerging rituals and helps them stick.</p>
-              <p className="text-base text-foreground font-medium">It's infrastructure, not a personality.</p>
-            </div>
+          <div className="max-w-[800px] mx-auto text-center space-y-8">
+            <h2 className="text-4xl md:text-5xl font-semibold text-foreground mb-8 leading-[1.2]">
+              AI in the background. People in the center.
+            </h2>
             
-            <p className="text-center text-lg text-muted-foreground mt-12">Quietly powerful in the background.</p>
+            <p className="text-lg md:text-xl text-muted-foreground leading-[1.7] max-w-[720px] mx-auto">
+              Clusive quietly learns when you can meet and what you enjoy, then handles the logistics so your group doesn't have to.
+            </p>
           </div>
         </section>
 
-        {/* Section 5 - Social Proof / Future */}
+        {/* Section 4 - Closing Band */}
         <section className="py-20 md:py-32 px-6 bg-background">
-          <div className="max-w-[900px] mx-auto text-center space-y-12">
+          <div className="max-w-[800px] mx-auto text-center space-y-8">
             <h2 className="text-4xl md:text-5xl font-semibold text-foreground leading-[1.2]">
-              The future of staying close.
+              Make it easy to stay close.
             </h2>
             
-            <div className="space-y-6 text-lg md:text-xl text-muted-foreground leading-[1.7]">
-              <p className="max-w-[720px] mx-auto">We're building Clusive for a world where your closest relationships don't get lost in feeds and calendars.</p>
-              <div className="pt-4 space-y-4">
-                <p>No endless scrolling.</p>
-                <p>No engagement traps.</p>
-                <p className="text-foreground font-medium">Just an intelligent layer that makes it easier to show up for the people who matter.</p>
-              </div>
-            </div>
-            
-            <SectionIllustration 
-              section="future-connected"
-              prompt="A hopeful scene of people in the real world connecting authentically - having coffee, walking together, sharing moments. Phones in pockets. Sunlight streaming through. Purple and coral color palette, modern clean style."
-              alt="Future of connection illustration"
-              className="max-w-[600px] mx-auto shadow-lg"
-            />
+            <p className="text-lg md:text-xl text-muted-foreground leading-[1.7]">
+              Join the early access list and be one of the first groups on Clusive.
+            </p>
 
-            <div className="pt-8">
-              <Link to="/new" onClick={() => { analytics.track('cta_join_waitlist', { location: 'future_section' }); window.scrollTo(0, 0); }}>
+            <div className="pt-4">
+              <Link to="/new" onClick={() => { analytics.track('cta_join_waitlist', { location: 'closing_band' }); window.scrollTo(0, 0); }}>
                 <Button size="lg" className="text-base px-8">
                   Join the waitlist for Clusive
                 </Button>
@@ -234,6 +128,7 @@ const Index = () => {
             </div>
           </div>
         </section>
+
       </div>
       <Footer />
     </>

@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
+import WhyClusive from "./pages/WhyClusive";
 import NewPlan from "./pages/NewPlan";
 import PlanView from "./pages/PlanView";
 import PlanLocked from "./pages/PlanLocked";
@@ -27,6 +28,7 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/why-clusive" element={<WhyClusive />} />
           <Route path="/new" element={<NewPlan />} />
           <Route path="/p/:planId" element={<PlanView />} />
           <Route path="/p/:planId/locked" element={<PlanLocked />} />
