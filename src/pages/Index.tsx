@@ -89,7 +89,7 @@ const Index = () => {
               <div className="order-2 md:order-1">
                 <SectionIllustration 
                   section="small-groups"
-                  prompt="Abstract minimalist scene of 5-6 friends kayaking together on calm water at sunset. Flowing, organic shapes representing the kayaks and people. Warm, intimate feeling of connection and movement. Soft gradients, purple and coral reflections on water. Modern, stylized, inviting aesthetic."
+                  prompt="A warm, joyful scene of 5-6 diverse friends kayaking together on calm water during golden hour. They're paddling side by side, some laughing and talking across kayaks. Natural lighting with purple and coral reflections on the water. Realistic but stylized illustration."
                   alt="Small groups kayaking together"
                   className="w-full rounded-2xl shadow-lg"
                 />
