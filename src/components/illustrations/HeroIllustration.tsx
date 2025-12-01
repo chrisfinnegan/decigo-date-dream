@@ -13,7 +13,7 @@ export const HeroIllustration = () => {
         const { data: existing } = await supabase
           .from('illustrations')
           .select('image_url')
-          .eq('section', 'hero')
+          .eq('section', 'hero-v2')
           .order('created_at', { ascending: false })
           .limit(1)
           .maybeSingle();
