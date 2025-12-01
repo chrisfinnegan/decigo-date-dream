@@ -13,7 +13,7 @@ export const HeroIllustration = () => {
         const { data: existing } = await supabase
           .from('illustrations')
           .select('image_url')
-          .eq('section', 'hero-v2')
+          .eq('section', 'hero-v3')
           .order('created_at', { ascending: false })
           .limit(1)
           .maybeSingle();
@@ -27,8 +27,8 @@ export const HeroIllustration = () => {
         // Generate new illustration
         const { data, error } = await supabase.functions.invoke('generate-illustration', {
           body: {
-            section: 'hero-v2',
-            prompt: 'A vibrant scene of 4-5 diverse friends joyfully planning together in a bright, modern space. They are gathered naturally, some sitting, some standing, with genuine smiles and animated gestures. Soft purple and coral lighting creates warmth. One person holds a phone showing a plan. Wide angle, eye-level perspective. Contemporary, clean illustration style with rich colors and natural depth. 16:9 aspect ratio. Realistic but stylized with an optimistic, energetic mood.'
+            section: 'hero-v3',
+            prompt: 'A bold, modern photo of 4-5 real diverse friends genuinely laughing and collaborating around a phone in an urban coffee shop. Natural daylight streaming through large windows. Candid, authentic moment captured documentary-style. Sharp focus on faces showing real joy and connection. Warm, cinematic color grading with rich purples and corals in the environment. Shot on professional camera with shallow depth of field. Photorealistic, NOT illustrated or animated. 16:9 aspect ratio. Magazine editorial photography style.'
           }
         });
 
