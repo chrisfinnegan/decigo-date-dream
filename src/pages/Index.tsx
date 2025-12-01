@@ -9,6 +9,7 @@ import { HeroWaveBackground } from "@/components/HeroWaveBackground";
 import { HeroIllustration } from "@/components/illustrations/HeroIllustration";
 import { FeatureIcon } from "@/components/illustrations/FeatureIcon";
 import { SectionIllustration } from "@/components/illustrations/SectionIllustration";
+import aiBackgroundImg from "@/assets/ai-background-illustration.png";
 
 const Index = () => {
   useEffect(() => {
@@ -121,11 +122,11 @@ const Index = () => {
                 </p>
               </div>
               <div>
-                <SectionIllustration 
-                  section="future-of-staying-close"
-                  prompt="A warm, intimate scene showing diverse friends naturally connecting in a modern setting with subtle AI elements in the background. Purple and coral accents. Realistic but stylized illustration showing technology supporting human connection."
+                <img 
+                  src={aiBackgroundImg}
                   alt="AI supporting human connection illustration"
-                  className="w-full rounded-2xl shadow-lg"
+                  className="w-full h-auto rounded-2xl shadow-lg"
+                  loading="lazy"
                 />
               </div>
             </div>
