@@ -12,25 +12,6 @@ const WhyClusive = () => {
     analytics.track('why_clusive_view');
   }, []);
 
-  // Scroll animation observer
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('animate-fade-in');
-          }
-        });
-      },
-      { threshold: 0.1, rootMargin: '0px 0px -100px 0px' }
-    );
-
-    document.querySelectorAll('.fade-on-scroll').forEach((el) => {
-      observer.observe(el);
-    });
-
-    return () => observer.disconnect();
-  }, []);
 
   return (
     <>
@@ -61,7 +42,7 @@ const WhyClusive = () => {
 
         {/* Opening Statement */}
         <section className="py-16 md:py-24 px-6">
-          <div className="max-w-[800px] mx-auto fade-on-scroll opacity-0">
+          <div className="max-w-[800px] mx-auto">
             <p className="text-2xl md:text-3xl text-foreground leading-[1.5] font-light">
               Most technology pulls attention away from the people you care about. 
               <span className="font-medium"> Clusive is built for the opposite</span>: helping your small groups form, grow, and thrive with just enough intelligence in the background to keep you showing up for each other.
@@ -73,13 +54,13 @@ const WhyClusive = () => {
         <section className="py-16 md:py-32 px-6 bg-secondary/20">
           <div className="max-w-[1100px] mx-auto">
             <div className="grid md:grid-cols-2 gap-16 items-start">
-              <div className="fade-on-scroll opacity-0">
+              <div>
                 <h2 className="text-4xl md:text-5xl font-semibold text-foreground leading-[1.15] mb-12">
                   Connection is breaking on two fronts
                 </h2>
               </div>
               
-              <div className="space-y-10 fade-on-scroll opacity-0" style={{ animationDelay: '0.2s' }}>
+              <div className="space-y-10">
                 <div className="space-y-3">
                   <div className="text-6xl font-bold text-primary/20">01</div>
                   <h3 className="text-2xl font-semibold text-foreground">Coordination</h3>
@@ -106,7 +87,7 @@ const WhyClusive = () => {
 
         {/* New Category - Centered with emphasis */}
         <section className="py-24 md:py-32 px-6">
-          <div className="max-w-[900px] mx-auto text-center space-y-12 fade-on-scroll opacity-0">
+          <div className="max-w-[900px] mx-auto text-center space-y-12">
             <h2 className="text-4xl md:text-6xl font-semibold text-foreground leading-[1.1]">
               AI Social Infrastructure
             </h2>
@@ -140,12 +121,12 @@ const WhyClusive = () => {
         {/* Three Layers - Visual timeline */}
         <section className="py-24 md:py-32 px-6 bg-secondary/20">
           <div className="max-w-[1000px] mx-auto">
-            <h2 className="text-4xl md:text-5xl font-semibold text-foreground leading-[1.15] mb-16 text-center fade-on-scroll opacity-0">
+            <h2 className="text-4xl md:text-5xl font-semibold text-foreground leading-[1.15] mb-16 text-center">
               From one plan to a living social fabric
             </h2>
             
             <div className="space-y-12">
-              <div className="fade-on-scroll opacity-0 flex gap-6">
+              <div className="flex gap-6">
                 <div className="flex-shrink-0 w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center text-2xl font-bold text-primary">
                   1
                 </div>
@@ -157,7 +138,7 @@ const WhyClusive = () => {
                 </div>
               </div>
 
-              <div className="fade-on-scroll opacity-0 flex gap-6" style={{ animationDelay: '0.1s' }}>
+              <div className="flex gap-6">
                 <div className="flex-shrink-0 w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center text-2xl font-bold text-primary">
                   2
                 </div>
@@ -169,7 +150,7 @@ const WhyClusive = () => {
                 </div>
               </div>
 
-              <div className="fade-on-scroll opacity-0 flex gap-6" style={{ animationDelay: '0.2s' }}>
+              <div className="flex gap-6">
                 <div className="flex-shrink-0 w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center text-2xl font-bold text-primary">
                   3
                 </div>
@@ -187,7 +168,7 @@ const WhyClusive = () => {
         {/* Today & Tomorrow - Side by side */}
         <section className="py-24 md:py-32 px-6">
           <div className="max-w-[1100px] mx-auto grid md:grid-cols-2 gap-16">
-            <div className="space-y-6 fade-on-scroll opacity-0">
+            <div className="space-y-6">
               <div className="text-sm font-medium text-primary uppercase tracking-wider">Today</div>
               <h2 className="text-3xl md:text-4xl font-semibold text-foreground leading-[1.2]">
                 A lighter way to plan and keep rituals
@@ -213,7 +194,7 @@ const WhyClusive = () => {
               </p>
             </div>
 
-            <div className="space-y-6 fade-on-scroll opacity-0" style={{ animationDelay: '0.2s' }}>
+            <div className="space-y-6">
               <div className="text-sm font-medium text-primary uppercase tracking-wider">Tomorrow</div>
               <h2 className="text-3xl md:text-4xl font-semibold text-foreground leading-[1.2]">
                 The wider social fabric
@@ -243,7 +224,7 @@ const WhyClusive = () => {
 
         {/* Design Principles - Pullquote style */}
         <section className="py-24 md:py-32 px-6 bg-gradient-to-b from-secondary/30 to-background">
-          <div className="max-w-[900px] mx-auto text-center space-y-12 fade-on-scroll opacity-0">
+          <div className="max-w-[900px] mx-auto text-center space-y-12">
             <h2 className="text-4xl md:text-5xl font-semibold text-foreground leading-[1.15]">
               Calm, intelligent, and warmly human
             </h2>
@@ -252,8 +233,7 @@ const WhyClusive = () => {
               {['Calm', 'Intelligent', 'Invisible', 'Warmly human', 'Trustworthy', 'Privacy-first'].map((principle, i) => (
                 <div 
                   key={principle}
-                  className="p-6 rounded-2xl bg-background/50 backdrop-blur-sm border border-border/50 fade-on-scroll opacity-0"
-                  style={{ animationDelay: `${i * 0.1}s` }}
+                  className="p-6 rounded-2xl bg-background/50 backdrop-blur-sm border border-border/50"
                 >
                   <p className="text-lg font-medium text-foreground">{principle}</p>
                 </div>
@@ -269,7 +249,7 @@ const WhyClusive = () => {
 
         {/* Closing CTA */}
         <section className="py-20 md:py-32 px-6">
-          <div className="max-w-[700px] mx-auto text-center space-y-8 fade-on-scroll opacity-0">
+          <div className="max-w-[700px] mx-auto text-center space-y-8">
             <h2 className="text-3xl md:text-4xl font-semibold text-foreground leading-[1.2]">
               Join us in building this
             </h2>
