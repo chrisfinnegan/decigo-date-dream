@@ -58,29 +58,6 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Section 1 - What Clusive Does */}
-        <section className="py-20 md:py-32 px-6 bg-background">
-          <div className="max-w-[800px] mx-auto text-center space-y-12">
-            <h2 className="text-4xl md:text-5xl font-semibold text-foreground mb-12 leading-[1.2]">
-              Less planning. More showing up.
-            </h2>
-            
-            <div className="space-y-8 text-lg md:text-xl text-muted-foreground leading-[1.7]">
-              <div className="space-y-3">
-                <p><span className="font-medium text-foreground">Smart suggestions:</span> Times and ideas that fit everyone.</p>
-                <p><span className="font-medium text-foreground">One-tap plans:</span> Say yes, pass, or suggest another time in a tap.</p>
-                <p><span className="font-medium text-foreground">Routines that stick:</span> Keep your dinners, walks, and game nights going.</p>
-              </div>
-            </div>
-            
-            <SectionIllustration 
-              section="what-clusive-does"
-              prompt="A warm scene showing a group of friends easily coordinating plans. Natural lighting, purple and coral accents. Realistic but stylized illustration."
-              alt="What Clusive does illustration"
-              className="max-w-[600px] mx-auto shadow-lg"
-            />
-          </div>
-        </section>
 
         {/* Section 2 - Who It's For */}
         <section id="what-clusive-does" className="py-20 md:py-32 px-6 bg-background">
