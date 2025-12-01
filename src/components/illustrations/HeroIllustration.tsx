@@ -7,7 +7,8 @@ export const HeroIllustration = () => {
         src={heroImage} 
         alt="Connected groups illustration" 
         className="w-full h-auto rounded-2xl shadow-lg"
-        loading="lazy"
+        loading="eager"
+        fetchPriority="high"
       />
     </div>
   );
