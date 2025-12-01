@@ -104,7 +104,7 @@ const Index = () => {
 
         {/* Section 3 - AI in the Background */}
         <section className="py-20 md:py-32 px-6 bg-background">
-          <div className="max-w-[800px] mx-auto text-center space-y-8">
+          <div className="max-w-[800px] mx-auto text-center space-y-12">
             <h2 className="text-4xl md:text-5xl font-semibold text-foreground mb-8 leading-[1.2]">
               AI in the background. People in the center.
             </h2>
@@ -112,6 +112,13 @@ const Index = () => {
             <p className="text-lg md:text-xl text-muted-foreground leading-[1.7] max-w-[720px] mx-auto">
               Clusive quietly learns when you can meet and what you enjoy, then handles the logistics so your group doesn't have to.
             </p>
+            
+            <SectionIllustration 
+              section="future-of-staying-close"
+              prompt="A warm, intimate scene showing diverse friends naturally connecting in a modern setting with subtle AI elements in the background. Purple and coral accents. Realistic but stylized illustration showing technology supporting human connection."
+              alt="AI supporting human connection illustration"
+              className="max-w-[600px] mx-auto shadow-lg"
+            />
           </div>
         </section>
 
