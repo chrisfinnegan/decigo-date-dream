@@ -13,7 +13,7 @@ export const HeroIllustration = () => {
         const { data: existing } = await supabase
           .from('illustrations')
           .select('image_url')
-          .eq('section', 'hero-v5')
+          .eq('section', 'hero-v6')
           .order('created_at', { ascending: false })
           .limit(1)
           .maybeSingle();
@@ -27,8 +27,8 @@ export const HeroIllustration = () => {
         // Generate new illustration
         const { data, error } = await supabase.functions.invoke('generate-illustration', {
           body: {
-            section: 'hero-v5',
-            prompt: 'Stylized illustration of connected people using minimalist geometric shapes. Multiple colorful overlapping circles and rounded forms representing diverse individuals coming together. Warm gradient colors flowing from coral to purple to soft pink. Clean, modern vector art with depth through transparency and layering. Sense of unity and collaboration through intersecting shapes. Smooth curves and flowing lines. 16:9 aspect ratio. Contemporary flat design with subtle dimensional effects.'
+            section: 'hero-v6',
+            prompt: 'Stylized illustration of 4-5 diverse friends gathered around a large phone or device, smiling and engaged. Clean vector art with recognizable human figures in modern clothing. Warm color palette with purples, corals, and soft pinks. Simplified but friendly facial features. Contemporary flat illustration style with subtle shadows for depth. Bright, welcoming atmosphere. 16:9 aspect ratio. Similar style to modern app illustrations - clear figures but stylized and polished.'
           }
         });
 
