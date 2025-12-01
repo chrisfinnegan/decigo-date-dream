@@ -67,9 +67,9 @@ const Index = () => {
             
             <div className="space-y-8 text-lg md:text-xl text-muted-foreground leading-[1.7]">
               <div className="space-y-3">
-                <p><span className="font-medium text-foreground">Smart suggestions</span> – Times and ideas that fit everyone.</p>
-                <p><span className="font-medium text-foreground">One-tap plans</span> – Say yes, pass, or suggest another time in a tap.</p>
-                <p><span className="font-medium text-foreground">Routines that stick</span> – Keep your dinners, walks, and game nights going.</p>
+                <p><span className="font-medium text-foreground">Smart suggestions:</span> Times and ideas that fit everyone.</p>
+                <p><span className="font-medium text-foreground">One-tap plans:</span> Say yes, pass, or suggest another time in a tap.</p>
+                <p><span className="font-medium text-foreground">Routines that stick:</span> Keep your dinners, walks, and game nights going.</p>
               </div>
             </div>
           </div>
