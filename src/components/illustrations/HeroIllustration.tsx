@@ -13,7 +13,7 @@ export const HeroIllustration = () => {
         const { data: existing } = await supabase
           .from('illustrations')
           .select('image_url')
-          .eq('section', 'hero-v6')
+          .eq('section', 'hero-v7')
           .order('created_at', { ascending: false })
           .limit(1)
           .maybeSingle();
@@ -27,8 +27,8 @@ export const HeroIllustration = () => {
         // Generate new illustration
         const { data, error } = await supabase.functions.invoke('generate-illustration', {
           body: {
-            section: 'hero-v6',
-            prompt: 'Stylized illustration of 4-5 diverse friends gathered around a large phone or device, smiling and engaged. Clean vector art with recognizable human figures in modern clothing. Warm color palette with purples, corals, and soft pinks. Simplified but friendly facial features. Contemporary flat illustration style with subtle shadows for depth. Bright, welcoming atmosphere. 16:9 aspect ratio. Similar style to modern app illustrations - clear figures but stylized and polished.'
+            section: 'hero-v7',
+            prompt: 'Playful, energetic illustration showing diverse friends celebrating and high-fiving around floating calendar icons and location pins. Bold, vibrant colors with purple, coral, and bright accents. Dynamic diagonal composition with movement and energy. Semi-flat illustration style with subtle texture and dimension. Friendly character designs with expressive poses. Confetti or sparkle elements suggesting excitement. Modern digital illustration with personality. 16:9 aspect ratio.'
           }
         });
 
