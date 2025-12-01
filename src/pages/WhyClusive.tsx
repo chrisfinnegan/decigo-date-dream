@@ -23,11 +23,11 @@ const WhyClusive = () => {
             </h1>
             
             <p className="text-xl md:text-2xl text-muted-foreground leading-[1.5]">
-              We use AI to remove the friction between people — so connection becomes easier, not rarer.
+              We use AI to remove the friction between people so connection becomes easier, not rarer.
             </p>
 
             <div className="text-lg md:text-xl text-muted-foreground leading-[1.7] pt-4">
-              <p>Most technology pulls attention away from the people you care about. Clusive is built for the opposite: helping your small groups form, grow, and thrive — with just enough intelligence in the background to keep you showing up for each other.</p>
+              <p>Most technology pulls attention away from the people you care about. Clusive is built for the opposite: helping your small groups form, grow, and thrive with just enough intelligence in the background to keep you showing up for each other.</p>
             </div>
 
             <div className="pt-6">
@@ -105,18 +105,18 @@ const WhyClusive = () => {
             
             <div className="space-y-8 text-lg md:text-xl text-muted-foreground leading-[1.7]">
               <div>
-                <p className="font-semibold text-foreground mb-3">1. Utility – "Group OS" (today's wedge)</p>
-                <p>The starting point is simple: help groups go from intent → plan → meetup with almost no coordination tax. This is your plan links, one-tap accepts, and a shared group home where the next plan is always one step away.</p>
+                <p className="font-semibold text-foreground mb-3">1. Utility: "Group OS" (today's wedge)</p>
+                <p>The starting point is simple: help groups go from intent to plan to meetup with almost no coordination tax. This is your plan links, one-tap accepts, and a shared group home where the next plan is always one step away.</p>
               </div>
 
               <div>
-                <p className="font-semibold text-foreground mb-3">2. Memory – "Ritual graph"</p>
+                <p className="font-semibold text-foreground mb-3">2. Memory: "Ritual graph"</p>
                 <p>Over time, Clusive builds a memory of your group's rituals, favorite spots, and patterns: who tends to show up, which nights work, what kinds of plans leave everyone feeling good. This becomes a living map of your shared history and rhythm.</p>
               </div>
 
               <div>
-                <p className="font-semibold text-foreground mb-3">3. Network – "Groups-first social graph"</p>
-                <p>In the long run, groups can connect with other groups, neighborhoods, and venues — all through the same intelligent layer. Cities, campuses, and communities can see and support the real rhythms of how people gather.</p>
+                <p className="font-semibold text-foreground mb-3">3. Network: "Groups-first social graph"</p>
+                <p>In the long run, groups can connect with other groups, neighborhoods, and venues, all through the same intelligent layer. Cities, campuses, and communities can see and support the real rhythms of how people gather.</p>
               </div>
             </div>
           </div>
@@ -133,12 +133,12 @@ const WhyClusive = () => {
               <p>In v0, Clusive focuses on a few simple jobs:</p>
 
               <ul className="space-y-4 pl-6">
-                <li>• Share a plan link that lets your group accept with one tap — no messy polls or 40-message threads.</li>
+                <li>• Share a plan link that lets your group accept with one tap. No messy polls or 40-message threads.</li>
                 <li>• Keep a group home where you can see who's in the circle, what's next, and what you've done together recently.</li>
                 <li>• Spot emerging rituals ("you've done Sunday brunch three times… want to make this a thing?") so you don't lose momentum.</li>
               </ul>
 
-              <p className="pt-4">The AI is mostly invisible. It powers the planning, nudges, suggestions, and shared spaces behind the scenes — so the experience feels like "of course this is how our group runs itself," not like talking to a bot.</p>
+              <p className="pt-4">The AI is mostly invisible. It powers the planning, nudges, suggestions, and shared spaces behind the scenes so the experience feels like "of course this is how our group runs itself," not like talking to a bot.</p>
             </div>
           </div>
         </section>
@@ -183,7 +183,7 @@ const WhyClusive = () => {
               </ul>
 
               <p className="text-xl italic text-foreground/80 pt-6">
-                We're designing something to be felt, not seen — the invisible fabric between people.
+                We're designing something to be felt, not seen: the invisible fabric between people.
               </p>
             </div>
 
