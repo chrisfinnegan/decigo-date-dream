@@ -27,8 +27,8 @@ export const HeroIllustration = () => {
         // Generate new illustration
         const { data, error } = await supabase.functions.invoke('generate-illustration', {
           body: {
-            section: 'hero',
-            prompt: 'A welcoming scene of diverse friends gathering around a table at a cozy cafe or restaurant, viewed from above. Warm lighting, soft purple and coral color palette. People are smiling, phones on table showing shared plans. Modern, clean illustration style with depth and warmth. 16:9 aspect ratio. Photorealistic but stylized.'
+            section: 'hero-v2',
+            prompt: 'A vibrant scene of 4-5 diverse friends joyfully planning together in a bright, modern space. They are gathered naturally, some sitting, some standing, with genuine smiles and animated gestures. Soft purple and coral lighting creates warmth. One person holds a phone showing a plan. Wide angle, eye-level perspective. Contemporary, clean illustration style with rich colors and natural depth. 16:9 aspect ratio. Realistic but stylized with an optimistic, energetic mood.'
           }
         });
 
