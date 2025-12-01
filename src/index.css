@@ -126,12 +126,12 @@ All colors MUST be HSL.
   }
 
   h1 {
-    font-size: clamp(2.2rem, 3.4vw, 2.7rem);
+    font-size: clamp(2rem, 3.2vw, 2.5rem);
     font-weight: 600;
   }
 
   h2 {
-    font-size: clamp(1.05rem, 2vw, 1.1rem);
+    font-size: clamp(0.95rem, 1.8vw, 1rem);
     font-weight: 580;
   }
 
