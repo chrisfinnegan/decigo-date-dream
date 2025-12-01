@@ -89,8 +89,8 @@ const Index = () => {
               <div className="order-2 md:order-1">
                 <SectionIllustration 
                   section="small-groups"
-                  prompt="A warm scene of 5-6 diverse friends actively doing an activity together - playing board games at a table, cooking together in a kitchen, or having a picnic outdoors. Show them engaged and laughing together. Natural lighting, purple and coral accents. Realistic but stylized illustration."
-                  alt="Small groups doing activities together"
+                  prompt="A dynamic scene of 5-6 diverse friends doing an active outdoor activity together - hiking on a scenic trail, playing volleyball at the beach, cycling together, or dancing energetically. Show movement, energy, and genuine joy. Natural lighting, purple and coral accents. Realistic but stylized illustration."
+                  alt="Small groups being active together"
                   className="w-full rounded-2xl shadow-lg"
                 />
               </div>
